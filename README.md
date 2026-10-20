@@ -77,7 +77,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 |---|---|---|
 | 🧩 **Comong Soon** | - | [repo](https://github.com/Dhityavv) |
 | 🧩 **Comong Soon** | - | [repo](https://github.com/Dhityavv) |
-| 🧩 **Comong Soon** | O- | [repo](https://github.com/Dhityavv) |
+| 🧩 **Comong Soon** | - | [repo](https://github.com/Dhityavv) |
 
 <!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
 
