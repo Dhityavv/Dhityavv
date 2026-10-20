@@ -41,7 +41,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 | | | |
 |:---:|:---:|:---:|
 | <img src="assets/Rumah Vale Render1.png" width="260" alt="Render 1" /> | <img src="assets/Link Envi SH2 Render.png" width="260" alt="Render 2" /> | <img src="assets/Redmi Note 13 4G Animation.gif" width="260" alt="Render 3" /> |
-| *Title of render 1* | *Title of render 2* | *Title of render 3* |
+| *Traditional House* | *A Forest* | *Redmi Note 13 4G Animation* |
 
 </div>
 
