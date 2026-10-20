@@ -9,7 +9,7 @@
 <br/>
 
 <img src="https://img.shields.io/badge/Blender-0D1117?style=for-the-badge&logo=blender&logoColor=F5792A" />
-<img src="https://img.shields.io/badge/Low--Poly-0D1117?style=for-the-badge&logoColor=F5792A&color=0D1117&label=3D" />
+<img src="https://img.shields.io/badge/Medium--Poly-0D1117?style=for-the-badge&logoColor=F5792A&color=0D1117&label=3D" />
 <img src="https://img.shields.io/badge/Minecraft-0D1117?style=for-the-badge&logo=minecraft&logoColor=F5792A" />
 <img src="https://img.shields.io/badge/Status-Learning-0D1117?style=for-the-badge&labelColor=0D1117&color=F5792A" />
 
