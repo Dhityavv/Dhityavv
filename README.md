@@ -20,11 +20,11 @@
 ## 🎬 About Me
 
 ```text
-> name        : Dhitya
-> role        : Animation student (SMK) / aspiring 3D artist
-> focus       : 3D modeling, low-poly art, environments
-> also into   : gaming, Minecraft modding, anime & manhwa
-> currently   : practicing Blender, tinkering with small AI-assisted projects
+> Name        : Dhitya
+> Role        : Animation Student (SMK) / Aspiring 3D Artist
+> Focus       : 3D Modeling, Medium-Poly Art, Environments
+> Also Into   : Gaming, Minecraft Modding, Anime & Manhwa
+> Currently   : practicing Blender, tinkering with small AI-assisted projects
 ```
 
 I'm a vocational school student majoring in Animation. Most of my time goes into **3D art in Blender**, and I love games, so I like making things that feel like they belong in one. Sometimes I also build small coding experiments with the help of AI, just to understand how things work and to have fun.
