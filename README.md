@@ -1,5 +1,5 @@
 <!-- ============ HEADER ============ -->
-<div align="left">
+<div>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,100:8A6FB5&height=220&section=header&text=Dhitya&fontSize=72&fontColor=FFFFFF&fontAlignY=38&animation=fadeIn&desc=3D%20Artist%20%C2%B7%20Gamer%20%C2%B7%20Tinkerer&descSize=18&descAlignY=60" alt="header" width="100%" />
 <a href="https://git.io/typing-svg">
