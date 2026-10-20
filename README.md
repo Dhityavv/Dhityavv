@@ -68,7 +68,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 </div>
 
-**What I've been practicing:** low-poly modeling · Geometry Nodes (grass) · cliffs & waterfall scenes · materials · armature & weight painting · scene organization
+**What I've been practicing:** medium-poly modeling · Geometry Nodes · cliffs & waterfall scenes · materials · armature & weight painting · scene organization
 
 ---
 
