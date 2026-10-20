@@ -113,6 +113,6 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 <sub>Always learning, always building. ⚡</sub>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:F5792A,100:0D1117&height=120&section=footer" alt="footer" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,100:8A6FB5&height=120&section=footer" alt="footer" width="100%" />
 
 </div>
