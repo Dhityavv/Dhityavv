@@ -40,7 +40,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 | | | |
 |:---:|:---:|:---:|
-| <img src="assets/render-1.png" width="260" alt="Render 1" /> | <img src="assets/render-2.png" width="260" alt="Render 2" /> | <img src="assets/render-3.png" width="260" alt="Render 3" /> |
+| <img src="assets/Rumah Vale Render1.png" width="260" alt="Render 1" /> | <img src="assets/Link Envi SH2 Render.png" width="260" alt="Render 2" /> | <img src="assets/Redmi Note 13 4G Animation.mp4" width="260" alt="Render 3" /> |
 | *Title of render 1* | *Title of render 2* | *Title of render 3* |
 
 </div>
