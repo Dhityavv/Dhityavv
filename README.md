@@ -19,13 +19,16 @@
 
 ## 🎬 About Me
 
-```text
-> Name        : Dhitya
-> Role        : Animation Student (SMK) / Aspiring 3D Artist
-> Focus       : 3D Modeling, Medium-Poly Art, Environments
-> Also Into   : Gaming, Minecraft Modding, Anime & Manhwa
-> Currently   : practicing Blender, tinkering with small AI-assisted projects
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/NAME-Dhitya-1F1B2D?style=for-the-badge&labelColor=8A6FB5" alt="Name" />
+  <img src="https://img.shields.io/badge/ROLE-Animation_Student_(SMK)_%2F_Aspiring_3D_Artist-1F1B2D?style=for-the-badge&labelColor=8A6FB5" alt="Role" />
+  <br>
+  <img src="https://img.shields.io/badge/FOCUS-3D_Modeling,_Medium--Poly_Art,_Environments-1F1B2D?style=for-the-badge&labelColor=8A6FB5" alt="Focus" />
+  <br>
+  <img src="https://img.shields.io/badge/ALSO_INTO-Gaming,_Minecraft_Modding,_Anime_%26_Manhwa-1F1B2D?style=for-the-badge&labelColor=8A6FB5" alt="Also into" />
+  <br>
+  <img src="https://img.shields.io/badge/CURRENTLY-Practicing_Blender,_tinkering_with_small_AI--assisted_projects-1F1B2D?style=for-the-badge&labelColor=8A6FB5" alt="Currently" />
+</p>
 
 I'm a vocational school student majoring in Animation. Most of my time goes into **3D art in Blender**, and I love games, so I like making things that feel like they belong in one. Sometimes I also build small coding experiments with the help of AI, just to understand how things work and to have fun.
 
