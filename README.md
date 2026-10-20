@@ -23,7 +23,7 @@
 
 |  |  |
 |:--|:--|
-| 🎬 **Name** | Dhitya |
+| 👤 **Name** | Dhitya |
 | 🎓 **Role** | Animation Student (SMK) / Aspiring 3D Artist |
 | 🧊 **Focus** | 3D Modeling, Medium-Poly Art, Environments |
 | 🎮 **Also Into** | Gaming, Minecraft Modding, Anime & Manhwa |
