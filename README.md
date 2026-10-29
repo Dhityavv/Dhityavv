@@ -90,8 +90,8 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 <div align="center">
 
-<img height="170" src="https://github-readme-stats.vercel.app/api?username=Dhityavv&show_icons=true&hide_border=false&bg_color=0D1117&title_color=8A6FB5&icon_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="stats" />
-<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Dhityavv&layout=compact&bg_color=0D1117&title_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="top languages" />
+<img height="170" src="https://github-stats-extended.vercel.app/api?username=Dhityavv&show_icons=true&hide_border=false&bg_color=0D1117&title_color=8A6FB5&icon_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="stats" />
+<img height="170" src="https://github-stats-extended.vercel.app/api/top-langs/?username=Dhityavv&layout=compact&bg_color=0D1117&title_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="top languages" />
 
 <br/>
 
