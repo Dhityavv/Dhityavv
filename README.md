@@ -78,9 +78,9 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 | Project | What it is | Link |
 |---|---|---|
-| 🧩 **Comong Soon** | - | [](https://github.com/Dhityavv) |
-| 🧩 **Comong Soon** | - | [](https://github.com/Dhityavv) |
-| 🧩 **Comong Soon** | - | [](https://github.com/Dhityavv) |
+| 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | [GitHub](https://github.com/Dhityavv/Filra) · [Live Demo](https://filra.vercel.app) |
+| 🧩 **Coming Soon** | Medium-poly 3D environment exploration with Blender | [GitHub](https://github.com/Dhityavv) |
+| 🧩 **Coming Soon** | Minecraft Fabric custom performance modpack & shaders | [GitHub](https://github.com/Dhityavv) |
 
 <!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
 
