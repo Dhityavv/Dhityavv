@@ -534,6 +534,34 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       "Clean hard-surface topology and bevel modifiers",
     ],
   },
+  {
+    id: "tree-animation",
+    title: "Stylized Tree Wind Animation",
+    subtitle: "Procedural Foliage & Wind Motion",
+    category: "Animation & Motion",
+    coverImage: "/assets/Tree.png",
+    photos: [
+      {
+        label: "Stylized Tree Render",
+        url: "/assets/Tree.png",
+      },
+    ],
+    videoUrl: "/assets/Tree Animation.mp4",
+    description:
+      "A stylized tree brought to life with subtle procedural wind motion across its foliage.",
+    tags: ["Tree", "Wind Animation", "Foliage", "Blender"],
+    stats: {
+      engine: "Blender Cycles & Eevee",
+      style: "Stylized Foliage",
+      polyCount: "~18k Triangles",
+      lighting: "Soft Ambient + Rim Sunlight",
+    },
+    features: [
+      "Includes animated wind loop demonstration",
+      "Organic trunk silhouette with stylized bark ridges",
+      "Soft, fluffy foliage shading",
+    ],
+  },
 ];
 
 const CATEGORIES = [
