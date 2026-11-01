@@ -237,8 +237,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "stylized-tree",
-    title: "Stylized Tree & Wind Animation",
-    subtitle: "Stylized Foliage Render",
+    title: "Tree & Sculpted Ground Study",
+    subtitle: "Static Sculpting Practice",
     category: "Environment & Nature",
     coverImage: "/assets/Tree.png",
     photos: [
@@ -248,18 +248,18 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description:
-      "Handcrafted stylized tree model with organic trunk curves and fluffy vertex-colored leaf clumps.",
-    tags: ["Foliage", "Stylized 3D", "Procedural"],
+      "A simple scene study with a randomly placed tree and ground shaped using Blender's sculpting tools. This is a static sculpting and layout exercise, not an animation.",
+    tags: ["Sculpting", "Terrain", "Tree Placement", "Static Scene"],
     stats: {
-      engine: "Blender Cycles & Eevee",
-      style: "Ghibli / Stylized Foliage",
-      polyCount: "~18k Triangles",
-      lighting: "Soft Ambient + Rim Sunlight",
+      engine: "Not specified",
+      style: "Sculpting Study",
+      polyCount: "Not provided",
+      lighting: "Not specified",
     },
     features: [
-      "Custom normal editing for smooth, fluffy foliage shadows",
-      "Organic trunk silhouette with stylized bark ridges",
-      "Lightweight triangle count optimized for game worlds",
+      "Ground shaped using Blender Sculpt Mode",
+      "Tree placed as a scene element",
+      "Static study with no animation",
     ],
   },
 
@@ -775,7 +775,7 @@ export default function BlenderStudioPage() {
                   {/* Technical Specs Strip */}
                   <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80 text-[11px] mb-4">
                     <div>
-                      <span className="text-[#8b949e] block">Engine</span>
+                      <span className="text-[#8b949e] block">Render Engine</span>
                       <span className="font-semibold text-white truncate block">
                         {work.stats.engine}
                       </span>
@@ -924,7 +924,7 @@ export default function BlenderStudioPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Engine</span>
+                    <span className="text-[#8b949e] block">Render Engine</span>
                     <span className="font-semibold text-white truncate block">
                       {selectedProject.stats.engine}
                     </span>
