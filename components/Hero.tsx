@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowDown, Box, Sparkles, Gamepad2, Eye } from "lucide-react";
 
 const TYPING_LINES = [
-  "Animation student @ vocational school",
+  "Animation student in vocational school",
   "Building medium-poly worlds in Blender",
   "Gamer | Minecraft tinkerer",
   "Learning by building small projects with AI",
@@ -61,7 +61,7 @@ export function Hero() {
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-4">
           Hi, I&apos;m{" "}
           <span className="bg-gradient-to-r from-white via-[#8A6FB5] to-[#c7b2e8] bg-clip-text text-transparent">
-            Dhitya
+            Dhitya Nurhadi
           </span>
         </h1>
 

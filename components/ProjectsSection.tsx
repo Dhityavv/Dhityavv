@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Rocket, Box, Gamepad2, Sparkles, ExternalLink, Clock, Film, Globe } from "lucide-react";
+import Link from "next/link";
+import { Rocket, Box, Gamepad2, Sparkles, ExternalLink, Clock, Film, Globe, ArrowRight, BookOpen } from "lucide-react";
 
 interface ProjectItem {
   title: string;
@@ -27,14 +28,14 @@ const PROJECTS: ProjectItem[] = [
     liveUrl: "https://filra.vercel.app",
   },
   {
-    title: "Medium-Poly Low Fantasy World",
-    category: "3D Environment",
-    status: "In Progress",
+    title: "Universal Chiseled Bookshelf",
+    category: "Minecraft Mod & System",
+    status: "Live",
     description:
-      "A complete stylized cliff and waterfall environment built using Blender Geometry Nodes with custom shaders and atmospheric lighting.",
-    icon: <Box className="w-5 h-5 text-[#8A6FB5]" />,
-    tags: ["Blender", "Geometry Nodes", "Stylized 3D"],
-    link: "https://github.com/Dhityavv",
+      "Expands the Minecraft bookshelf system without adding new blocks or items. Store and organize more useful items in bookshelves while preserving the authentic vanilla look and behavior.",
+    icon: <BookOpen className="w-5 h-5 text-[#8A6FB5]" />,
+    tags: ["Minecraft", "Vanilla+", "Datapack", "Modding"],
+    link: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
   },
   {
     title: "Fabric Custom Performance Modpack",
@@ -76,15 +77,24 @@ export function ProjectsSection() {
               learn from.
             </p>
           </div>
-          <a
-            href="https://github.com/Dhityavv?tab=repositories"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-white transition-colors"
-          >
-            <span>View All Repositories</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#8A6FB5]" />
-          </a>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
+            >
+              <span>Full Projects Hub</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <a
+              href="https://github.com/Dhityavv?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-white transition-colors"
+            >
+              <span>GitHub Repos</span>
+              <ExternalLink className="w-3.5 h-3.5 text-[#8A6FB5]" />
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -159,6 +169,31 @@ export function ProjectsSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Dedicated Projects Hub Action Banner */}
+        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-[#161b22] via-[#1a202c] to-[#161b22] border border-[#30363d] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#8A6FB5]/20 border border-[#8A6FB5]/40 flex items-center justify-center text-[#8A6FB5] shrink-0">
+              <Rocket className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm sm:text-base font-bold text-white">
+                Discover More Web & Creative Experiments
+              </h4>
+              <p className="text-xs text-[#8b949e]">
+                Explore full interactive demos, architecture stack, features list, and upcoming roadmap.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
+          >
+            <span>Open Projects Hub</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>

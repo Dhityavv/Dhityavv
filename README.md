@@ -3,7 +3,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,100:8A6FB5&height=220&section=header&text=Dhitya&fontSize=72&fontColor=FFFFFF&fontAlignY=38&animation=fadeIn&desc=3D%20Artist%20%C2%B7%20Gamer%20%C2%B7%20Tinkerer&descSize=18&descAlignY=60" alt="header" width="100%" />
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=8A6FB5&center=true&vCenter=true&width=620&lines=Animation+student+%40+vocational+school;Building+medium-poly+worlds+in+Blender;Gamer+%7C+Minecraft+tinkerer;Learning+by+building+small+projects+with+AI" alt="typing animation" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=8A6FB5&center=true&vCenter=true&width=620&lines=Animation+student+in+vocational+school;Building+medium-poly+worlds+in+Blender;Gamer+%7C+Minecraft+tinkerer;Learning+by+building+small+projects+with+AI" alt="typing animation" />
 </a>
 
 <br/>
@@ -79,8 +79,8 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 | Project | What it is | Link |
 |---|---|---|
 | 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Live Demo</a> |
-| 🧩 **Coming Soon** | Medium-poly 3D environment exploration with Blender | <a href="https://github.com/Dhityavv" target="_blank" rel="noopener noreferrer">GitHub</a> |
-| 🧩 **Coming Soon** | Minecraft Fabric custom performance modpack & shaders | <a href="https://github.com/Dhityavv" target="_blank" rel="noopener noreferrer">GitHub</a> |
+| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> |
+| ⚡ **AI-Assisted Web Lab** | Experimental 3D web showcase and interactive browser tools | <a href="https://github.com/Dhityavv" target="_blank" rel="noopener noreferrer">GitHub</a> |
 
 <!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
 

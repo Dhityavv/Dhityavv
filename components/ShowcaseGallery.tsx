@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Layers,
+  Box,
   Maximize2,
   X,
   Sparkles,
@@ -12,7 +14,16 @@ import {
   TreePine,
   Home,
   ExternalLink,
+  ArrowRight,
+  Images,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+
+interface ShowcasePhoto {
+  label: string;
+  url: string;
+}
 
 interface ShowcaseItem {
   id: string;
@@ -20,6 +31,7 @@ interface ShowcaseItem {
   category: string;
   subtitle: string;
   filename: string;
+  photos: ShowcasePhoto[];
   description: string;
   tags: string[];
   type: "image" | "animation";
@@ -37,6 +49,9 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     subtitle: "Rumah Vale Render 1",
     category: "Architecture",
     filename: "/assets/Rumah Vale Render1.png",
+    photos: [
+      { label: "Exterior View", url: "/assets/Rumah Vale Render1.png" },
+    ],
     description:
       "A stylized medium-poly architectural render of a traditional house with custom wooden textures, tiled rooftops, and warm ambient lighting modeled and arranged in Blender.",
     tags: ["Blender", "Medium-Poly", "Architecture", "Environment"],
@@ -48,11 +63,34 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     },
   },
   {
+    id: "tedung-keraton",
+    title: "Tedung Keraton",
+    subtitle: "Royal Ceremonial Umbrella",
+    category: "Architecture",
+    filename: "/assets/Tedung Keraton.png",
+    photos: [
+      { label: "Front Angle", url: "/assets/Tedung Keraton.png" },
+      { label: "Perspective Angle", url: "/assets/Tedung Keraton 2.png" },
+    ],
+    description:
+      "Intricate 3D model of Tedung Keraton, the sacred ceremonial royal umbrella. Features ornate golden finials, tiered fabric canopy trims, decorative tassels, and authentic Balinese motifs.",
+    tags: ["Culture", "Ceremonial", "Multi-Angle", "Gold Shader"],
+    type: "image",
+    stats: {
+      tool: "Blender Cycles",
+      style: "Intricate Traditional Craft",
+      renderNote: "Includes 2 distinct angles",
+    },
+  },
+  {
     id: "link-envi",
     title: "A Forest",
     subtitle: "Link Envi SH2 Render",
     category: "Environment",
     filename: "/assets/Link Envi SH2 Render.png",
+    photos: [
+      { label: "Canopy View", url: "/assets/Link Envi SH2 Render.png" },
+    ],
     description:
       "An atmospheric nature environment render featuring tall canopy trees, forest undergrowth, mood mist, and stylized scenic foliage.",
     tags: ["Blender", "Environment Art", "Nature", "Lighting"],
@@ -64,11 +102,53 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     },
   },
   {
+    id: "ninja-model",
+    title: "Ninja Character Model",
+    subtitle: "Shinobi Operative Turnaround",
+    category: "Characters",
+    filename: "/assets/Ninja 1.png",
+    photos: [
+      { label: "Front Stance", url: "/assets/Ninja 1.png" },
+      { label: "Side Action Stance", url: "/assets/Ninja 2.png" },
+    ],
+    description:
+      "Stylized shinobi operative character turnaround featuring dark fabric cowl, arm wraps, utility sash, and balanced anime proportions.",
+    tags: ["Character", "Shinobi", "2 Renders", "Game Ready"],
+    type: "image",
+    stats: {
+      tool: "Blender 3D",
+      style: "Stylized Character",
+      renderNote: "Includes 2 poses & angles",
+    },
+  },
+  {
+    id: "sushi-sashimi",
+    title: "Sushi & Sashimi Platter",
+    subtitle: "Japanese Culinary 3D Art",
+    category: "Props & Food",
+    filename: "/assets/Sushi & Sashimi.png",
+    photos: [
+      { label: "Platter Render", url: "/assets/Sushi & Sashimi.png" },
+    ],
+    description:
+      "Appetizing stylized food render of fresh nigiri sushi, tuna & salmon sashimi slices, wasabi quenelle, and lacquered ceramic presentation board.",
+    tags: ["Food 3D", "Stylized Props", "Subsurface Scattering", "Culinary"],
+    type: "image",
+    stats: {
+      tool: "Blender Cycles",
+      style: "Stylized Food Art",
+      renderNote: "Subsurface scattering shaders",
+    },
+  },
+  {
     id: "redmi-animation",
     title: "Redmi Note 13 4G Animation",
-    subtitle: "3D Product Animation",
+    subtitle: "3D Product Commercial Motion",
     category: "Animation & Motion",
     filename: "/assets/Redmi Note 13 4G Animation.gif",
+    photos: [
+      { label: "Commercial Motion GIF", url: "/assets/Redmi Note 13 4G Animation.gif" },
+    ],
     description:
       "A dynamic 3D commercial animation showcasing the Redmi Note 13 4G with smooth camera rotations, metallic material reflections, and motion design.",
     tags: ["Blender", "Motion Design", "3D Animation", "Commercial"],
@@ -83,14 +163,20 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
 
 export function ShowcaseGallery() {
   const [selectedItem, setSelectedItem] = useState<ShowcaseItem | null>(null);
+  const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [activeFilter, setActiveFilter] = useState<string>("All");
 
-  const categories = ["All", "Architecture", "Environment", "Animation & Motion"];
+  const categories = ["All", "Architecture", "Environment", "Characters", "Props & Food", "Animation & Motion"];
 
   const filteredItems =
     activeFilter === "All"
       ? SHOWCASE_ITEMS
       : SHOWCASE_ITEMS.filter((item) => item.category === activeFilter);
+
+  const openModal = (item: ShowcaseItem) => {
+    setSelectedItem(item);
+    setActivePhotoIdx(0);
+  };
 
   return (
     <section id="showcase" className="py-16 border-t border-[#30363d]/60 relative">
@@ -105,35 +191,44 @@ export function ShowcaseGallery() {
               Showcase & Renders
             </h2>
             <p className="text-sm text-[#8b949e] mt-1">
-              Handcrafted 3D renders and animations directly from the original
-              showcase
+              Handcrafted 3D renders and animations directly from Dhitya&apos;s Blender archive
             </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeFilter === cat
-                    ? "bg-[#8A6FB5] text-white shadow-md shadow-[#8A6FB5]/25"
-                    : "bg-[#161b22] text-[#8b949e] border border-[#30363d] hover:text-white hover:bg-[#21262d]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Filter Pills & Dedicated Page Link */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-[#0d1117] border border-[#30363d]/80">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveFilter(cat)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                    activeFilter === cat
+                      ? "bg-[#8A6FB5] text-white shadow-sm shadow-[#8A6FB5]/30"
+                      : "text-[#8b949e] hover:text-white hover:bg-[#161b22]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            <Link
+              href="/blender"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
+            >
+              <span>Full 3D Website</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              onClick={() => setSelectedItem(item)}
+              onClick={() => openModal(item)}
               className="group cursor-pointer bg-[#161b22] border border-[#30363d] rounded-2xl overflow-hidden hover:border-[#8A6FB5] transition-all duration-300 hover:shadow-xl hover:shadow-[#8A6FB5]/10 flex flex-col"
             >
               {/* Media Container */}
@@ -153,11 +248,21 @@ export function ShowcaseGallery() {
                     <Film className="w-3 h-3 text-[#8A6FB5]" />
                   ) : item.category === "Architecture" ? (
                     <Home className="w-3 h-3 text-[#8A6FB5]" />
-                  ) : (
+                  ) : item.category === "Environment" ? (
                     <TreePine className="w-3 h-3 text-[#8A6FB5]" />
+                  ) : (
+                    <Box className="w-3 h-3 text-[#8A6FB5]" />
                   )}
                   <span>{item.category}</span>
                 </div>
+
+                {/* Multi-photo badge */}
+                {item.photos.length > 1 && (
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                    <Images className="w-3 h-3 text-[#8A6FB5]" />
+                    <span>{item.photos.length} Angles</span>
+                  </div>
+                )}
 
                 {/* Zoom Icon Top Right */}
                 <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
@@ -190,13 +295,38 @@ export function ShowcaseGallery() {
                   <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-[#8A6FB5] font-medium">
                     <span>{item.stats.tool}</span>
                     <span className="flex items-center gap-1 text-[#8b949e] group-hover:text-white transition-colors">
-                      Inspect <Maximize2 className="w-3 h-3" />
+                      {item.photos.length > 1 ? `View ${item.photos.length} Renders` : "Inspect"} <Maximize2 className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Dedicated Gallery Action Banner */}
+        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-[#161b22] via-[#1a202c] to-[#161b22] border border-[#30363d] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#8A6FB5]/20 border border-[#8A6FB5]/40 flex items-center justify-center text-[#8A6FB5] shrink-0">
+              <Box className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm sm:text-base font-bold text-white">
+                Explore All 16+ 3D Blender Works & Archive
+              </h4>
+              <p className="text-xs text-[#8b949e]">
+                Dedicated website with complete cultural flags, fish revisions, katana, sawah, and turnarounds.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/blender"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
+          >
+            <span>Open 3D Blender Studio</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* Modal Lightbox */}
@@ -206,14 +336,19 @@ export function ShowcaseGallery() {
             onClick={() => setSelectedItem(null)}
           >
             <div
-              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
               <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between bg-[#0d1117]/60">
                 <div>
-                  <h3 className="text-lg font-bold text-white">
-                    {selectedItem.title}
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <span>{selectedItem.title}</span>
+                    {selectedItem.photos.length > 1 && (
+                      <span className="text-xs px-2 py-0.5 rounded-md bg-[#8A6FB5]/20 text-[#c7b2e8] border border-[#8A6FB5]/30">
+                        {activePhotoIdx + 1} of {selectedItem.photos.length}
+                      </span>
+                    )}
                   </h3>
                   <p className="text-xs text-[#8b949e]">
                     {selectedItem.subtitle} · {selectedItem.category}
@@ -228,13 +363,62 @@ export function ShowcaseGallery() {
               </div>
 
               {/* Modal Image View */}
-              <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-auto p-4">
+              <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-auto p-4 group">
                 <img
-                  src={selectedItem.filename}
+                  src={selectedItem.photos[activePhotoIdx]?.url || selectedItem.filename}
                   alt={selectedItem.title}
                   className="max-h-[60vh] max-w-full object-contain rounded-lg shadow-lg"
                 />
+
+                {/* Left/Right controls if multiple photos */}
+                {selectedItem.photos.length > 1 && (
+                  <>
+                    <button
+                      onClick={() =>
+                        setActivePhotoIdx((prev) =>
+                          prev === 0 ? selectedItem.photos.length - 1 : prev - 1
+                        )
+                      }
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setActivePhotoIdx((prev) =>
+                          (prev + 1) % selectedItem.photos.length
+                        )
+                      }
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
               </div>
+
+              {/* Angle Switcher Row */}
+              {selectedItem.photos.length > 1 && (
+                <div className="px-5 py-2.5 bg-[#0d1117] border-t border-[#30363d] flex items-center gap-2 overflow-x-auto">
+                  <span className="text-[11px] font-semibold text-[#8b949e] shrink-0 mr-1 flex items-center gap-1">
+                    <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                    Angles:
+                  </span>
+                  {selectedItem.photos.map((p, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActivePhotoIdx(idx)}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-all shrink-0 ${
+                        activePhotoIdx === idx
+                          ? "bg-[#8A6FB5] border-[#8A6FB5] text-white"
+                          : "bg-[#161b22] border-[#30363d] text-[#8b949e] hover:text-white"
+                      }`}
+                    >
+                      <span>{p.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Modal Details Footer */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3">
@@ -275,12 +459,12 @@ export function ShowcaseGallery() {
                     ))}
                   </div>
                   <a
-                    href={selectedItem.filename}
+                    href={selectedItem.photos[activePhotoIdx]?.url || selectedItem.filename}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white transition-colors"
                   >
-                    Open Raw Asset <ExternalLink className="w-3.5 h-3.5" />
+                    Open Current Asset <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </div>

@@ -1,0 +1,948 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowLeft,
+  Box,
+  Layers,
+  Sparkles,
+  Maximize2,
+  X,
+  Film,
+  TreePine,
+  Home,
+  ExternalLink,
+  Cpu,
+  ChevronLeft,
+  ChevronRight,
+  Images,
+  CheckCircle2,
+  Search,
+} from "lucide-react";
+
+export interface RenderPhoto {
+  label: string;
+  url: string;
+}
+
+export interface BlenderProject {
+  id: string;
+  title: string;
+  subtitle: string;
+  category:
+    | "Architecture & Culture"
+    | "Environment & Nature"
+    | "Characters & Creatures"
+    | "Props & Objects"
+    | "Animation & Motion";
+  coverImage: string;
+  photos: RenderPhoto[];
+  videoUrl?: string;
+  description: string;
+  tags: string[];
+  stats: {
+    engine: string;
+    style: string;
+    polyCount: string;
+    lighting: string;
+  };
+  features: string[];
+}
+
+const ALL_BLENDER_PROJECTS: BlenderProject[] = [
+  // 1. Architecture & Culture
+  {
+    id: "rumah-vale",
+    title: "Traditional House (Rumah Vale)",
+    subtitle: "Vernacular Stilt House Architecture",
+    category: "Architecture & Culture",
+    coverImage: "/assets/Rumah Vale Render1.png",
+    photos: [
+      {
+        label: "Main Exterior View",
+        url: "/assets/Rumah Vale Render1.png",
+      },
+    ],
+    description:
+      "A stylized medium-poly architectural render of a traditional house. Features handcrafted timber stilts, modular curved roof tiles, open decking, and golden-hour sunset lighting.",
+    tags: ["Architecture", "Medium-Poly", "Blender Cycles", "Modular Assets"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Stylized Medium-Poly",
+      polyCount: "~35k Triangles",
+      lighting: "Warm Golden HDRI + Directional Sun",
+    },
+    features: [
+      "Custom wooden beams with authentic Indonesian timber wear",
+      "Hand-placed curved roof tiles with stylized edge bevels",
+      "Traditional raised stilt deck architecture",
+      "Atmospheric evening ambient occlusion and warm lighting",
+    ],
+  },
+  {
+    id: "tedung-keraton",
+    title: "Tedung Keraton",
+    subtitle: "Royal Ceremonial Umbrella (2 Angles)",
+    category: "Architecture & Culture",
+    coverImage: "/assets/Tedung Keraton.png",
+    photos: [
+      {
+        label: "Front Angle",
+        url: "/assets/Tedung Keraton.png",
+      },
+      {
+        label: "Perspective Angle",
+        url: "/assets/Tedung Keraton 2.png",
+      },
+    ],
+    description:
+      "A majestic 3D model of Tedung Keraton, the sacred ceremonial royal umbrella. Features ornate golden finials, tiered fabric canopy trims, decorative tassels, and authentic Balinese ceremonial carvings.",
+    tags: ["Culture", "Ceremonial Prop", "Multi-Angle", "Gold Shading"],
+    stats: {
+      engine: "Blender Eevee / Cycles",
+      style: "Intricate Traditional Craft",
+      polyCount: "~42k Triangles",
+      lighting: "Ceremonial Studio Rim Lighting",
+    },
+    features: [
+      "Includes 2 distinct camera angles in full render quality",
+      "Procedural gold metallic shaders with specular highlights",
+      "Tiered cloth drape simulation with hanging decorative fringe",
+      "Ornamental wood pole with ceremonial Balinese engravings",
+    ],
+  },
+  {
+    id: "bendera-tradisional",
+    title: "Bendera Tradisional (Ceremonial Flags)",
+    subtitle: "Amertha, Kshetra & Madya Standards (3 Renders)",
+    category: "Architecture & Culture",
+    coverImage: "/assets/Bendera Amertha.png",
+    photos: [
+      {
+        label: "Bendera Amertha",
+        url: "/assets/Bendera Amertha.png",
+      },
+      {
+        label: "Bendera Kshetra",
+        url: "/assets/Bendera Kshetra.png",
+      },
+      {
+        label: "Bendera Madya",
+        url: "/assets/Bendera Madya.png",
+      },
+    ],
+    description:
+      "A complete set of three traditional ceremonial standards: Bendera Amertha, Bendera Kshetra, and Bendera Madya. Each flag features custom fabric pennants, carved wooden bases, and sacred symbolic motifs.",
+    tags: ["Balinese Flags", "Culture", "3 Variations", "Cloth Dynamics"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Traditional Indonesian Standards",
+      polyCount: "~55k Triangles (3 sets)",
+      lighting: "Warm Sunlight + Diffuse Fill",
+    },
+    features: [
+      "Includes all 3 ceremonial variants (Amertha, Kshetra, Madya)",
+      "Realistic cloth folds and micro-wrinkle normals",
+      "Hand-carved wooden base stands with traditional motifs",
+      "High-resolution 4K render exports for each standard",
+    ],
+  },
+
+  // 2. Environment & Nature
+  {
+    id: "link-envi",
+    title: "A Forest (Link Envi)",
+    subtitle: "Atmospheric Deep Woods Diorama",
+    category: "Environment & Nature",
+    coverImage: "/assets/Link Envi SH2 Render.png",
+    photos: [
+      {
+        label: "Forest Canopy View",
+        url: "/assets/Link Envi SH2 Render.png",
+      },
+    ],
+    description:
+      "An atmospheric deep forest environment render featuring morning fog, towering pine trees, lush moss-covered boulders, and volumetric sun rays filtering through the tree canopies.",
+    tags: ["Environment Art", "Stylized Nature", "Volumetric Fog", "Canopy"],
+    stats: {
+      engine: "Blender Eevee",
+      style: "Atmospheric Stylized",
+      polyCount: "~65k Triangles",
+      lighting: "Volumetric Mist + God Rays",
+    },
+    features: [
+      "Instanced vegetation particle system for dense foliage",
+      "Layered fog shaders creating deep atmospheric depth",
+      "Stylized bark and needle materials",
+      "Cinematic low-angle camera framing",
+    ],
+  },
+  {
+    id: "sawah-terrace",
+    title: "Sawah Rice Terraces",
+    subtitle: "Indonesian Stepped Field Landscape",
+    category: "Environment & Nature",
+    coverImage: "/assets/Sawah Render viewport.png",
+    photos: [
+      {
+        label: "Viewport & Field Layout",
+        url: "/assets/Sawah Render viewport.png",
+      },
+    ],
+    description:
+      "An expansive tiered paddy field landscape modeling water reflection planes, embankment vegetation, terraced earth levels, and rural Indonesian terrain layout.",
+    tags: ["Landscape", "Rice Terraces", "Indonesian Nature", "Water Shader"],
+    stats: {
+      engine: "Blender Viewport Render",
+      style: "Terrain Modeling",
+      polyCount: "~78k Triangles",
+      lighting: "Overhead Daylight & Sky Reflection",
+    },
+    features: [
+      "Multi-tier contoured embankment curves",
+      "Dynamic water mirror planes reflecting open sky",
+      "Modular paddy boundary segments for landscape assembly",
+      "Terrain heightmap modeling and erosion slopes",
+    ],
+  },
+  {
+    id: "layouting-envi",
+    title: "Environment Scene Layouting",
+    subtitle: "Worldbuilding Blockout & Composition",
+    category: "Environment & Nature",
+    coverImage: "/assets/Layouting Envi Render.png",
+    photos: [
+      {
+        label: "Composition Blockout",
+        url: "/assets/Layouting Envi Render.png",
+      },
+    ],
+    description:
+      "A comprehensive environment layout composition exploring asset placement, depth staging, camera focal lengths, and spatial balance for game scenes.",
+    tags: ["Worldbuilding", "Scene Layout", "Level Design", "Composition"],
+    stats: {
+      engine: "Blender Eevee",
+      style: "Environment Staging",
+      polyCount: "~50k Triangles",
+      lighting: "Atmospheric Ambient + Direct Sun",
+    },
+    features: [
+      "Focal point composition using the rule of thirds",
+      "Layered foreground, midground, and background visual hierarchy",
+      "Foliage cluster distribution for natural transitions",
+      "Clean modular prop placement for game engine export",
+    ],
+  },
+  {
+    id: "stylized-tree",
+    title: "Stylized Tree & Wind Animation",
+    subtitle: "Foliage Shading & Dynamics (Image + Video)",
+    category: "Environment & Nature",
+    coverImage: "/assets/Tree.png",
+    photos: [
+      {
+        label: "Stylized Tree Still Render",
+        url: "/assets/Tree.png",
+      },
+    ],
+    videoUrl: "/assets/Tree Animation.mp4",
+    description:
+      "Handcrafted stylized tree model with organic trunk curves, fluffy vertex-colored leaf clumps, and subtle procedural wind animation dynamic playback.",
+    tags: ["Foliage", "Wind Dynamics", "Stylized 3D", "Procedural"],
+    stats: {
+      engine: "Blender Cycles & Eevee",
+      style: "Ghibli / Stylized Foliage",
+      polyCount: "~18k Triangles",
+      lighting: "Soft Ambient + Rim Sunlight",
+    },
+    features: [
+      "Custom normal editing for smooth, fluffy foliage shadows",
+      "Organic trunk silhouette with stylized bark ridges",
+      "Includes MP4 animated wind loop demonstration",
+      "Lightweight triangle count optimized for game worlds",
+    ],
+  },
+
+  // 3. Characters & Creatures
+  {
+    id: "ikan-v1",
+    title: "Ikan (Fish Character) - Version 1",
+    subtitle: "First Iteration / Concept Design",
+    category: "Characters & Creatures",
+    coverImage: "/assets/Ikan 1 v2.png",
+    photos: [
+      {
+        label: "Side Silhouette (Angle 1)",
+        url: "/assets/Ikan 1 v2.png",
+      },
+      {
+        label: "Perspective View (Angle 2)",
+        url: "/assets/Ikan 2 v2.png",
+      },
+    ],
+    description:
+      "First initial iteration of the stylized 3D fish character. Explored primary body proportions, fin shapes, eye placements, and aquatic silhouettes before revision.",
+    tags: ["Creature", "Stylized Fish", "Version 1", "Concept"],
+    stats: {
+      engine: "Blender Eevee",
+      style: "Low-Poly Creature",
+      polyCount: "~8k Triangles",
+      lighting: "Underwater Soft Diffuse",
+    },
+    features: [
+      "Original baseline silhouette and character proportions",
+      "Broad fin profiles designed for swimming deformations",
+      "Simplified eye and gill geometry",
+      "Served as the foundation for the Version 2 revision",
+    ],
+  },
+  {
+    id: "ikan-v2",
+    title: "Ikan (Fish Character) - Version 2 (Revised)",
+    subtitle: "Polished Model, Shaders & Angles (Revisi)",
+    category: "Characters & Creatures",
+    coverImage: "/assets/Ikan 2 v2.png",
+    photos: [
+      {
+        label: "Refined Perspective (Angle 1)",
+        url: "/assets/Ikan 2 v2.png",
+      },
+      {
+        label: "Full Profile (Angle 2)",
+        url: "/assets/Ikan 1 v2.png",
+      },
+    ],
+    description:
+      "The revised and upgraded Version 2 of the fish character. Features refined topology edge flows for smooth deformations, improved translucent fin shaders, gradient scale coloring, and studio turntable lighting.",
+    tags: ["Creature", "Revised Version", "Polished 3D", "PBR Fish"],
+    stats: {
+      engine: "Blender Cycles / Eevee",
+      style: "Stylized Semi-Realistic",
+      polyCount: "~16k Triangles",
+      lighting: "Studio Softbox + Rim Backlight",
+    },
+    features: [
+      "Overhauled edge flow for organic rigging and swimming animation",
+      "Subsurface scattering and translucent fin edge effects",
+      "Vibrant tropical aquatic color gradient mapping",
+      "Multi-angle studio turnaround renders",
+    ],
+  },
+  {
+    id: "ninja-model",
+    title: "Ninja Character Model",
+    subtitle: "Shinobi Operative Turnaround (2 Renders)",
+    category: "Characters & Creatures",
+    coverImage: "/assets/Ninja 1.png",
+    photos: [
+      {
+        label: "Front Stance (Render 1)",
+        url: "/assets/Ninja 1.png",
+      },
+      {
+        label: "Side Action Stance (Render 2)",
+        url: "/assets/Ninja 2.png",
+      },
+    ],
+    description:
+      "A stylized ninja character model featuring a cloth cowl mask, shinobi shozoku wraps, utility sash, and arm guards. Rendered across multiple viewpoints to verify silhouette balance.",
+    tags: ["Character Model", "Ninja", "2 Renders", "Game Ready"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Stylized Shinobi",
+      polyCount: "~22k Triangles",
+      lighting: "Dark Noir Studio Rim Lighting",
+    },
+    features: [
+      "Includes 2 distinct render poses and camera perspectives",
+      "Layered dark cloth folds and utility belt attachments",
+      "Defined muscle silhouettes and anime-inspired proportions",
+      "Ready for bipedal armature rigging and weight painting",
+    ],
+  },
+
+  // 4. Props & Objects
+  {
+    id: "sushi-sashimi",
+    title: "Sushi & Sashimi Platter",
+    subtitle: "Japanese Culinary 3D Art",
+    category: "Props & Objects",
+    coverImage: "/assets/Sushi & Sashimi.png",
+    photos: [
+      {
+        label: "Platter Presentation",
+        url: "/assets/Sushi & Sashimi.png",
+      },
+    ],
+    description:
+      "An appetizing stylized culinary render featuring nigiri sushi with fresh tuna and salmon cuts, wasabi quenelle, pickled ginger, and dark wooden serving board.",
+    tags: ["Food 3D", "Stylized Props", "Subsurface Scattering", "Culinary"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Stylized Food Art",
+      polyCount: "~14k Triangles",
+      lighting: "Warm Restaurant Key Light",
+    },
+    features: [
+      "Subsurface scattering giving raw fish cuts natural translucency",
+      "Textured rice grain procedural bump and gloss mapping",
+      "Handcrafted wasabi paste and garnish details",
+      "Dark timber geta board with satin lacquer reflections",
+    ],
+  },
+  {
+    id: "katana",
+    title: "Traditional Katana Blade",
+    subtitle: "Japanese Samurai Weapon Hard-Surface Model",
+    category: "Props & Objects",
+    coverImage: "/assets/Katana.jpg",
+    photos: [
+      {
+        label: "Blade & Saya Display",
+        url: "/assets/Katana.jpg",
+      },
+    ],
+    description:
+      "A precision-modeled traditional Japanese katana sword. Features an authentic curved steel blade with hamon temper line, wrapped tsuka hilt, decorative gold tsuba guard, and lacquered saya scabbard.",
+    tags: ["Hard-Surface", "Katana", "Weapon", "Metallic PBR"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Hard-Surface Samurai Sword",
+      polyCount: "~19k Triangles",
+      lighting: "Studio Rim Highlights on Steel Edge",
+    },
+    features: [
+      "Detailed diamond-pattern tsuka-ito hilt wrap geometry",
+      "Metallic blade shader with wave hamon temper line reflections",
+      "Custom gold-engraved tsuba handguard",
+      "High-gloss black lacquer finish on wooden scabbard",
+    ],
+  },
+  {
+    id: "mug",
+    title: "Ceramic Coffee Mug",
+    subtitle: "Studio Prop Study & High-Gloss Shading",
+    category: "Props & Objects",
+    coverImage: "/assets/Mug.png",
+    photos: [
+      {
+        label: "Ceramic Mug Render",
+        url: "/assets/Mug.png",
+      },
+    ],
+    description:
+      "A clean everyday tabletop prop model of a ceramic coffee mug. Features smooth ergonomic handle curvature, interior liquid meniscus, and high-gloss ceramic glaze reflections.",
+    tags: ["Prop", "Ceramics", "Glossy Shading", "Hard-Surface"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Clean Product Prop",
+      polyCount: "~9k Triangles",
+      lighting: "Studio Softbox Highlight Setup",
+    },
+    features: [
+      "Subdivision surface modeling with clean round edge loops",
+      "Clearcoat ceramic shader with specular reflection highlights",
+      "Modeled coffee liquid surface and inner wall meniscus",
+      "Clean bevel modifiers with zero shading artifacts",
+    ],
+  },
+  {
+    id: "meja",
+    title: "Crafted Wooden Table (Meja)",
+    subtitle: "Modular Furniture Asset",
+    category: "Props & Objects",
+    coverImage: "/assets/Meja.png",
+    photos: [
+      {
+        label: "Table Isometric View",
+        url: "/assets/Meja.png",
+      },
+    ],
+    description:
+      "Handcrafted rustic wooden table with beveled timber edges, realistic wood grain texture orientation, and modular dimensions for game interior staging.",
+    tags: ["Furniture", "Woodworking", "Modular", "Prop"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Rustic Wood Furniture",
+      polyCount: "~12k Triangles",
+      lighting: "Warm Diffuse Interior Lighting",
+    },
+    features: [
+      "Custom wood grain UV mapping aligned with timber grain directions",
+      "Subtle beveled corners preventing sharp digital edges",
+      "Sturdy leg joinery and cross-beam construction",
+      "Low draw-call geometry ideal for game environments",
+    ],
+  },
+  {
+    id: "book-on-floor",
+    title: "Book on Floor (Still Life)",
+    subtitle: "Atmospheric Dramatic Prop Scene",
+    category: "Props & Objects",
+    coverImage: "/assets/Book In Floor.png",
+    photos: [
+      {
+        label: "Low-Angle Still Life",
+        url: "/assets/Book In Floor.png",
+      },
+    ],
+    description:
+      "A dramatic, cinematic still life of an open antique book resting on rustic wooden floorboards with focused directional lighting and dust mote ambience.",
+    tags: ["Still Life", "Cinematic", "Book", "Dramatic Lighting"],
+    stats: {
+      engine: "Blender Cycles",
+      style: "Cinematic Mood Piece",
+      polyCount: "~26k Triangles",
+      lighting: "Directional Window Shaft Lighting",
+    },
+    features: [
+      "Curved open book pages with paper translucency",
+      "Rustic wooden plank floor with micro-surface displacement",
+      "Cinematic shallow depth of field (DoF)",
+      "High-contrast chiaroscuro lighting mood",
+    ],
+  },
+
+  // 5. Animation & Motion
+  {
+    id: "redmi-animation",
+    title: "Redmi Note 13 4G Commercial Animation",
+    subtitle: "3D Product Commercial Motion",
+    category: "Animation & Motion",
+    coverImage: "/assets/Redmi Note 13 4G Animation.gif",
+    photos: [
+      {
+        label: "Commercial Animation GIF",
+        url: "/assets/Redmi Note 13 4G Animation.gif",
+      },
+    ],
+    description:
+      "A dynamic 3D commercial motion animation showcasing the Redmi Note 13 4G smartphone. Features precision CAD-accurate chassis modeling, sapphire lens reflections, and smooth choreographed camera sweeps.",
+    tags: ["Commercial", "Product Motion", "Hard-Surface", "Keyframe Animation"],
+    stats: {
+      engine: "Blender Animation",
+      style: "Commercial Product Motion",
+      polyCount: "~48k Triangles",
+      lighting: "Studio Softbox Rig + Rim Lights",
+    },
+    features: [
+      "Choreographed camera rig with smooth easing curves",
+      "High-fidelity PBR glass, aluminium, and sapphire lens shaders",
+      "Studio light sweep highlighting the slim form factor",
+      "Clean hard-surface topology and bevel modifiers",
+    ],
+  },
+];
+
+const CATEGORIES = [
+  "All Works",
+  "Architecture & Culture",
+  "Environment & Nature",
+  "Characters & Creatures",
+  "Props & Objects",
+  "Animation & Motion",
+];
+
+export default function BlenderStudioPage() {
+  const [activeCategory, setActiveCategory] = useState<string>("All Works");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedProject, setSelectedProject] = useState<BlenderProject | null>(
+    null
+  );
+  const [activePhotoIndex, setActivePhotoIndex] = useState<number>(0);
+
+  const filteredProjects = ALL_BLENDER_PROJECTS.filter((proj) => {
+    const matchesCategory =
+      activeCategory === "All Works" || proj.category === activeCategory;
+    const matchesSearch =
+      searchQuery.trim() === "" ||
+      proj.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      proj.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      proj.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  const openModal = (proj: BlenderProject) => {
+    setSelectedProject(proj);
+    setActivePhotoIndex(0);
+  };
+
+  const handleNextPhoto = () => {
+    if (!selectedProject) return;
+    setActivePhotoIndex((prev) => (prev + 1) % selectedProject.photos.length);
+  };
+
+  const handlePrevPhoto = () => {
+    if (!selectedProject) return;
+    setActivePhotoIndex((prev) =>
+      prev === 0 ? selectedProject.photos.length - 1 : prev - 1
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0d1117] text-[#c9d1d9] flex flex-col selection:bg-[#8A6FB5]/30 selection:text-white">
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-40 bg-[#0d1117]/85 backdrop-blur-md border-b border-[#30363d] py-3.5 shadow-md">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 text-xs font-semibold text-white transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#8A6FB5]" />
+              <span>Back to Portfolio</span>
+            </Link>
+            <span className="text-[#30363d] hidden sm:inline">/</span>
+            <div className="hidden sm:flex items-center gap-2 text-xs text-[#8b949e]">
+              <Box className="w-3.5 h-3.5 text-[#8A6FB5]" />
+              <span className="font-semibold text-white">Dhitya Nurhadi</span>
+              <span>· 3D Blender Studio & Renders</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs px-3 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-[#8A6FB5] font-mono">
+              {ALL_BLENDER_PROJECTS.length} Works Catalogued
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Container */}
+      <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full">
+        {/* Hero Banner */}
+        <div className="mb-12 text-center max-w-3xl mx-auto relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[280px] bg-[#8A6FB5]/10 blur-[120px] pointer-events-none rounded-full" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#8A6FB5] mb-4">
+            <Box className="w-3.5 h-3.5" />
+            <span>Complete 3D Blender Archive</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+            Blender 3D Works & Renders
+          </h1>
+          <p className="text-sm sm:text-base text-[#8b949e] leading-relaxed">
+            Full gallery of 3D architecture, cultural artifacts, environments,
+            character models, and product animations modeled by{" "}
+            <span className="text-white font-medium">Dhitya Nurhadi</span> in
+            Blender.
+          </p>
+        </div>
+
+        {/* Category Toggles & Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2.5 rounded-2xl bg-[#161b22] border border-[#30363d] mb-10 shadow-lg">
+          {/* Category Pills */}
+          <div className="flex flex-wrap gap-1.5">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  activeCategory === cat
+                    ? "bg-[#8A6FB5] text-white shadow-md shadow-[#8A6FB5]/25"
+                    : "text-[#8b949e] hover:text-white hover:bg-[#0d1117]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Search Box */}
+          <div className="relative min-w-[210px]">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#8b949e]" />
+            <input
+              type="text"
+              placeholder="Search render or tag..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#0d1117] border border-[#30363d] rounded-xl text-white placeholder-[#8b949e] focus:outline-none focus:border-[#8A6FB5]"
+            />
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {filteredProjects.map((work) => (
+            <div
+              key={work.id}
+              onClick={() => openModal(work)}
+              className="group cursor-pointer bg-[#161b22] border border-[#30363d] rounded-2xl overflow-hidden hover:border-[#8A6FB5] transition-all duration-300 hover:shadow-2xl hover:shadow-[#8A6FB5]/10 flex flex-col justify-between"
+            >
+              {/* Image Preview Container */}
+              <div className="relative aspect-[4/3] w-full bg-[#0d1117] overflow-hidden">
+                <Image
+                  src={work.coverImage}
+                  alt={work.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-all duration-500"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
+
+                {/* Badge Category */}
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#0d1117]/85 backdrop-blur-md border border-white/10 text-[11px] font-medium text-white">
+                  {work.category === "Animation & Motion" ? (
+                    <Film className="w-3 h-3 text-[#8A6FB5]" />
+                  ) : work.category === "Architecture & Culture" ? (
+                    <Home className="w-3 h-3 text-[#8A6FB5]" />
+                  ) : work.category === "Environment & Nature" ? (
+                    <TreePine className="w-3 h-3 text-[#8A6FB5]" />
+                  ) : (
+                    <Box className="w-3 h-3 text-[#8A6FB5]" />
+                  )}
+                  <span>{work.category}</span>
+                </div>
+
+                {/* Multi-Photo Count Badge */}
+                {work.photos.length > 1 && (
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                    <Images className="w-3 h-3 text-[#8A6FB5]" />
+                    <span>{work.photos.length} Renders</span>
+                  </div>
+                )}
+
+                {/* Inspect Button Icon */}
+                <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-[#0d1117]/85 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
+                  <Maximize2 className="w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Information Section */}
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="text-xs text-[#8A6FB5] font-mono mb-1">
+                    {work.subtitle}
+                  </div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-[#c7b2e8] transition-colors mb-2">
+                    {work.title}
+                  </h3>
+                  <p className="text-xs text-[#8b949e] leading-relaxed mb-4 line-clamp-2">
+                    {work.description}
+                  </p>
+                </div>
+
+                <div>
+                  {/* Technical Specs Strip */}
+                  <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80 text-[11px] mb-4">
+                    <div>
+                      <span className="text-[#8b949e] block">Engine</span>
+                      <span className="font-semibold text-white truncate block">
+                        {work.stats.engine}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#8b949e] block">Density</span>
+                      <span className="font-semibold text-white truncate block">
+                        {work.stats.polyCount}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {work.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d]/60 text-[10px] text-[#8b949e]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-[#8A6FB5] font-semibold">
+                    <span>
+                      {work.photos.length > 1
+                        ? `Click to View ${work.photos.length} Renders`
+                        : "Click to Inspect Render"}
+                    </span>
+                    <Maximize2 className="w-3.5 h-3.5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal Lightbox with Multi-Render Switcher */}
+        {selectedProject && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md animate-in fade-in duration-200"
+            onClick={() => setSelectedProject(null)}
+          >
+            <div
+              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[94vh] overflow-hidden flex flex-col shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="px-5 py-3.5 border-b border-[#30363d] flex items-center justify-between bg-[#0d1117]/85">
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <span>{selectedProject.title}</span>
+                    {selectedProject.photos.length > 1 && (
+                      <span className="text-xs px-2 py-0.5 rounded-md bg-[#8A6FB5]/20 text-[#c7b2e8] border border-[#8A6FB5]/30">
+                        {activePhotoIndex + 1} of {selectedProject.photos.length}
+                      </span>
+                    )}
+                  </h3>
+                  <p className="text-xs text-[#8b949e]">
+                    {selectedProject.subtitle} · {selectedProject.category}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="w-8 h-8 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-[#8b949e] hover:text-white hover:bg-[#30363d] transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Main Media Viewer */}
+              <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-auto p-4 group">
+                <img
+                  src={
+                    selectedProject.photos[activePhotoIndex]?.url ||
+                    selectedProject.coverImage
+                  }
+                  alt={selectedProject.title}
+                  className="max-h-[58vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300"
+                />
+
+                {/* Left / Right Arrows for Multi-Photo Items */}
+                {selectedProject.photos.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePrevPhoto}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all hover:scale-105"
+                      title="Previous angle"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={handleNextPhoto}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all hover:scale-105"
+                      title="Next angle"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Thumbnails Row for Multi-Render items (e.g. Bendera, Tedung, Ninja, Ikan) */}
+              {selectedProject.photos.length > 1 && (
+                <div className="px-5 py-2.5 bg-[#0d1117] border-t border-[#30363d] flex items-center gap-2 overflow-x-auto">
+                  <span className="text-[11px] font-semibold text-[#8b949e] shrink-0 mr-2 flex items-center gap-1">
+                    <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                    Angles / Variations:
+                  </span>
+                  {selectedProject.photos.map((p, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActivePhotoIndex(idx)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border flex items-center gap-2 transition-all shrink-0 ${
+                        activePhotoIndex === idx
+                          ? "bg-[#8A6FB5] border-[#8A6FB5] text-white shadow-sm shadow-[#8A6FB5]/30"
+                          : "bg-[#161b22] border-[#30363d] text-[#8b949e] hover:text-white"
+                      }`}
+                    >
+                      <span>{p.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Video Player if available (e.g. Tree Animation) */}
+              {selectedProject.videoUrl && (
+                <div className="px-5 py-3 bg-[#0d1117] border-t border-[#30363d]">
+                  <span className="text-xs font-semibold text-white block mb-2 flex items-center gap-1.5">
+                    <Film className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                    Animated Video Playback:
+                  </span>
+                  <video
+                    src={selectedProject.videoUrl}
+                    controls
+                    className="w-full max-h-[220px] rounded-lg bg-black"
+                  />
+                </div>
+              )}
+
+              {/* Details and Technical Specs */}
+              <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3.5">
+                <p className="text-sm text-[#c9d1d9] leading-relaxed">
+                  {selectedProject.description}
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
+                    <span className="text-[#8b949e] block">Engine</span>
+                    <span className="font-semibold text-white truncate block">
+                      {selectedProject.stats.engine}
+                    </span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
+                    <span className="text-[#8b949e] block">Polygon Count</span>
+                    <span className="font-semibold text-white">
+                      {selectedProject.stats.polyCount}
+                    </span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
+                    <span className="text-[#8b949e] block">Art Style</span>
+                    <span className="font-semibold text-white">
+                      {selectedProject.stats.style}
+                    </span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
+                    <span className="text-[#8b949e] block">Lighting</span>
+                    <span className="font-semibold text-white truncate block">
+                      {selectedProject.stats.lighting}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-[#30363d]/60">
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedProject.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d] text-[11px] text-[#8A6FB5]"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href={
+                      selectedProject.photos[activePhotoIndex]?.url ||
+                      selectedProject.coverImage
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white transition-colors"
+                  >
+                    Open Current Asset <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-[#30363d] bg-[#0d1117] py-8 text-center text-xs text-[#8b949e]">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <Link
+            href="/"
+            className="hover:text-white transition-colors flex items-center gap-1.5"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 text-[#8A6FB5]" />
+            <span>Return to Portfolio</span>
+          </Link>
+          <span>Blender 3D Studio & Works · Dhitya Nurhadi</span>
+        </div>
+      </footer>
+    </div>
+  );
+}

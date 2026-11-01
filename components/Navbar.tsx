@@ -49,6 +49,12 @@ export function Navbar() {
             <Layers className="w-4 h-4" /> 3D Showcase
           </a>
           <a
+            href="#projects"
+            className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
+          >
+            <Box className="w-4 h-4" /> Projects
+          </a>
+          <a
             href="#skills"
             className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
           >
