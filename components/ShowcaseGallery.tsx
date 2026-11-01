@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -165,6 +165,20 @@ export function ShowcaseGallery() {
   const [selectedItem, setSelectedItem] = useState<ShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [activeFilter, setActiveFilter] = useState<string>("All");
+
+  useEffect(() => {
+    if (!selectedItem) return;
+
+    const bodyOverflow = document.body.style.overflow;
+    const documentOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = documentOverflow;
+    };
+  }, [selectedItem]);
 
   const categories = ["All", "Architecture", "Environment", "Characters", "Props & Food", "Animation & Motion"];
 
@@ -336,7 +350,7 @@ export function ShowcaseGallery() {
             onClick={() => setSelectedItem(null)}
           >
             <div
-              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl"
+              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[92dvh] overflow-x-hidden overflow-y-auto overscroll-contain shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
@@ -363,7 +377,7 @@ export function ShowcaseGallery() {
               </div>
 
               {/* Modal Image View */}
-              <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-auto p-4 group">
+              <div className="relative min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-hidden p-4 group">
                 <img
                   src={selectedItem.photos[activePhotoIdx]?.url || selectedItem.filename}
                   alt={selectedItem.title}

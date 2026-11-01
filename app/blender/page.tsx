@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -238,7 +238,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   {
     id: "stylized-tree",
     title: "Stylized Tree & Wind Animation",
-    subtitle: "Foliage Shading & Dynamics (Image + Video)",
+    subtitle: "Stylized Foliage Render",
     category: "Environment & Nature",
     coverImage: "/assets/Tree.png",
     photos: [
@@ -247,10 +247,9 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Tree.png",
       },
     ],
-    videoUrl: "/assets/Tree Animation.mp4",
     description:
-      "Handcrafted stylized tree model with organic trunk curves, fluffy vertex-colored leaf clumps, and subtle procedural wind animation dynamic playback.",
-    tags: ["Foliage", "Wind Dynamics", "Stylized 3D", "Procedural"],
+      "Handcrafted stylized tree model with organic trunk curves and fluffy vertex-colored leaf clumps.",
+    tags: ["Foliage", "Stylized 3D", "Procedural"],
     stats: {
       engine: "Blender Cycles & Eevee",
       style: "Ghibli / Stylized Foliage",
@@ -260,7 +259,6 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     features: [
       "Custom normal editing for smooth, fluffy foliage shadows",
       "Organic trunk silhouette with stylized bark ridges",
-      "Includes MP4 animated wind loop demonstration",
       "Lightweight triangle count optimized for game worlds",
     ],
   },
@@ -271,19 +269,23 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     title: "Ikan (Fish Character) - Version 1",
     subtitle: "First Iteration / Concept Design",
     category: "Characters & Creatures",
-    coverImage: "/assets/Ikan 1 v2.png",
+    coverImage: "/assets/Ikan 1 v1.png",
     photos: [
       {
-        label: "Side Silhouette (Angle 1)",
-        url: "/assets/Ikan 1 v2.png",
+        label: "Ikan 1 v1",
+        url: "/assets/Ikan 1 v1.png",
       },
       {
-        label: "Perspective View (Angle 2)",
-        url: "/assets/Ikan 2 v2.png",
+        label: "Ikan 2 v1",
+        url: "/assets/Ikan 2 v1.png",
+      },
+      {
+        label: "Ikan 3 v1",
+        url: "/assets/Ikan 3 v1.png",
       },
     ],
     description:
-      "First initial iteration of the stylized 3D fish character. Explored primary body proportions, fin shapes, eye placements, and aquatic silhouettes before revision.",
+      "The first iteration of the stylized 3D fish character, exploring body proportions, fin shapes, eye placement, and aquatic silhouettes.",
     tags: ["Creature", "Stylized Fish", "Version 1", "Concept"],
     stats: {
       engine: "Blender Eevee",
@@ -295,28 +297,32 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       "Original baseline silhouette and character proportions",
       "Broad fin profiles designed for swimming deformations",
       "Simplified eye and gill geometry",
-      "Served as the foundation for the Version 2 revision",
+      "Established the foundation for Version 2",
     ],
   },
   {
     id: "ikan-v2",
-    title: "Ikan (Fish Character) - Version 2 (Revised)",
-    subtitle: "Polished Model, Shaders & Angles (Revisi)",
+    title: "Ikan (Fish Character) - Version 2",
+    subtitle: "Polished Model, Shaders & Angles",
     category: "Characters & Creatures",
-    coverImage: "/assets/Ikan 2 v2.png",
+    coverImage: "/assets/Ikan 1 v2.png",
     photos: [
       {
-        label: "Refined Perspective (Angle 1)",
+        label: "Ikan 1 v2",
+        url: "/assets/Ikan 1 v2.png",
+      },
+      {
+        label: "Ikan 2 v2",
         url: "/assets/Ikan 2 v2.png",
       },
       {
-        label: "Full Profile (Angle 2)",
-        url: "/assets/Ikan 1 v2.png",
+        label: "Ikan 3 v2",
+        url: "/assets/Ikan 3 v2.png",
       },
     ],
     description:
-      "The revised and upgraded Version 2 of the fish character. Features refined topology edge flows for smooth deformations, improved translucent fin shaders, gradient scale coloring, and studio turntable lighting.",
-    tags: ["Creature", "Revised Version", "Polished 3D", "PBR Fish"],
+      "The upgraded Version 2 fish character, featuring refined topology for smooth deformations, translucent fin shaders, gradient scale coloring, and studio turntable lighting.",
+    tags: ["Creature", "Version 2", "Polished 3D", "PBR Fish"],
     stats: {
       engine: "Blender Cycles / Eevee",
       style: "Stylized Semi-Realistic",
@@ -536,7 +542,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "tree-animation",
-    title: "Stylized Tree Wind Animation",
+    title: "Tree Animation",
     subtitle: "Procedural Foliage & Wind Motion",
     category: "Animation & Motion",
     coverImage: "/assets/Tree.png",
@@ -580,6 +586,20 @@ export default function BlenderStudioPage() {
     null
   );
   const [activePhotoIndex, setActivePhotoIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const bodyOverflow = document.body.style.overflow;
+    const documentOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = documentOverflow;
+    };
+  }, [selectedProject]);
 
   const filteredProjects = ALL_BLENDER_PROJECTS.filter((proj) => {
     const matchesCategory =
@@ -800,7 +820,7 @@ export default function BlenderStudioPage() {
             onClick={() => setSelectedProject(null)}
           >
             <div
-              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[94vh] overflow-hidden flex flex-col shadow-2xl"
+              className="bg-[#161b22] border border-[#30363d] rounded-2xl max-w-4xl w-full max-h-[94dvh] overflow-x-hidden overflow-y-auto overscroll-contain shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
@@ -827,7 +847,7 @@ export default function BlenderStudioPage() {
               </div>
 
               {/* Main Media Viewer */}
-              <div className="relative flex-1 min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-auto p-4 group">
+              <div className="relative min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-hidden p-4 group">
                 <img
                   src={
                     selectedProject.photos[activePhotoIndex]?.url ||
