@@ -283,7 +283,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     stats: {
       engine: "Cycles",
       style: "Low-Poly Creature",
-      polyCount: "253 / 253 / 5,803",
+      polyCount: "253,580",
       lighting: "Underwater Soft Diffuse",
     },
     features: [
