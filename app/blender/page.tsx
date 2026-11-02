@@ -259,7 +259,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 3. Characters & Creatures
   {
     id: "ikan-v1",
-    title: "3 Jenis Ikan v1",
+    title: "3 Types of Fish v1",
     subtitle: "Three Fish Models · Version 1",
     category: "Characters & Creatures",
     coverImage: "/assets/Ikan 1 v1.png",
@@ -283,7 +283,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     stats: {
       engine: "Cycles",
       style: "Low-Poly Creature",
-      polyCount: "253,580",
+      polyCount: "253,580 in total (3 fish)",
       lighting: "Underwater Soft Diffuse",
     },
     features: [
@@ -295,7 +295,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "ikan-v2",
-    title: "3 Jenis Ikan v2",
+    title: "3 Types of Fish v2",
     subtitle: "Three Fish Models · Version 2",
     category: "Characters & Creatures",
     coverImage: "/assets/Ikan 1 v2.png",
@@ -318,7 +318,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     stats: {
       engine: "Cycles",
       style: "Stylized Semi-Realistic",
-      polyCount: "189,500 total (3 fish)",
+      polyCount: "189,500 in total (3 fish)",
       lighting: "Studio Softbox + Rim Backlight",
     },
     features: [
