@@ -69,8 +69,8 @@ const ALL_PROJECTS: ProjectDetail[] = [
       "Clean, non-intrusive implementation for survival worlds",
     ],
     repoUrl: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
-    liveUrl: "https://modrinth.com/mod/universal-chiseled-bookshelf",
-    liveLabel: "View on Modrinth",
+    liveUrl: "https://discord.gg/vCZHM2NmA",
+    liveLabel: "Download on Discord",
   },
   {
     id: "ai-lab",
@@ -300,7 +300,7 @@ export default function ProjectsHubPage() {
                       className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
                     >
                       <Globe className="w-3.5 h-3.5" />
-                      <span>{proj.liveLabel ?? "Open Live Demo"}</span>
+                      <span>{proj.liveLabel ?? "Open the Website"}</span>
                       <ExternalLink className="w-3 h-3 text-white/80" />
                     </a>
                   )}
