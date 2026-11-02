@@ -1,23 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="cubeTop" x1="20" y1="13" x2="46" y2="31" gradientUnits="userSpaceOnUse">
+    <linearGradient id="cube" x1="13" y1="9" x2="51" y2="55" gradientUnits="userSpaceOnUse">
       <stop stop-color="#C7B2E8"/>
-      <stop offset="1" stop-color="#8A6FB5"/>
-    </linearGradient>
-    <linearGradient id="cubeLeft" x1="16" y1="26" x2="33" y2="52" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#A98BD4"/>
+      <stop offset=".52" stop-color="#8A6FB5"/>
       <stop offset="1" stop-color="#71529E"/>
     </linearGradient>
-    <linearGradient id="cubeRight" x1="34" y1="26" x2="50" y2="51" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8A6FB5"/>
-      <stop offset="1" stop-color="#4F3974"/>
-    </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="17" fill="#0D1117"/>
-  <rect x="1" y="1" width="62" height="62" rx="16" stroke="#8A6FB5" stroke-opacity=".35" stroke-width="2"/>
-  <path d="M32 10 51 20.5v23L32 54 13 43.5v-23L32 10Z" fill="#161B22" stroke="#8A6FB5" stroke-opacity=".5" stroke-width="1.5"/>
-  <path d="M32 11.8 48.8 21 32 30.4 15.2 21 32 11.8Z" fill="url(#cubeTop)"/>
-  <path d="M15.2 21 32 30.4v20L15.2 41V21Z" fill="url(#cubeLeft)"/>
-  <path d="M48.8 21 32 30.4v20L48.8 41V21Z" fill="url(#cubeRight)"/>
-  <path d="M24 25.7h7.1c5.8 0 9.2 3.2 9.2 8.5s-3.4 8.5-9.2 8.5H24V25.7Zm6.8 13.4c3.3 0 5.1-1.6 5.1-4.9s-1.8-4.9-5.1-4.9h-2.5v9.8h2.5Z" fill="#FFF" fill-rule="evenodd"/>
+  <path d="M32 5 56 18.5v27L32 59 8 45.5v-27L32 5Z" fill="url(#cube)"/>
+  <path d="M32 5v27L8 18.5 32 5Z" fill="#D9C9F0" fill-opacity=".72"/>
+  <path d="M32 32v27L8 45.5V18.5L32 32Z" fill="#8A6FB5" fill-opacity=".8"/>
+  <path d="M56 18.5v27L32 59V32l24-13.5Z" fill="#62478D" fill-opacity=".72"/>
+  <path d="M23 22h9.2c7.1 0 11.3 3.9 11.3 10s-4.2 10-11.3 10H23V22Zm8.8 15.5c4 0 6.1-1.8 6.1-5.5s-2.1-5.5-6.1-5.5h-3.1v11h3.1Z" fill="#FFF" fill-rule="evenodd"/>
 </svg>

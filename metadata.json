@@ -1,6 +1,6 @@
 {
-  "name": "Dhitya - 3D Artist & Animation Portfolio",
-  "description": "Portfolio and showcase for Dhitya, an animation student and 3D artist specializing in Blender medium-poly worlds, environments, and game art.",
+  "name": "Dhitya - Animation Student Portfolio",
+  "description": "Portfolio and creative work by Dhitya Nurhadi, an animation student exploring 3D art, web design, and Minecraft modding.",
   "permissions": [],
   "capabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

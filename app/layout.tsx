@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dhitya - 3D Artist & Animation Portfolio",
+  title: "Dhitya - Animation Student Portfolio",
   description:
-    "Portfolio and showcase for Dhitya, an animation student and 3D artist specializing in Blender medium-poly worlds, environments, and game art.",
+    "Portfolio and creative work by Dhitya Nurhadi, an animation student exploring 3D art, web design, and Minecraft modding.",
   openGraph: {
-    title: "Dhitya - 3D Artist & Animation Portfolio",
+    title: "Dhitya - Animation Student Portfolio",
     description:
-      "Portfolio and showcase for Dhitya, an animation student and 3D artist specializing in Blender medium-poly worlds, environments, and game art.",
+      "Portfolio and creative work by Dhitya Nurhadi, an animation student exploring 3D art, web design, and Minecraft modding.",
     type: "website",
   },
 };
