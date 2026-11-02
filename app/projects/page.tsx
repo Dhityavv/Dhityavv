@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   Rocket,
   Film,
-  Box,
   Gamepad2,
   Sparkles,
   ExternalLink,
@@ -23,13 +22,14 @@ interface ProjectDetail {
   id: string;
   title: string;
   subtitle: string;
-  category: "Full-Stack Web" | "3D & Interactive" | "Game Modding";
+  category: "Full-Stack Web" | "Game Modding";
   status: "Live" | "In Progress" | "Experimental" | "Coming Soon";
   description: string;
   techStack: string[];
   features: string[];
   repoUrl: string;
   liveUrl?: string;
+  liveLabel?: string;
   featured?: boolean;
 }
 
@@ -70,24 +70,8 @@ const ALL_PROJECTS: ProjectDetail[] = [
       "Clean, non-intrusive implementation for survival worlds",
     ],
     repoUrl: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
-  },
-  {
-    id: "fabric-modpack",
-    title: "Fabric Custom Performance Modpack",
-    subtitle: "Optimized Minecraft Client & Shaders",
-    category: "Game Modding",
-    status: "Experimental",
-    featured: false,
-    description:
-      "A tailored Minecraft Fabric mod configuration engineered for maximum FPS performance, sodium rendering optimizations, subtle atmospheric Iris shaders, and quality-of-life UI enhancements.",
-    techStack: ["Minecraft 1.21+", "Fabric Loader", "Sodium", "Iris Shaders", "Java"],
-    features: [
-      "Up to 3x FPS boost with Sodium and Lithium memory optimization",
-      "Curated shader profile for crisp atmospheric lighting",
-      "Lightweight client-side modpack setup",
-      "Smooth camera and render distance caching",
-    ],
-    repoUrl: "https://github.com/Dhityavv",
+    liveUrl: "https://modrinth.com/mod/universal-chiseled-bookshelf",
+    liveLabel: "View on Modrinth",
   },
   {
     id: "ai-lab",
@@ -106,26 +90,9 @@ const ALL_PROJECTS: ProjectDetail[] = [
     ],
     repoUrl: "https://github.com/Dhityavv",
   },
-  {
-    id: "waterfall-diorama",
-    title: "Waterfall & Cliff Procedural Scene",
-    subtitle: "Geometry Nodes Exploration",
-    category: "3D & Interactive",
-    status: "In Progress",
-    featured: false,
-    description:
-      "An in-depth study of Geometry Nodes for instancing rocks, procedural foliage scattering across cliff faces, and water volume simulation in Blender.",
-    techStack: ["Blender 3D", "Geometry Nodes", "Simulation Nodes"],
-    features: [
-      "Parameter-driven waterfall height and rock distribution",
-      "Instanced stylized trees and vegetation clusters",
-      "Automated UV projection and vertex coloring",
-    ],
-    repoUrl: "https://github.com/Dhityavv",
-  },
 ];
 
-const CATEGORIES = ["All Projects", "Full-Stack Web", "3D & Interactive", "Game Modding"];
+const CATEGORIES = ["All Projects", "Full-Stack Web", "Game Modding"];
 
 export default function ProjectsHubPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All Projects");
@@ -248,8 +215,6 @@ export default function ProjectsHubPage() {
                         <BookOpen className="w-5 h-5 text-[#8A6FB5]" />
                       ) : proj.category === "Full-Stack Web" ? (
                         <Film className="w-5 h-5 text-[#8A6FB5]" />
-                      ) : proj.category === "3D & Interactive" ? (
-                        <Box className="w-5 h-5 text-[#8A6FB5]" />
                       ) : (
                         <Gamepad2 className="w-5 h-5 text-emerald-400" />
                       )}
@@ -334,7 +299,7 @@ export default function ProjectsHubPage() {
                       className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
                     >
                       <Globe className="w-3.5 h-3.5" />
-                      <span>Open Live Demo</span>
+                      <span>{proj.liveLabel ?? "Open Live Demo"}</span>
                       <ExternalLink className="w-3 h-3 text-white/80" />
                     </a>
                   )}
