@@ -32,7 +32,7 @@ export interface BlenderProject {
   title: string;
   subtitle: string;
   category:
-    | "Architecture & Culture"
+    | "Architecture"
     | "Environment & Nature"
     | "Characters & Creatures"
     | "Props & Objects"
@@ -52,12 +52,12 @@ export interface BlenderProject {
 }
 
 const ALL_BLENDER_PROJECTS: BlenderProject[] = [
-  // 1. Architecture & Culture
+  // 1. Architecture
   {
     id: "rumah-vale",
     title: "Traditional House",
     subtitle: "Rumah Vale",
-    category: "Architecture & Culture",
+    category: "Architecture",
     coverImage: "/assets/Rumah Vale Render1.png",
     photos: [
       {
@@ -84,7 +84,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     id: "tedung-keraton",
     title: "Tedung Keraton",
     subtitle: "Traditional Umbrella",
-    category: "Architecture & Culture",
+    category: "Props & Objects",
     coverImage: "/assets/Tedung Keraton.png",
     photos: [
       {
@@ -115,7 +115,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     id: "bendera-tradisional",
     title: "3 Flags",
     subtitle: "Amertha, Kshetra, and Madya",
-    category: "Architecture & Culture",
+    category: "Props & Objects",
     coverImage: "/assets/Bendera Amertha.png",
     photos: [
       {
@@ -150,7 +150,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 2. Environment & Nature
   {
     id: "link-envi",
-    title: "Layouting Environment Hutan",
+    title: "Layouting Environment Forest",
     subtitle: "Forest Environment Layout",
     category: "Environment & Nature",
     coverImage: "/assets/Link Envi SH2 Render.png",
@@ -204,7 +204,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "layouting-envi",
-    title: "Layouting Environment Sawah",
+    title: "Layouting Environment Ricefield",
     subtitle: "Ricefield Environment Layout",
     category: "Environment & Nature",
     coverImage: "/assets/Layouting Envi Render.png",
@@ -231,28 +231,28 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "stylized-tree",
-    title: "Stylized Tree",
-    subtitle: "Tree Model",
+    title: "Simple Tree Layout",
+    subtitle: "Environment Layout",
     category: "Environment & Nature",
     coverImage: "/assets/Tree.png",
     photos: [
       {
-        label: "Stylized Tree Still Render",
+        label: "Simple Tree Layout",
         url: "/assets/Tree.png",
       },
     ],
-    description: "Stylized 3D tree model.",
-    tags: ["Tree", "Cycles"],
+    description: "A simple environment layout featuring a tree, created in Blender.",
+    tags: ["Tree", "Environment Layout", "Cycles"],
     stats: {
       engine: "Cycles",
-      style: "Sculpting Study",
+      style: "Simple Environment Layout",
       polyCount: "313,300",
       lighting: "Not specified",
     },
     features: [
-      "Ground shaped using Blender Sculpt Mode",
-      "Tree placed as a scene element",
-      "Static study with no animation",
+      "Simple composition featuring a tree and ground",
+      "Arranged as a basic environment layout",
+      "Static scene rendered with Cycles",
     ],
   },
 
@@ -552,26 +552,26 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     ],
   },
   {
-    id: "ricefield-animation",
+    id: "ricefield-model",
     title: "Ricefield",
-    subtitle: "Animation",
-    category: "Animation & Motion",
+    subtitle: "Environment Model",
+    category: "Environment & Nature",
     coverImage: "/assets/Sawah Render viewport.png",
     photos: [
       {
-        label: "Ricefield",
+        label: "Ricefield Environment",
         url: "/assets/Sawah Render viewport.png",
       },
     ],
-    description: "Ricefield animation scene created in Blender.",
-    tags: ["Ricefield", "Animation", "Cycles"],
+    description: "3D model of a ricefield environment created in Blender.",
+    tags: ["Ricefield", "Environment", "Cycles"],
     stats: {
       engine: "Cycles",
-      style: "Animation",
+      style: "Environment Model",
       polyCount: "131,000",
       lighting: "Not specified",
     },
-    features: ["Ricefield animation", "Rendered with Cycles", "131,000 triangles"],
+    features: ["Ricefield environment model", "Rendered with Cycles", "131,000 triangles"],
   },
   {
     id: "among-us",
@@ -628,7 +628,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
 
 const CATEGORIES = [
   "All Works",
-  "Architecture & Culture",
+  "Architecture",
   "Environment & Nature",
   "Characters & Creatures",
   "Props & Objects",
@@ -801,7 +801,7 @@ export default function BlenderStudioPage() {
                 <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#0d1117]/85 backdrop-blur-md border border-white/10 text-[11px] font-medium text-white">
                   {work.category === "Animation & Motion" ? (
                     <Film className="w-3 h-3 text-[#8A6FB5]" />
-                  ) : work.category === "Architecture & Culture" ? (
+                  ) : work.category === "Architecture" ? (
                     <Home className="w-3 h-3 text-[#8A6FB5]" />
                   ) : work.category === "Environment & Nature" ? (
                     <TreePine className="w-3 h-3 text-[#8A6FB5]" />

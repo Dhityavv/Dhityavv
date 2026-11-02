@@ -92,10 +92,10 @@ const SKILLS: SkillItem[] = [
 const PRACTICE_AREAS = [
   "Medium-poly modeling",
   "Geometry Nodes",
-  "Cliffs & waterfall scenes",
+  "Environment layout",
   "Stylized materials & PBR",
   "Armature & weight painting",
-  "Scene organization & hierarchy",
+  "Creative web design",
 ];
 
 export function SkillsSection() {

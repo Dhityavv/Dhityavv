@@ -270,7 +270,7 @@ export function ShowcaseGallery() {
                 Explore All 16+ 3D Blender Works & Archive
               </h4>
               <p className="text-xs text-[#8b949e]">
-                Dedicated website with complete cultural flags, fish revisions, katana, sawah, and turnarounds.
+                Dedicated website with complete cultural flags, fish revisions, katana, ricefield, and turnarounds.
               </p>
             </div>
           </div>
