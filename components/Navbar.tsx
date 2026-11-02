@@ -31,7 +31,7 @@ export function Navbar() {
             <Box className="w-4 h-4" />
           </div>
           <span>
-            Dhitya<span className="text-[#8A6FB5]">.3d</span>
+            Dhitya<span className="text-[#8A6FB5]">.3D</span>
           </span>
         </a>
 

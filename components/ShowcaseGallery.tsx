@@ -10,9 +10,6 @@ import {
   X,
   Sparkles,
   Info,
-  Film,
-  TreePine,
-  Home,
   ExternalLink,
   ArrowRight,
   Images,
@@ -28,13 +25,11 @@ interface ShowcasePhoto {
 interface ShowcaseItem {
   id: string;
   title: string;
-  category: string;
   subtitle: string;
   filename: string;
   photos: ShowcasePhoto[];
   description: string;
   tags: string[];
-  type: "image" | "animation";
   stats: {
     tool: string;
     style: string;
@@ -47,7 +42,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "rumah-vale",
     title: "Traditional House",
     subtitle: "Rumah Vale Render 1",
-    category: "Architecture",
     filename: "/assets/Rumah Vale Render1.png",
     photos: [
       { label: "Exterior View", url: "/assets/Rumah Vale Render1.png" },
@@ -55,7 +49,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "A stylized medium-poly architectural render of a traditional house with custom wooden textures, tiled rooftops, and warm ambient lighting modeled and arranged in Blender.",
     tags: ["Blender", "Medium-Poly", "Architecture", "Environment"],
-    type: "image",
     stats: {
       tool: "Blender 3D",
       style: "Medium-Poly",
@@ -66,7 +59,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "tedung-keraton",
     title: "Tedung Keraton",
     subtitle: "Royal Ceremonial Umbrella",
-    category: "Architecture",
     filename: "/assets/Tedung Keraton.png",
     photos: [
       { label: "Front Angle", url: "/assets/Tedung Keraton.png" },
@@ -75,7 +67,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "Intricate 3D model of Tedung Keraton, the sacred ceremonial royal umbrella. Features ornate golden finials, tiered fabric canopy trims, decorative tassels, and authentic Balinese motifs.",
     tags: ["Culture", "Ceremonial", "Multi-Angle", "Gold Shader"],
-    type: "image",
     stats: {
       tool: "Blender Cycles",
       style: "Intricate Traditional Craft",
@@ -86,7 +77,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "link-envi",
     title: "A Forest",
     subtitle: "Link Envi SH2 Render",
-    category: "Environment",
     filename: "/assets/Link Envi SH2 Render.png",
     photos: [
       { label: "Canopy View", url: "/assets/Link Envi SH2 Render.png" },
@@ -94,7 +84,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "An atmospheric nature environment render featuring tall canopy trees, forest undergrowth, mood mist, and stylized scenic foliage.",
     tags: ["Blender", "Environment Art", "Nature", "Lighting"],
-    type: "image",
     stats: {
       tool: "Blender 3D",
       style: "Stylized Nature",
@@ -105,7 +94,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "ninja-model",
     title: "Ninja Character Model",
     subtitle: "Shinobi Operative Turnaround",
-    category: "Characters",
     filename: "/assets/Ninja 1.png",
     photos: [
       { label: "Front Stance", url: "/assets/Ninja 1.png" },
@@ -114,7 +102,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "Stylized shinobi operative character turnaround featuring dark fabric cowl, arm wraps, utility sash, and balanced anime proportions.",
     tags: ["Character", "Shinobi", "2 Renders", "Game Ready"],
-    type: "image",
     stats: {
       tool: "Blender 3D",
       style: "Stylized Character",
@@ -125,7 +112,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "sushi-sashimi",
     title: "Sushi & Sashimi Platter",
     subtitle: "Japanese Culinary 3D Art",
-    category: "Props & Food",
     filename: "/assets/Sushi & Sashimi.png",
     photos: [
       { label: "Platter Render", url: "/assets/Sushi & Sashimi.png" },
@@ -133,7 +119,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "Appetizing stylized food render of fresh nigiri sushi, tuna & salmon sashimi slices, wasabi quenelle, and lacquered ceramic presentation board.",
     tags: ["Food 3D", "Stylized Props", "Subsurface Scattering", "Culinary"],
-    type: "image",
     stats: {
       tool: "Blender Cycles",
       style: "Stylized Food Art",
@@ -144,7 +129,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "redmi-animation",
     title: "Redmi Note 13 4G Animation",
     subtitle: "3D Product Commercial Motion",
-    category: "Animation & Motion",
     filename: "/assets/Redmi Note 13 4G Animation.gif",
     photos: [
       { label: "Commercial Motion GIF", url: "/assets/Redmi Note 13 4G Animation.gif" },
@@ -152,7 +136,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
     description:
       "A dynamic 3D commercial animation showcasing the Redmi Note 13 4G with smooth camera rotations, metallic material reflections, and motion design.",
     tags: ["Blender", "Motion Design", "3D Animation", "Commercial"],
-    type: "animation",
     stats: {
       tool: "Blender Animation",
       style: "Motion Graphics",
@@ -164,8 +147,6 @@ const SHOWCASE_ITEMS: ShowcaseItem[] = [
 export function ShowcaseGallery() {
   const [selectedItem, setSelectedItem] = useState<ShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
-  const [activeFilter, setActiveFilter] = useState<string>("All");
-
   useEffect(() => {
     if (!selectedItem) return;
 
@@ -179,13 +160,6 @@ export function ShowcaseGallery() {
       document.documentElement.style.overflow = documentOverflow;
     };
   }, [selectedItem]);
-
-  const categories = ["All", "Architecture", "Environment", "Characters", "Props & Food", "Animation & Motion"];
-
-  const filteredItems =
-    activeFilter === "All"
-      ? SHOWCASE_ITEMS
-      : SHOWCASE_ITEMS.filter((item) => item.category === activeFilter);
 
   const openModal = (item: ShowcaseItem) => {
     setSelectedItem(item);
@@ -209,37 +183,18 @@ export function ShowcaseGallery() {
             </p>
           </div>
 
-          {/* Filter Pills & Dedicated Page Link */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex flex-wrap gap-1.5 p-1 rounded-xl bg-[#0d1117] border border-[#30363d]/80">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                    activeFilter === cat
-                      ? "bg-[#8A6FB5] text-white shadow-sm shadow-[#8A6FB5]/30"
-                      : "text-[#8b949e] hover:text-white hover:bg-[#161b22]"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
-            <Link
-              href="/blender"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
-            >
-              <span>Full 3D Website</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <Link
+            href="/blender"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
+          >
+            <span>Open 3D Blender Hub</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
+          {SHOWCASE_ITEMS.map((item) => (
             <div
               key={item.id}
               onClick={() => openModal(item)}
@@ -255,20 +210,6 @@ export function ShowcaseGallery() {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-80" />
-
-                {/* Badge Top Left */}
-                <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#0d1117]/80 backdrop-blur-md border border-white/10 text-[11px] font-medium text-white">
-                  {item.type === "animation" ? (
-                    <Film className="w-3 h-3 text-[#8A6FB5]" />
-                  ) : item.category === "Architecture" ? (
-                    <Home className="w-3 h-3 text-[#8A6FB5]" />
-                  ) : item.category === "Environment" ? (
-                    <TreePine className="w-3 h-3 text-[#8A6FB5]" />
-                  ) : (
-                    <Box className="w-3 h-3 text-[#8A6FB5]" />
-                  )}
-                  <span>{item.category}</span>
-                </div>
 
                 {/* Multi-photo badge */}
                 {item.photos.length > 1 && (
@@ -338,7 +279,7 @@ export function ShowcaseGallery() {
             href="/blender"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
           >
-            <span>Open 3D Blender Studio</span>
+            <span>Open 3D Blender Hub</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -365,7 +306,7 @@ export function ShowcaseGallery() {
                     )}
                   </h3>
                   <p className="text-xs text-[#8b949e]">
-                    {selectedItem.subtitle} · {selectedItem.category}
+                    {selectedItem.subtitle}
                   </p>
                 </div>
                 <button

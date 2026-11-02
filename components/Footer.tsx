@@ -20,7 +20,7 @@ export function Footer() {
           </div>
           <div>
             <div className="text-sm font-bold text-white">
-              Dhitya<span className="text-[#8A6FB5]">.3d</span>
+              Dhitya<span className="text-[#8A6FB5]">.3D</span>
             </div>
             <div className="text-xs text-[#8b949e]">
               3D Artist · Gamer · Tinkerer
