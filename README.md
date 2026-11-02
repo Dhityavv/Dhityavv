@@ -43,7 +43,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 | | | |
 |:---:|:---:|:---:|
-| <img src="assets/Rumah Vale Render1.png" width="260" alt="Render 1" /> | <img src="assets/Link Envi SH2 Render.png" width="260" alt="Render 2" /> | <img src="assets/Redmi Note 13 4G Animation.gif" width="260" alt="Render 3" /> |
+| <img src="assets/Rumah Vale Render1.png" width="260" alt="Render 1" /> | <img src="assets/Layouting Envi Render.png" width="260" alt="Render 2" /> | <img src="assets/Redmi Note 13 4G Animation.gif" width="260" alt="Render 3" /> |
 | *Traditional Indonesian House* | *A Forest* | *Redmi Note 13 4G Animation* |
 
 </div>
@@ -78,8 +78,8 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 | Project | What it is | Link |
 |---|---|---|
-| 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Live Demo</a> |
-| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> |
+| 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Open the Website</a> |
+| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://discord.gg/VKsfPzC2g" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
 | ⚡ **AI-Assisted Web Lab** | Experimental 3D web showcase and interactive browser tools | <a href="https://github.com/Dhityavv" target="_blank" rel="noopener noreferrer">GitHub</a> |
 
 <!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
