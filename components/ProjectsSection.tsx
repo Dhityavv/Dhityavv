@@ -2,55 +2,17 @@
 
 import React from "react";
 import Link from "next/link";
-import { Rocket, Box, Sparkles, ExternalLink, Clock, Film, Globe, ArrowRight, BookOpen } from "lucide-react";
-
-interface ProjectItem {
-  title: string;
-  category: string;
-  status: "Live" | "In Progress" | "Coming Soon" | "Experimental";
-  description: string;
-  icon: React.ReactNode;
-  tags: string[];
-  link: string;
-  liveUrl?: string;
-  liveLabel?: string;
-}
-
-const PROJECTS: ProjectItem[] = [
-  {
-    title: "Filra",
-    category: "Full-Stack Web App",
-    status: "Live",
-    description:
-      "A responsive movie discovery and rating web application built with Next.js, TMDB API, Clerk Auth, and Supabase database. Browse films, track ratings, and sync personal watchlists.",
-    icon: <Film className="w-5 h-5 text-[#8A6FB5]" />,
-    tags: ["Next.js", "TMDB", "Clerk", "Supabase", "Tailwind CSS"],
-    link: "https://github.com/Dhityavv/Filra",
-    liveUrl: "https://filra.vercel.app",
-  },
-  {
-    title: "Universal Chiseled Bookshelf",
-    category: "Minecraft Mod & System",
-    status: "Live",
-    description:
-      "Expands the Minecraft bookshelf system without adding new blocks or items. Store and organize more useful items in bookshelves while preserving the authentic vanilla look and behavior.",
-    icon: <BookOpen className="w-5 h-5 text-[#8A6FB5]" />,
-    tags: ["Minecraft", "Vanilla+", "Datapack", "Modding"],
-    link: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
-    liveUrl: "https://modrinth.com/mod/universal-chiseled-bookshelf",
-    liveLabel: "Modrinth",
-  },
-  {
-    title: "AI-Assisted Web & 3D Interactive Lab",
-    category: "Web & AI",
-    status: "Coming Soon",
-    description:
-      "Interactive 3D web experiments powered by WebGL and AI prototyping to showcase animations and game assets in browser.",
-    icon: <Sparkles className="w-5 h-5 text-amber-400" />,
-    tags: ["Next.js", "AI Prototyping", "3D Web"],
-    link: "https://github.com/Dhityavv",
-  },
-];
+import {
+  Rocket,
+  Sparkles,
+  ExternalLink,
+  Clock,
+  Film,
+  Globe,
+  ArrowRight,
+  BookOpen,
+} from "lucide-react";
+import { PROJECTS } from "@/lib/projects";
 
 export function ProjectsSection() {
   return (
@@ -90,16 +52,22 @@ export function ProjectsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {PROJECTS.map((proj, idx) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {PROJECTS.map((proj) => (
             <div
-              key={idx}
+              key={proj.id}
               className="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 transition-all hover:shadow-xl hover:-translate-y-1 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80">
-                    {proj.icon}
+                    {proj.id === "universal-chiseled-bookshelf" ? (
+                      <BookOpen className="w-5 h-5 text-[#8A6FB5]" />
+                    ) : proj.category === "Full-Stack Web" && proj.id === "filra" ? (
+                      <Film className="w-5 h-5 text-[#8A6FB5]" />
+                    ) : (
+                      <Sparkles className="w-5 h-5 text-amber-400" />
+                    )}
                   </div>
                   <span
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
@@ -109,6 +77,8 @@ export function ProjectsSection() {
                         ? "bg-[#8A6FB5]/15 border-[#8A6FB5]/40 text-[#c7b2e8]"
                         : proj.status === "Experimental"
                         ? "bg-sky-500/10 border-sky-500/30 text-sky-300"
+                        : proj.status === "Under Review on Modrinth"
+                        ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
                         : "bg-[#21262d] border-[#30363d] text-[#8b949e]"
                     }`}
                   >
@@ -120,7 +90,11 @@ export function ProjectsSection() {
                     {proj.status}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{proj.title}</h3>
+                <span className="text-[11px] font-mono text-[#8b949e] block mb-1">
+                  {proj.category}
+                </span>
+                <h3 className="text-lg font-bold text-white mb-1">{proj.title}</h3>
+                <p className="text-[11px] text-[#8A6FB5] mb-2">{proj.subtitle}</p>
                 <p className="text-xs text-[#8b949e] leading-relaxed mb-4">
                   {proj.description}
                 </p>
@@ -128,7 +102,7 @@ export function ProjectsSection() {
 
               <div>
                 <div className="flex flex-wrap gap-1.5 mb-4">
-                  {proj.tags.map((t) => (
+                  {proj.techStack.map((t) => (
                     <span
                       key={t}
                       className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
@@ -139,12 +113,12 @@ export function ProjectsSection() {
                 </div>
                 <div className="flex items-center gap-2">
                   <a
-                    href={proj.link}
+                    href={proj.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-[#0d1117] border border-[#30363d] hover:border-[#8A6FB5]/50 hover:bg-[#21262d] text-xs font-medium text-white transition-colors"
                   >
-                    <span>Repo</span>
+                    <span>View Repository</span>
                     <ExternalLink className="w-3 h-3 text-[#8b949e]" />
                   </a>
                   {proj.liveUrl && (
@@ -155,7 +129,7 @@ export function ProjectsSection() {
                       className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-semibold text-white transition-colors shadow-sm"
                     >
                       <Globe className="w-3 h-3" />
-                      <span>{proj.liveLabel ?? "Live Demo"}</span>
+                      <span>{proj.liveLabel ?? "Open the Website"}</span>
                     </a>
                   )}
                 </div>
