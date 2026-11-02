@@ -80,8 +80,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 |---|---|---|
 | 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Open the Website</a> |
 | 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://discord.gg/VKsfPzC2g" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
-| ⚡ **AI-Assisted Web Lab** | Experimental 3D web showcase and interactive browser tools | <a href="https://github.com/Dhityavv" target="_blank" rel="noopener noreferrer">GitHub</a> |
-
+| 🌿 **Rimba** | <isi deskripsi proyek Rimba di sini> | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
 <!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
 
 ---
