@@ -66,7 +66,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a traditional house, Rumah Vale.",
-    tags: ["Architecture", "Cycles"],
+    tags: ["Architecture", "House"],
     stats: {
       engine: "Cycles",
       style: "Stylized Medium-Poly",
@@ -97,7 +97,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a Tedung Keraton.",
-    tags: ["Tedung Keraton", "Cycles"],
+    tags: ["Props", "Traditional Umbrella"],
     stats: {
       engine: "Cycles",
       style: "Intricate Traditional Craft",
@@ -132,7 +132,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "Three flag models: Amertha, Kshetra, and Madya.",
-    tags: ["Flags", "Cycles"],
+    tags: ["Props", "Ceremonial Flags"],
     stats: {
       engine: "Cycles",
       style: "Traditional Indonesian Standards",
@@ -161,7 +161,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "Layout of a forest environment in Blender.",
-    tags: ["Forest Environment", "Cycles"],
+    tags: ["Environment", "Forest Layout"],
     stats: {
       engine: "Cycles",
       style: "Atmospheric Stylized",
@@ -188,7 +188,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a ricefield environment.",
-    tags: ["Ricefield", "Cycles"],
+    tags: ["Environment", "Ricefield"],
     stats: {
       engine: "Cycles",
       style: "Terrain Modeling",
@@ -215,7 +215,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "Layout of a ricefield environment in Blender.",
-    tags: ["Environment Layout", "Cycles"],
+    tags: ["Environment", "Ricefield Layout"],
     stats: {
       engine: "Cycles",
       style: "Environment Staging",
@@ -242,7 +242,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "A simple environment layout featuring a tree, created in Blender.",
-    tags: ["Tree", "Environment Layout", "Cycles"],
+    tags: ["Environment", "Tree Layout"],
     stats: {
       engine: "Cycles",
       style: "Simple Environment Layout",
@@ -279,7 +279,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     ],
     description:
       "Three fish models, version 1. Triangle counts are listed in order for fish 1, fish 2, and fish 3.",
-    tags: ["Fish", "Version 1", "Cycles"],
+    tags: ["Character", "Fish Models", "Version 1"],
     stats: {
       engine: "Cycles",
       style: "Low-Poly Creature",
@@ -314,7 +314,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "Three fish models, version 2.",
-    tags: ["Fish", "Version 2", "Cycles"],
+    tags: ["Character", "Fish Models", "Version 2"],
     stats: {
       engine: "Cycles",
       style: "Stylized Semi-Realistic",
@@ -345,7 +345,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a ninja character.",
-    tags: ["Ninja", "Cycles"],
+    tags: ["Character", "Ninja"],
     stats: {
       engine: "Cycles",
       style: "Stylized Shinobi",
@@ -374,7 +374,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of sushi and sashimi.",
-    tags: ["Sushi", "Cycles"],
+    tags: ["Food", "Sushi & Sashimi"],
     stats: {
       engine: "Cycles",
       style: "Stylized Food Art",
@@ -401,7 +401,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a katana.",
-    tags: ["Katana", "Cycles"],
+    tags: ["Weapon", "Katana"],
     stats: {
       engine: "Cycles",
       style: "Hard-Surface Samurai Sword",
@@ -428,7 +428,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a mug.",
-    tags: ["Mug", "Cycles"],
+    tags: ["Props", "Ceramic Mug"],
     stats: {
       engine: "Cycles",
       style: "Clean Product Prop",
@@ -444,7 +444,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "meja",
-    title: "Table (Meja)",
+    title: "Table",
     subtitle: "3D Model",
     category: "Props & Objects",
     coverImage: "/assets/Meja.png",
@@ -455,7 +455,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a table.",
-    tags: ["Table", "Cycles"],
+    tags: ["Furniture", "Table"],
     stats: {
       engine: "Cycles",
       style: "Rustic Wood Furniture",
@@ -482,7 +482,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D scene of a book on the floor.",
-    tags: ["Book", "Cycles"],
+    tags: ["Scene", "Book on Floor"],
     stats: {
       engine: "Cycles",
       style: "Cinematic Mood Piece",
@@ -511,7 +511,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D animation featuring a Redmi Note 13 4G.",
-    tags: ["Redmi Note 13 4G", "Animation", "Cycles"],
+    tags: ["Animation", "Product Animation", "Redmi Note 13 4G"],
     stats: {
       engine: "Cycles",
       style: "Commercial Product Motion",
@@ -538,7 +538,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "Simple tree animation created in Blender.",
-    tags: ["Tree", "Animation", "Cycles"],
+    tags: ["Animation", "Tree Animation"],
     stats: {
       engine: "Cycles",
       style: "Simple Animation",
@@ -564,7 +564,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description: "3D model of a ricefield environment created in Blender.",
-    tags: ["Ricefield", "Environment", "Cycles"],
+    tags: ["Environment", "Ricefield"],
     stats: {
       engine: "Cycles",
       style: "Environment Model",
@@ -575,20 +575,20 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "among-us",
-    title: "Among Us",
-    subtitle: "3D Model",
+    title: "Among Us & Chicks",
+    subtitle: "Character Models",
     category: "Characters & Creatures",
     coverImage: "/assets/Among Us.png",
-    photos: [{ label: "Among Us", url: "/assets/Among Us.png" }],
-    description: "3D model of an Among Us character.",
-    tags: ["Character", "Cycles"],
+    photos: [{ label: "Among Us & Chicks", url: "/assets/Among Us.png" }],
+    description: "Character modeling project featuring Among Us and chicks.",
+    tags: ["Character", "Among Us & Chicks"],
     stats: {
       engine: "Cycles",
-      style: "Character Model",
+      style: "Character Models",
       polyCount: "19,806",
       lighting: "Not specified",
     },
-    features: ["3D model", "Rendered with Cycles", "19,806 triangles"],
+    features: ["Among Us and chick character models", "Rendered with Cycles", "19,806 triangles"],
   },
   {
     id: "hydrant",
@@ -598,7 +598,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     coverImage: "/assets/Hydrant.png",
     photos: [{ label: "Hydrant", url: "/assets/Hydrant.png" }],
     description: "3D model of a hydrant.",
-    tags: ["Prop", "Cycles"],
+    tags: ["Props", "Fire Hydrant"],
     stats: {
       engine: "Cycles",
       style: "Prop Model",
@@ -615,7 +615,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
     coverImage: "/assets/Nintendo Switch.png",
     photos: [{ label: "Nintendo Switch", url: "/assets/Nintendo Switch.png" }],
     description: "3D model of a Nintendo Switch.",
-    tags: ["Electronics", "Eevee"],
+    tags: ["Electronics", "Nintendo Switch"],
     stats: {
       engine: "Eevee",
       style: "Product Model",
