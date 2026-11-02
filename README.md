@@ -41,12 +41,11 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 <div align="center">
 
-| | | |
-|:---:|:---:|:---:|
-| <img src="assets/Rumah Vale Render1.png" width="260" alt="Render 1" /> | <img src="assets/Layouting Envi Render.png" width="260" alt="Render 2" /> | <img src="assets/Redmi Note 13 4G Animation.gif" width="260" alt="Render 3" /> |
-| *Traditional Indonesian House* | *A Forest* | *Redmi Note 13 4G Animation* |
-
-</div>
+| Project | What it is | Link |
+|---|---|---|
+| 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Open the Website</a> |
+| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://discord.gg/VKsfPzC2g" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
+| 🌿 **Rimba — Survival Town 2.5D** | Isometric browser survival game featuring exploration, character creation, resource gathering, building, and a player-driven marketplace | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
 
 <!-- TODO: upload your renders to an `assets/` folder in this repo and rename them render-1.png, render-2.png, render-3.png
      (or change the file names above). Replace the italic titles too. -->
