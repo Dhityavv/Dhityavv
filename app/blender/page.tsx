@@ -54,9 +54,9 @@ export interface BlenderProject {
 const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 1. Architecture
   {
-    id: "rumah-vale",
-    title: "Traditional House",
-    subtitle: "Rumah Vale",
+    id: "indonesian-traditional-house",
+    title: "Traditional Indonesian House",
+    subtitle: "Indonesian Traditional Architecture",
     category: "Architecture",
     coverImage: "/assets/Rumah Vale Render1.png",
     photos: [
@@ -65,7 +65,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Rumah Vale Render1.png",
       },
     ],
-    description: "3D model of a traditional house, Rumah Vale.",
+    description: "3D model of a traditional Indonesian house.",
     tags: ["Architecture", "House"],
     stats: {
       engine: "Cycles",

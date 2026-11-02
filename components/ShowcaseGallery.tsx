@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BLENDER_SHOWCASE } from "@/lib/blender-showcase";
 import {
   Layers,
   Box,
@@ -17,135 +18,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-interface ShowcasePhoto {
-  label: string;
-  url: string;
-}
-
-interface ShowcaseItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  filename: string;
-  photos: ShowcasePhoto[];
-  description: string;
-  tags: string[];
-  stats: {
-    tool: string;
-    style: string;
-    renderNote: string;
-  };
-}
-
-const SHOWCASE_ITEMS: ShowcaseItem[] = [
-  {
-    id: "rumah-vale",
-    title: "Traditional House",
-    subtitle: "Rumah Vale Render 1",
-    filename: "/assets/Rumah Vale Render1.png",
-    photos: [
-      { label: "Exterior View", url: "/assets/Rumah Vale Render1.png" },
-    ],
-    description:
-      "A stylized medium-poly architectural render of a traditional house with custom wooden textures, tiled rooftops, and warm ambient lighting modeled and arranged in Blender.",
-    tags: ["Blender", "Medium-Poly", "Architecture", "Environment"],
-    stats: {
-      tool: "Blender 3D",
-      style: "Medium-Poly",
-      renderNote: "Custom lighting & textures",
-    },
-  },
-  {
-    id: "tedung-keraton",
-    title: "Tedung Keraton",
-    subtitle: "Royal Ceremonial Umbrella",
-    filename: "/assets/Tedung Keraton.png",
-    photos: [
-      { label: "Front Angle", url: "/assets/Tedung Keraton.png" },
-      { label: "Perspective Angle", url: "/assets/Tedung Keraton 2.png" },
-    ],
-    description:
-      "Intricate 3D model of Tedung Keraton, the sacred ceremonial royal umbrella. Features ornate golden finials, tiered fabric canopy trims, decorative tassels, and authentic Balinese motifs.",
-    tags: ["Culture", "Ceremonial", "Multi-Angle", "Gold Shader"],
-    stats: {
-      tool: "Blender Cycles",
-      style: "Intricate Traditional Craft",
-      renderNote: "Includes 2 distinct angles",
-    },
-  },
-  {
-    id: "link-envi",
-    title: "A Forest",
-    subtitle: "Link Envi SH2 Render",
-    filename: "/assets/Link Envi SH2 Render.png",
-    photos: [
-      { label: "Canopy View", url: "/assets/Link Envi SH2 Render.png" },
-    ],
-    description:
-      "An atmospheric nature environment render featuring tall canopy trees, forest undergrowth, mood mist, and stylized scenic foliage.",
-    tags: ["Blender", "Environment Art", "Nature", "Lighting"],
-    stats: {
-      tool: "Blender 3D",
-      style: "Stylized Nature",
-      renderNote: "Atmospheric depth & vegetation",
-    },
-  },
-  {
-    id: "ninja-model",
-    title: "Ninja Character Model",
-    subtitle: "Shinobi Operative Turnaround",
-    filename: "/assets/Ninja 1.png",
-    photos: [
-      { label: "Front Stance", url: "/assets/Ninja 1.png" },
-      { label: "Side Action Stance", url: "/assets/Ninja 2.png" },
-    ],
-    description:
-      "Stylized shinobi operative character turnaround featuring dark fabric cowl, arm wraps, utility sash, and balanced anime proportions.",
-    tags: ["Character", "Shinobi", "2 Renders", "Game Ready"],
-    stats: {
-      tool: "Blender 3D",
-      style: "Stylized Character",
-      renderNote: "Includes 2 poses & angles",
-    },
-  },
-  {
-    id: "sushi-sashimi",
-    title: "Sushi & Sashimi Platter",
-    subtitle: "Japanese Culinary 3D Art",
-    filename: "/assets/Sushi & Sashimi.png",
-    photos: [
-      { label: "Platter Render", url: "/assets/Sushi & Sashimi.png" },
-    ],
-    description:
-      "Appetizing stylized food render of fresh nigiri sushi, tuna & salmon sashimi slices, wasabi quenelle, and lacquered ceramic presentation board.",
-    tags: ["Food 3D", "Stylized Props", "Subsurface Scattering", "Culinary"],
-    stats: {
-      tool: "Blender Cycles",
-      style: "Stylized Food Art",
-      renderNote: "Subsurface scattering shaders",
-    },
-  },
-  {
-    id: "redmi-animation",
-    title: "Redmi Note 13 4G Animation",
-    subtitle: "3D Product Commercial Motion",
-    filename: "/assets/Redmi Note 13 4G Animation.gif",
-    photos: [
-      { label: "Commercial Motion GIF", url: "/assets/Redmi Note 13 4G Animation.gif" },
-    ],
-    description:
-      "A dynamic 3D commercial animation showcasing the Redmi Note 13 4G with smooth camera rotations, metallic material reflections, and motion design.",
-    tags: ["Blender", "Motion Design", "3D Animation", "Commercial"],
-    stats: {
-      tool: "Blender Animation",
-      style: "Motion Graphics",
-      renderNote: "Camera rig & keyframe easing",
-    },
-  },
-];
-
 export function ShowcaseGallery() {
-  const [selectedItem, setSelectedItem] = useState<ShowcaseItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<(typeof BLENDER_SHOWCASE)[number] | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   useEffect(() => {
     if (!selectedItem) return;
@@ -161,7 +35,7 @@ export function ShowcaseGallery() {
     };
   }, [selectedItem]);
 
-  const openModal = (item: ShowcaseItem) => {
+  const openModal = (item: (typeof BLENDER_SHOWCASE)[number]) => {
     setSelectedItem(item);
     setActivePhotoIdx(0);
   };
@@ -194,7 +68,7 @@ export function ShowcaseGallery() {
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SHOWCASE_ITEMS.map((item) => (
+          {BLENDER_SHOWCASE.map((item) => (
             <div
               key={item.id}
               onClick={() => openModal(item)}
