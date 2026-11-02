@@ -62,7 +62,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="connect" className="py-16 border-t border-[#30363d]/60 relative">
+    <section id="connect" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#8A6FB5] mb-3">
           <Send className="w-3.5 h-3.5" />
@@ -77,7 +77,7 @@ export function ContactSection() {
         </p>
 
         {/* Social Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 max-md:grid-cols-2 max-md:gap-3 max-md:mb-9 mb-12">
           {socials.map((s, idx) =>
             s.isLink ? (
               <a
@@ -85,7 +85,7 @@ export function ContactSection() {
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-5 rounded-2xl bg-[#161b22] border border-[#30363d] ${s.color} transition-all hover:-translate-y-1 hover:shadow-lg flex flex-col items-center justify-between group`}
+                className={`p-5 max-md:p-3.5 rounded-2xl bg-[#161b22] border border-[#30363d] ${s.color} transition-all hover:-translate-y-1 hover:shadow-lg flex flex-col items-center justify-between group`}
               >
                 <div className="p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80 mb-3 group-hover:scale-110 transition-transform">
                   {s.icon}
@@ -102,7 +102,7 @@ export function ContactSection() {
               <button
                 key={idx}
                 onClick={s.onClick}
-                className={`p-5 rounded-2xl bg-[#161b22] border border-[#30363d] ${s.color} transition-all hover:-translate-y-1 hover:shadow-lg flex flex-col items-center justify-between group text-left w-full`}
+                className={`p-5 max-md:p-3.5 rounded-2xl bg-[#161b22] border border-[#30363d] ${s.color} transition-all hover:-translate-y-1 hover:shadow-lg flex flex-col items-center justify-between group text-left w-full`}
               >
                 <div className="p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80 mb-3 group-hover:scale-110 transition-transform">
                   {s.icon}

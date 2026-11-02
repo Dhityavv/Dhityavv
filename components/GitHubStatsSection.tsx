@@ -13,7 +13,7 @@ export function GitHubStatsSection() {
   };
 
   return (
-    <section id="stats" className="py-16 border-t border-[#30363d]/60 relative">
+    <section id="stats" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
@@ -29,7 +29,7 @@ export function GitHubStatsSection() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 max-md:flex-wrap">
             <button
               onClick={copyUsername}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#c9d1d9] hover:text-white hover:border-[#8A6FB5]/50 transition-colors"
@@ -59,9 +59,9 @@ export function GitHubStatsSection() {
         </div>
 
         {/* Dynamic Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-md:gap-4 max-md:mb-4 mb-6">
           {/* Card 1: Main Stats */}
-          <div className="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg overflow-hidden">
+          <div className="p-6 max-md:p-4 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg overflow-hidden">
             <div className="w-full flex items-center justify-between pb-4 mb-4 border-b border-[#30363d]/60 text-xs font-semibold text-[#8b949e]">
               <span className="flex items-center gap-1.5 text-white">
                 <GitCommit className="w-4 h-4 text-[#8A6FB5]" />
@@ -80,7 +80,7 @@ export function GitHubStatsSection() {
           </div>
 
           {/* Card 2: Top Languages */}
-          <div className="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg overflow-hidden">
+          <div className="p-6 max-md:p-4 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg overflow-hidden">
             <div className="w-full flex items-center justify-between pb-4 mb-4 border-b border-[#30363d]/60 text-xs font-semibold text-[#8b949e]">
               <span className="flex items-center gap-1.5 text-white">
                 <Star className="w-4 h-4 text-[#8A6FB5]" />
@@ -100,7 +100,7 @@ export function GitHubStatsSection() {
         </div>
 
         {/* Streak Stats */}
-        <div className="p-6 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg">
+        <div className="p-6 max-md:p-4 rounded-2xl bg-[#161b22] border border-[#30363d] flex flex-col items-center justify-center text-center shadow-lg">
           <div className="w-full flex items-center justify-between pb-4 mb-4 border-b border-[#30363d]/60 text-xs font-semibold text-[#8b949e]">
             <span className="flex items-center gap-1.5 text-white">
               <Flame className="w-4 h-4 text-orange-400" />

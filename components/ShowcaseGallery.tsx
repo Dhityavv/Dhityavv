@@ -41,9 +41,9 @@ export function ShowcaseGallery() {
   };
 
   return (
-    <section id="showcase" className="py-16 border-t border-[#30363d]/60 relative">
+    <section id="showcase" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 max-md:mb-7">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
               <Layers className="w-4 h-4" />
@@ -59,7 +59,7 @@ export function ShowcaseGallery() {
 
           <Link
             href="/blender"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 max-md:w-full max-md:justify-center rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
           >
             <span>Open 3D Blender Hub</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -67,12 +67,12 @@ export function ShowcaseGallery() {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto -mx-4 px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
           {BLENDER_SHOWCASE.map((item) => (
             <div
               key={item.id}
               onClick={() => openModal(item)}
-              className="group cursor-pointer bg-[#161b22] border border-[#30363d] rounded-2xl overflow-hidden hover:border-[#8A6FB5] transition-all duration-300 hover:shadow-xl hover:shadow-[#8A6FB5]/10 flex flex-col"
+              className="group w-[84vw] max-w-[360px] shrink-0 snap-start md:w-auto md:max-w-none cursor-pointer bg-[#161b22] border border-[#30363d] rounded-2xl overflow-hidden hover:border-[#8A6FB5] transition-all duration-300 hover:shadow-xl hover:shadow-[#8A6FB5]/10 flex flex-col"
             >
               {/* Media Container */}
               <div className="relative aspect-[4/3] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
@@ -134,8 +134,8 @@ export function ShowcaseGallery() {
         </div>
 
         {/* Dedicated Gallery Action Banner */}
-        <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-[#161b22] via-[#1a202c] to-[#161b22] border border-[#30363d] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div className="flex items-center gap-3.5">
+        <div className="mt-8 max-md:mt-5 p-6 max-md:p-4 rounded-2xl bg-gradient-to-r from-[#161b22] via-[#1a202c] to-[#161b22] border border-[#30363d] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
+          <div className="flex items-center gap-3.5 max-md:items-start">
             <div className="w-10 h-10 rounded-xl bg-[#8A6FB5]/20 border border-[#8A6FB5]/40 flex items-center justify-center text-[#8A6FB5] shrink-0">
               <Box className="w-5 h-5" />
             </div>
@@ -151,7 +151,7 @@ export function ShowcaseGallery() {
 
           <Link
             href="/blender"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-5 py-2.5 max-md:w-full max-md:justify-center rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
           >
             <span>Open 3D Blender Hub</span>
             <ArrowRight className="w-4 h-4" />

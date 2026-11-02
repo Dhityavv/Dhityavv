@@ -33,7 +33,7 @@ export function AboutSection() {
   ];
 
   return (
-    <section id="about" className="py-16 border-t border-[#30363d]/60 relative">
+    <section id="about" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-9 h-9 rounded-xl bg-[#8A6FB5]/15 border border-[#8A6FB5]/30 flex items-center justify-center text-[#8A6FB5]">
@@ -50,9 +50,9 @@ export function AboutSection() {
         </div>
 
         {/* Equal height grid with items-stretch */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-md:gap-4 items-stretch">
           {/* Bio text card */}
-          <div className="lg:col-span-7 bg-[#161b22] border border-[#30363d] rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-xl flex flex-col justify-between h-full">
+          <div className="lg:col-span-7 bg-[#161b22] border border-[#30363d] rounded-2xl p-6 sm:p-8 max-md:p-5 relative overflow-hidden shadow-xl flex flex-col justify-between h-full">
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#8A6FB5]/10 blur-3xl pointer-events-none rounded-full" />
             <div>
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
@@ -94,16 +94,16 @@ export function AboutSection() {
           </div>
 
           {/* Quick Info Table - equal height */}
-          <div className="lg:col-span-5 bg-[#161b22] border border-[#30363d] rounded-2xl p-6 sm:p-8 shadow-xl flex flex-col justify-between h-full">
+          <div className="lg:col-span-5 bg-[#161b22] border border-[#30363d] rounded-2xl p-6 sm:p-8 max-md:p-5 shadow-xl flex flex-col justify-between h-full">
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wider text-[#8b949e] mb-4">
                 Quick Profile
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3 max-md:grid max-md:grid-cols-2 max-md:gap-2 max-md:space-y-0">
                 {details.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/60 flex items-start gap-3 transition-colors hover:border-[#8A6FB5]/40"
+                    className="p-3 max-md:p-2.5 rounded-xl bg-[#0d1117] border border-[#30363d]/60 flex items-start gap-3 max-md:flex-col max-md:gap-1.5 transition-colors hover:border-[#8A6FB5]/40"
                   >
                     <div className="mt-0.5 shrink-0 p-1.5 rounded-lg bg-[#161b22]">
                       {item.icon}
@@ -112,7 +112,7 @@ export function AboutSection() {
                       <div className="text-xs text-[#8b949e] font-medium">
                         {item.label}
                       </div>
-                      <div className="text-sm font-semibold text-white mt-0.5">
+                      <div className="text-sm max-md:text-xs font-semibold text-white mt-0.5">
                         {item.value}
                       </div>
                     </div>

@@ -9,7 +9,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative border-t border-[#30363d] bg-[#0d1117] pt-12 pb-16 overflow-hidden">
+    <footer className="relative border-t border-[#30363d] bg-[#0d1117] pt-12 pb-16 max-md:pt-9 max-md:pb-10 overflow-hidden">
       {/* Decorative gradient wave line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#8A6FB5] to-transparent opacity-70" />
 
