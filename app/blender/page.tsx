@@ -55,8 +55,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 1. Architecture & Culture
   {
     id: "rumah-vale",
-    title: "Traditional House (Rumah Vale)",
-    subtitle: "Vernacular Stilt House Architecture",
+    title: "Traditional House",
+    subtitle: "Rumah Vale",
     category: "Architecture & Culture",
     coverImage: "/assets/Rumah Vale Render1.png",
     photos: [
@@ -65,13 +65,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Rumah Vale Render1.png",
       },
     ],
-    description:
-      "A stylized medium-poly architectural render of a traditional house. Features handcrafted timber stilts, modular curved roof tiles, open decking, and golden-hour sunset lighting.",
-    tags: ["Architecture", "Medium-Poly", "Blender Cycles", "Modular Assets"],
+    description: "3D model of a traditional house, Rumah Vale.",
+    tags: ["Architecture", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Stylized Medium-Poly",
-      polyCount: "~35k Triangles",
+      polyCount: "1,317,600",
       lighting: "Warm Golden HDRI + Directional Sun",
     },
     features: [
@@ -84,7 +83,7 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   {
     id: "tedung-keraton",
     title: "Tedung Keraton",
-    subtitle: "Royal Ceremonial Umbrella (2 Angles)",
+    subtitle: "Traditional Umbrella",
     category: "Architecture & Culture",
     coverImage: "/assets/Tedung Keraton.png",
     photos: [
@@ -97,13 +96,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Tedung Keraton 2.png",
       },
     ],
-    description:
-      "A majestic 3D model of Tedung Keraton, the sacred ceremonial royal umbrella. Features ornate golden finials, tiered fabric canopy trims, decorative tassels, and authentic Balinese ceremonial carvings.",
-    tags: ["Culture", "Ceremonial Prop", "Multi-Angle", "Gold Shading"],
+    description: "3D model of a Tedung Keraton.",
+    tags: ["Tedung Keraton", "Cycles"],
     stats: {
-      engine: "Blender Eevee / Cycles",
+      engine: "Cycles",
       style: "Intricate Traditional Craft",
-      polyCount: "~42k Triangles",
+      polyCount: "218,300",
       lighting: "Ceremonial Studio Rim Lighting",
     },
     features: [
@@ -115,8 +113,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "bendera-tradisional",
-    title: "Bendera Tradisional (Ceremonial Flags)",
-    subtitle: "Amertha, Kshetra & Madya Standards (3 Renders)",
+    title: "3 Flags",
+    subtitle: "Amertha, Kshetra, and Madya",
     category: "Architecture & Culture",
     coverImage: "/assets/Bendera Amertha.png",
     photos: [
@@ -133,13 +131,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Bendera Madya.png",
       },
     ],
-    description:
-      "A complete set of three traditional ceremonial standards: Bendera Amertha, Bendera Kshetra, and Bendera Madya. Each flag features custom fabric pennants, carved wooden bases, and sacred symbolic motifs.",
-    tags: ["Balinese Flags", "Culture", "3 Variations", "Cloth Dynamics"],
+    description: "Three flag models: Amertha, Kshetra, and Madya.",
+    tags: ["Flags", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Traditional Indonesian Standards",
-      polyCount: "~55k Triangles (3 sets)",
+      polyCount: "156,500 total (3 flags)",
       lighting: "Warm Sunlight + Diffuse Fill",
     },
     features: [
@@ -153,8 +150,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 2. Environment & Nature
   {
     id: "link-envi",
-    title: "A Forest (Link Envi)",
-    subtitle: "Atmospheric Deep Woods Diorama",
+    title: "Layouting Environment Hutan",
+    subtitle: "Forest Environment Layout",
     category: "Environment & Nature",
     coverImage: "/assets/Link Envi SH2 Render.png",
     photos: [
@@ -163,13 +160,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Link Envi SH2 Render.png",
       },
     ],
-    description:
-      "An atmospheric deep forest environment render featuring morning fog, towering pine trees, lush moss-covered boulders, and volumetric sun rays filtering through the tree canopies.",
-    tags: ["Environment Art", "Stylized Nature", "Volumetric Fog", "Canopy"],
+    description: "Layout of a forest environment in Blender.",
+    tags: ["Forest Environment", "Cycles"],
     stats: {
-      engine: "Blender Eevee",
+      engine: "Cycles",
       style: "Atmospheric Stylized",
-      polyCount: "~65k Triangles",
+      polyCount: "Not provided",
       lighting: "Volumetric Mist + God Rays",
     },
     features: [
@@ -181,8 +177,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "sawah-terrace",
-    title: "Sawah Rice Terraces",
-    subtitle: "Indonesian Stepped Field Landscape",
+    title: "Ricefield",
+    subtitle: "Environment Model",
     category: "Environment & Nature",
     coverImage: "/assets/Sawah Render viewport.png",
     photos: [
@@ -191,13 +187,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Sawah Render viewport.png",
       },
     ],
-    description:
-      "An expansive tiered paddy field landscape modeling water reflection planes, embankment vegetation, terraced earth levels, and rural Indonesian terrain layout.",
-    tags: ["Landscape", "Rice Terraces", "Indonesian Nature", "Water Shader"],
+    description: "3D model of a ricefield environment.",
+    tags: ["Ricefield", "Cycles"],
     stats: {
-      engine: "Blender Viewport Render",
+      engine: "Cycles",
       style: "Terrain Modeling",
-      polyCount: "~78k Triangles",
+      polyCount: "14,600",
       lighting: "Overhead Daylight & Sky Reflection",
     },
     features: [
@@ -209,8 +204,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "layouting-envi",
-    title: "Environment Scene Layouting",
-    subtitle: "Worldbuilding Blockout & Composition",
+    title: "Layouting Environment Sawah",
+    subtitle: "Ricefield Environment Layout",
     category: "Environment & Nature",
     coverImage: "/assets/Layouting Envi Render.png",
     photos: [
@@ -219,13 +214,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Layouting Envi Render.png",
       },
     ],
-    description:
-      "A comprehensive environment layout composition exploring asset placement, depth staging, camera focal lengths, and spatial balance for game scenes.",
-    tags: ["Worldbuilding", "Scene Layout", "Level Design", "Composition"],
+    description: "Layout of a ricefield environment in Blender.",
+    tags: ["Environment Layout", "Cycles"],
     stats: {
-      engine: "Blender Eevee",
+      engine: "Cycles",
       style: "Environment Staging",
-      polyCount: "~50k Triangles",
+      polyCount: "1,597,600",
       lighting: "Atmospheric Ambient + Direct Sun",
     },
     features: [
@@ -237,8 +231,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "stylized-tree",
-    title: "Tree & Sculpted Ground Study",
-    subtitle: "Static Sculpting Practice",
+    title: "Stylized Tree",
+    subtitle: "Tree Model",
     category: "Environment & Nature",
     coverImage: "/assets/Tree.png",
     photos: [
@@ -247,13 +241,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Tree.png",
       },
     ],
-    description:
-      "A simple scene study with a randomly placed tree and ground shaped using Blender's sculpting tools. This is a static sculpting and layout exercise, not an animation.",
-    tags: ["Sculpting", "Terrain", "Tree Placement", "Static Scene"],
+    description: "Stylized 3D tree model.",
+    tags: ["Tree", "Cycles"],
     stats: {
-      engine: "Not specified",
+      engine: "Cycles",
       style: "Sculpting Study",
-      polyCount: "Not provided",
+      polyCount: "313,300",
       lighting: "Not specified",
     },
     features: [
@@ -266,8 +259,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 3. Characters & Creatures
   {
     id: "ikan-v1",
-    title: "Ikan (Fish Character) - Version 1",
-    subtitle: "First Iteration / Concept Design",
+    title: "3 Jenis Ikan v1",
+    subtitle: "Three Fish Models · Version 1",
     category: "Characters & Creatures",
     coverImage: "/assets/Ikan 1 v1.png",
     photos: [
@@ -285,12 +278,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
       },
     ],
     description:
-      "The first iteration of the stylized 3D fish character, exploring body proportions, fin shapes, eye placement, and aquatic silhouettes.",
-    tags: ["Creature", "Stylized Fish", "Version 1", "Concept"],
+      "Three fish models, version 1. Triangle counts are listed in order for fish 1, fish 2, and fish 3.",
+    tags: ["Fish", "Version 1", "Cycles"],
     stats: {
-      engine: "Blender Eevee",
+      engine: "Cycles",
       style: "Low-Poly Creature",
-      polyCount: "~8k Triangles",
+      polyCount: "253 / 253 / 5,803",
       lighting: "Underwater Soft Diffuse",
     },
     features: [
@@ -302,8 +295,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "ikan-v2",
-    title: "Ikan (Fish Character) - Version 2",
-    subtitle: "Polished Model, Shaders & Angles",
+    title: "3 Jenis Ikan v2",
+    subtitle: "Three Fish Models · Version 2",
     category: "Characters & Creatures",
     coverImage: "/assets/Ikan 1 v2.png",
     photos: [
@@ -320,13 +313,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Ikan 3 v2.png",
       },
     ],
-    description:
-      "The upgraded Version 2 fish character, featuring refined topology for smooth deformations, translucent fin shaders, gradient scale coloring, and studio turntable lighting.",
-    tags: ["Creature", "Version 2", "Polished 3D", "PBR Fish"],
+    description: "Three fish models, version 2.",
+    tags: ["Fish", "Version 2", "Cycles"],
     stats: {
-      engine: "Blender Cycles / Eevee",
+      engine: "Cycles",
       style: "Stylized Semi-Realistic",
-      polyCount: "~16k Triangles",
+      polyCount: "189,500 total (3 fish)",
       lighting: "Studio Softbox + Rim Backlight",
     },
     features: [
@@ -338,8 +330,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "ninja-model",
-    title: "Ninja Character Model",
-    subtitle: "Shinobi Operative Turnaround (2 Renders)",
+    title: "Ninja",
+    subtitle: "Character Model",
     category: "Characters & Creatures",
     coverImage: "/assets/Ninja 1.png",
     photos: [
@@ -352,13 +344,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Ninja 2.png",
       },
     ],
-    description:
-      "A stylized ninja character model featuring a cloth cowl mask, shinobi shozoku wraps, utility sash, and arm guards. Rendered across multiple viewpoints to verify silhouette balance.",
-    tags: ["Character Model", "Ninja", "2 Renders", "Game Ready"],
+    description: "3D model of a ninja character.",
+    tags: ["Ninja", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Stylized Shinobi",
-      polyCount: "~22k Triangles",
+      polyCount: "36,145",
       lighting: "Dark Noir Studio Rim Lighting",
     },
     features: [
@@ -372,8 +363,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 4. Props & Objects
   {
     id: "sushi-sashimi",
-    title: "Sushi & Sashimi Platter",
-    subtitle: "Japanese Culinary 3D Art",
+    title: "Sushi",
+    subtitle: "Food Model",
     category: "Props & Objects",
     coverImage: "/assets/Sushi & Sashimi.png",
     photos: [
@@ -382,13 +373,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Sushi & Sashimi.png",
       },
     ],
-    description:
-      "An appetizing stylized culinary render featuring nigiri sushi with fresh tuna and salmon cuts, wasabi quenelle, pickled ginger, and dark wooden serving board.",
-    tags: ["Food 3D", "Stylized Props", "Subsurface Scattering", "Culinary"],
+    description: "3D model of sushi and sashimi.",
+    tags: ["Sushi", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Stylized Food Art",
-      polyCount: "~14k Triangles",
+      polyCount: "1,200,000",
       lighting: "Warm Restaurant Key Light",
     },
     features: [
@@ -400,8 +390,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "katana",
-    title: "Traditional Katana Blade",
-    subtitle: "Japanese Samurai Weapon Hard-Surface Model",
+    title: "Katana",
+    subtitle: "3D Model",
     category: "Props & Objects",
     coverImage: "/assets/Katana.jpg",
     photos: [
@@ -410,13 +400,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Katana.jpg",
       },
     ],
-    description:
-      "A precision-modeled traditional Japanese katana sword. Features an authentic curved steel blade with hamon temper line, wrapped tsuka hilt, decorative gold tsuba guard, and lacquered saya scabbard.",
-    tags: ["Hard-Surface", "Katana", "Weapon", "Metallic PBR"],
+    description: "3D model of a katana.",
+    tags: ["Katana", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Hard-Surface Samurai Sword",
-      polyCount: "~19k Triangles",
+      polyCount: "Not provided",
       lighting: "Studio Rim Highlights on Steel Edge",
     },
     features: [
@@ -428,8 +417,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "mug",
-    title: "Ceramic Coffee Mug",
-    subtitle: "Studio Prop Study & High-Gloss Shading",
+    title: "Mug",
+    subtitle: "3D Model",
     category: "Props & Objects",
     coverImage: "/assets/Mug.png",
     photos: [
@@ -438,13 +427,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Mug.png",
       },
     ],
-    description:
-      "A clean everyday tabletop prop model of a ceramic coffee mug. Features smooth ergonomic handle curvature, interior liquid meniscus, and high-gloss ceramic glaze reflections.",
-    tags: ["Prop", "Ceramics", "Glossy Shading", "Hard-Surface"],
+    description: "3D model of a mug.",
+    tags: ["Mug", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Clean Product Prop",
-      polyCount: "~9k Triangles",
+      polyCount: "74,200",
       lighting: "Studio Softbox Highlight Setup",
     },
     features: [
@@ -456,8 +444,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "meja",
-    title: "Crafted Wooden Table (Meja)",
-    subtitle: "Modular Furniture Asset",
+    title: "Table (Meja)",
+    subtitle: "3D Model",
     category: "Props & Objects",
     coverImage: "/assets/Meja.png",
     photos: [
@@ -466,13 +454,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Meja.png",
       },
     ],
-    description:
-      "Handcrafted rustic wooden table with beveled timber edges, realistic wood grain texture orientation, and modular dimensions for game interior staging.",
-    tags: ["Furniture", "Woodworking", "Modular", "Prop"],
+    description: "3D model of a table.",
+    tags: ["Table", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Rustic Wood Furniture",
-      polyCount: "~12k Triangles",
+      polyCount: "3,315",
       lighting: "Warm Diffuse Interior Lighting",
     },
     features: [
@@ -484,8 +471,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "book-on-floor",
-    title: "Book on Floor (Still Life)",
-    subtitle: "Atmospheric Dramatic Prop Scene",
+    title: "Book on Floor",
+    subtitle: "3D Scene",
     category: "Props & Objects",
     coverImage: "/assets/Book In Floor.png",
     photos: [
@@ -494,13 +481,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Book In Floor.png",
       },
     ],
-    description:
-      "A dramatic, cinematic still life of an open antique book resting on rustic wooden floorboards with focused directional lighting and dust mote ambience.",
-    tags: ["Still Life", "Cinematic", "Book", "Dramatic Lighting"],
+    description: "3D scene of a book on the floor.",
+    tags: ["Book", "Cycles"],
     stats: {
-      engine: "Blender Cycles",
+      engine: "Cycles",
       style: "Cinematic Mood Piece",
-      polyCount: "~26k Triangles",
+      polyCount: "1,638",
       lighting: "Directional Window Shaft Lighting",
     },
     features: [
@@ -514,8 +500,8 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   // 5. Animation & Motion
   {
     id: "redmi-animation",
-    title: "Redmi Note 13 4G Commercial Animation",
-    subtitle: "3D Product Commercial Motion",
+    title: "Redmi Note 13 4G",
+    subtitle: "Product Animation",
     category: "Animation & Motion",
     coverImage: "/assets/Redmi Note 13 4G Animation.gif",
     photos: [
@@ -524,13 +510,12 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
         url: "/assets/Redmi Note 13 4G Animation.gif",
       },
     ],
-    description:
-      "A dynamic 3D commercial motion animation showcasing the Redmi Note 13 4G smartphone. Features precision CAD-accurate chassis modeling, sapphire lens reflections, and smooth choreographed camera sweeps.",
-    tags: ["Commercial", "Product Motion", "Hard-Surface", "Keyframe Animation"],
+    description: "3D animation featuring a Redmi Note 13 4G.",
+    tags: ["Redmi Note 13 4G", "Animation", "Cycles"],
     stats: {
-      engine: "Blender Animation",
+      engine: "Cycles",
       style: "Commercial Product Motion",
-      polyCount: "~48k Triangles",
+      polyCount: "31,836",
       lighting: "Studio Softbox Rig + Rim Lights",
     },
     features: [
@@ -542,31 +527,102 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
   {
     id: "tree-animation",
-    title: "Tree Animation",
-    subtitle: "Procedural Foliage & Wind Motion",
+    title: "Simple Tree",
+    subtitle: "Animation",
     category: "Animation & Motion",
-    coverImage: "/assets/Tree.png",
+    coverImage: "/assets/Tree Animation.gif",
     photos: [
       {
-        label: "Stylized Tree Render",
-        url: "/assets/Tree.png",
+        label: "Simple Tree Animation",
+        url: "/assets/Tree Animation.gif",
       },
     ],
-    videoUrl: "/assets/Tree Animation.mp4",
-    description:
-      "A stylized tree brought to life with subtle procedural wind motion across its foliage.",
-    tags: ["Tree", "Wind Animation", "Foliage", "Blender"],
+    description: "Simple tree animation created in Blender.",
+    tags: ["Tree", "Animation", "Cycles"],
     stats: {
-      engine: "Blender Cycles & Eevee",
-      style: "Stylized Foliage",
-      polyCount: "~18k Triangles",
-      lighting: "Soft Ambient + Rim Sunlight",
+      engine: "Cycles",
+      style: "Simple Animation",
+      polyCount: "41,200",
+      lighting: "Not specified",
     },
     features: [
-      "Includes animated wind loop demonstration",
-      "Organic trunk silhouette with stylized bark ridges",
-      "Soft, fluffy foliage shading",
+      "Animated tree scene",
+      "Rendered with Cycles",
+      "41,200 triangles",
     ],
+  },
+  {
+    id: "ricefield-animation",
+    title: "Ricefield",
+    subtitle: "Animation",
+    category: "Animation & Motion",
+    coverImage: "/assets/Sawah Render viewport.png",
+    photos: [
+      {
+        label: "Ricefield",
+        url: "/assets/Sawah Render viewport.png",
+      },
+    ],
+    description: "Ricefield animation scene created in Blender.",
+    tags: ["Ricefield", "Animation", "Cycles"],
+    stats: {
+      engine: "Cycles",
+      style: "Animation",
+      polyCount: "131,000",
+      lighting: "Not specified",
+    },
+    features: ["Ricefield animation", "Rendered with Cycles", "131,000 triangles"],
+  },
+  {
+    id: "among-us",
+    title: "Among Us",
+    subtitle: "3D Model",
+    category: "Characters & Creatures",
+    coverImage: "/assets/Among Us.png",
+    photos: [{ label: "Among Us", url: "/assets/Among Us.png" }],
+    description: "3D model of an Among Us character.",
+    tags: ["Character", "Cycles"],
+    stats: {
+      engine: "Cycles",
+      style: "Character Model",
+      polyCount: "19,806",
+      lighting: "Not specified",
+    },
+    features: ["3D model", "Rendered with Cycles", "19,806 triangles"],
+  },
+  {
+    id: "hydrant",
+    title: "Hydrant",
+    subtitle: "3D Model",
+    category: "Props & Objects",
+    coverImage: "/assets/Hydrant.png",
+    photos: [{ label: "Hydrant", url: "/assets/Hydrant.png" }],
+    description: "3D model of a hydrant.",
+    tags: ["Prop", "Cycles"],
+    stats: {
+      engine: "Cycles",
+      style: "Prop Model",
+      polyCount: "24,368",
+      lighting: "Not specified",
+    },
+    features: ["3D model", "Rendered with Cycles", "24,368 triangles"],
+  },
+  {
+    id: "nintendo-switch",
+    title: "Nintendo Switch",
+    subtitle: "3D Model",
+    category: "Props & Objects",
+    coverImage: "/assets/Nintendo Switch.png",
+    photos: [{ label: "Nintendo Switch", url: "/assets/Nintendo Switch.png" }],
+    description: "3D model of a Nintendo Switch.",
+    tags: ["Electronics", "Eevee"],
+    stats: {
+      engine: "Eevee",
+      style: "Product Model",
+      polyCount: "25,550",
+      lighting: "Not specified",
+    },
+    features: ["3D model", "Rendered with Eevee", "25,550 triangles"],
   },
 ];
 
@@ -720,13 +776,25 @@ export default function BlenderStudioPage() {
             >
               {/* Image Preview Container */}
               <div className="relative aspect-[4/3] w-full bg-[#0d1117] overflow-hidden">
-                <Image
-                  src={work.coverImage}
-                  alt={work.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-all duration-500"
-                  unoptimized
-                />
+                {work.videoUrl ? (
+                  <video
+                    src={work.videoUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    aria-label={work.title}
+                    className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-all duration-500"
+                  />
+                ) : (
+                  <Image
+                    src={work.coverImage}
+                    alt={work.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-all duration-500"
+                    unoptimized
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
 
                 {/* Badge Category */}
@@ -781,7 +849,7 @@ export default function BlenderStudioPage() {
                       </span>
                     </div>
                     <div>
-                      <span className="text-[#8b949e] block">Density</span>
+                      <span className="text-[#8b949e] block">Tris</span>
                       <span className="font-semibold text-white truncate block">
                         {work.stats.polyCount}
                       </span>
@@ -801,7 +869,9 @@ export default function BlenderStudioPage() {
 
                   <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-[#8A6FB5] font-semibold">
                     <span>
-                      {work.photos.length > 1
+                      {work.videoUrl
+                        ? "Click to Watch Animation"
+                        : work.photos.length > 1
                         ? `Click to View ${work.photos.length} Renders`
                         : "Click to Inspect Render"}
                     </span>
@@ -848,14 +918,26 @@ export default function BlenderStudioPage() {
 
               {/* Main Media Viewer */}
               <div className="relative min-h-[300px] sm:min-h-[460px] bg-[#0d1117] flex items-center justify-center overflow-hidden p-4 group">
-                <img
-                  src={
-                    selectedProject.photos[activePhotoIndex]?.url ||
-                    selectedProject.coverImage
-                  }
-                  alt={selectedProject.title}
-                  className="max-h-[58vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300"
-                />
+                {selectedProject.videoUrl ? (
+                  <video
+                    src={selectedProject.videoUrl}
+                    autoPlay
+                    controls
+                    muted
+                    loop
+                    playsInline
+                    className="max-h-[58vh] max-w-full rounded-lg bg-black shadow-2xl"
+                  />
+                ) : (
+                  <img
+                    src={
+                      selectedProject.photos[activePhotoIndex]?.url ||
+                      selectedProject.coverImage
+                    }
+                    alt={selectedProject.title}
+                    className="max-h-[58vh] max-w-full object-contain rounded-lg shadow-2xl transition-all duration-300"
+                  />
+                )}
 
                 {/* Left / Right Arrows for Multi-Photo Items */}
                 {selectedProject.photos.length > 1 && (
@@ -901,28 +983,13 @@ export default function BlenderStudioPage() {
                 </div>
               )}
 
-              {/* Video Player if available (e.g. Tree Animation) */}
-              {selectedProject.videoUrl && (
-                <div className="px-5 py-3 bg-[#0d1117] border-t border-[#30363d]">
-                  <span className="text-xs font-semibold text-white block mb-2 flex items-center gap-1.5">
-                    <Film className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                    Animated Video Playback:
-                  </span>
-                  <video
-                    src={selectedProject.videoUrl}
-                    controls
-                    className="w-full max-h-[220px] rounded-lg bg-black"
-                  />
-                </div>
-              )}
-
               {/* Details and Technical Specs */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3.5">
                 <p className="text-sm text-[#c9d1d9] leading-relaxed">
                   {selectedProject.description}
                 </p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">Render Engine</span>
                     <span className="font-semibold text-white truncate block">
@@ -930,21 +997,9 @@ export default function BlenderStudioPage() {
                     </span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Polygon Count</span>
+                    <span className="text-[#8b949e] block">Tris</span>
                     <span className="font-semibold text-white">
                       {selectedProject.stats.polyCount}
-                    </span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Art Style</span>
-                    <span className="font-semibold text-white">
-                      {selectedProject.stats.style}
-                    </span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Lighting</span>
-                    <span className="font-semibold text-white truncate block">
-                      {selectedProject.stats.lighting}
                     </span>
                   </div>
                 </div>
