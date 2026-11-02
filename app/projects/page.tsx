@@ -23,7 +23,7 @@ interface ProjectDetail {
   title: string;
   subtitle: string;
   category: "Full-Stack Web" | "Game Modding";
-  status: "Live" | "In Progress" | "Experimental" | "Coming Soon";
+  status: "Live" | "In Progress" | "Experimental" | "Coming Soon" | "Under Review on Modrinth";
   description: string;
   techStack: string[];
   features: string[];
@@ -58,15 +58,14 @@ const ALL_PROJECTS: ProjectDetail[] = [
     title: "Universal Chiseled Bookshelf",
     subtitle: "Minecraft Vanilla+ Bookshelf Storage Expansion",
     category: "Game Modding",
-    status: "Live",
+    status: "Under Review on Modrinth",
     featured: true,
     description:
       "Universal Chiseled Bookshelf expands the existing Minecraft bookshelf system without adding new blocks or items. Store and organize more useful items inside your bookshelves while keeping the original Minecraft look, feel, and vanilla mechanics intact.",
-    techStack: ["Minecraft 1.20+", "Datapack / Mod", "JSON Models", "Vanilla+"],
+    techStack: ["Minecraft 26.3", "Vanilla+ Mod"],
     features: [
       "Expands item storage capacity within vanilla chiseled bookshelves",
       "No custom blocks required — 100% vanilla game parity and aesthetics",
-      "Compatible with multiplayer servers and standard Minecraft inventory systems",
       "Clean, non-intrusive implementation for survival worlds",
     ],
     repoUrl: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
@@ -235,6 +234,8 @@ export default function ProjectsHubPage() {
                         ? "bg-[#8A6FB5]/15 border-[#8A6FB5]/40 text-[#c7b2e8]"
                         : proj.status === "Experimental"
                         ? "bg-sky-500/10 border-sky-500/30 text-sky-300"
+                        : proj.status === "Under Review on Modrinth"
+                        ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
                         : "bg-[#21262d] border-[#30363d] text-[#8b949e]"
                     }`}
                   >
