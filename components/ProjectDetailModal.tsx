@@ -18,9 +18,11 @@ import {
   ShieldCheck,
   MessageSquare,
   Box,
+  Download,
 } from "lucide-react";
 import { ProjectDetail, DEPLOYED_CLIENT_WEBSITES } from "@/lib/projects";
 import { useLanguage } from "@/lib/LanguageContext";
+import { UcbDownloadModal } from "@/components/UcbDownloadModal";
 
 interface ProjectDetailModalProps {
   project: ProjectDetail | null;
@@ -37,6 +39,7 @@ export function ProjectDetailModal({
   const [activeTab, setActiveTab] = useState<
     "overview" | "architecture" | "deliverables" | "websites"
   >(initialTab);
+  const [isUcbModalOpen, setIsUcbModalOpen] = useState(false);
 
   // Prevent background scroll when modal is open and handle ESC key
   useEffect(() => {
@@ -134,7 +137,7 @@ export function ProjectDetailModal({
                 {isClientShowcase && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 border border-emerald-500/35 text-emerald-300">
                     <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                    {lang === "EN" ? "In Active Production" : "Sudah Dipakai Klien"}
+                    {lang === "EN" ? "Active" : "Active"}
                   </span>
                 )}
               </div>
@@ -325,8 +328,8 @@ export function ProjectDetailModal({
                   <Globe className="w-4 h-4 text-emerald-400" />
                   <span>
                     {lang === "EN"
-                      ? "Active Client Websites in Production"
-                      : "Daftar Website Klien yang Aktif Digunakan"}
+                      ? "Active Client Websites"
+                      : "Daftar Website Klien yang Aktif"}
                   </span>
                 </h3>
                 <p className="text-xs text-[#8b949e] mt-1">
@@ -390,30 +393,6 @@ export function ProjectDetailModal({
                         <span>{lang === "EN" ? "Visit Active Site" : "Kunjungi Website Asli"}</span>
                         <ExternalLink className="w-3 h-3 text-black/80" />
                       </a>
-
-                      {site.clientWhatsapp && (
-                        <a
-                          href={site.clientWhatsapp}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-emerald-500/50 text-xs font-semibold text-emerald-300 transition-colors"
-                        >
-                          <MessageSquare className="w-3.5 h-3.5" />
-                          <span>{lang === "EN" ? "Client WhatsApp" : "WhatsApp Klien"}</span>
-                        </a>
-                      )}
-
-                      {site.clientInstagramUrl && (
-                        <a
-                          href={site.clientInstagramUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-pink-500/50 text-xs font-semibold text-pink-300 transition-colors"
-                        >
-                          <span>{site.clientHandle || "Instagram"}</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -555,26 +534,46 @@ export function ProjectDetailModal({
                 </a>
 
                 {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
-                  >
-                    <Globe className="w-3.5 h-3.5" />
-                    <span>
-                      {lang === "EN"
-                        ? project.liveLabelEn || "Open the Websites"
-                        : project.liveLabelId || "Buka Website"}
-                    </span>
-                    <ExternalLink className="w-3 h-3 text-white/80" />
-                  </a>
+                  project.id === "universal-chiseled-bookshelf" ? (
+                    <button
+                      onClick={() => setIsUcbModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-xs font-bold text-black shadow-md shadow-amber-500/20 hover:shadow-amber-500/35 transition-all"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === "EN"
+                          ? project.liveLabelEn || "Download"
+                          : project.liveLabelId || "Download"}
+                      </span>
+                    </button>
+                  ) : (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === "EN"
+                          ? project.liveLabelEn || "Open the Websites"
+                          : project.liveLabelId || "Buka Website"}
+                      </span>
+                      <ExternalLink className="w-3 h-3 text-white/80" />
+                    </a>
+                  )
                 )}
               </>
             )}
           </div>
         </div>
       </div>
+
+      {/* UCB Download Modal */}
+      <UcbDownloadModal
+        isOpen={isUcbModalOpen}
+        onClose={() => setIsUcbModalOpen(false)}
+      />
     </div>
   );
 }

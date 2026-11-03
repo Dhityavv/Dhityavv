@@ -17,10 +17,12 @@ import {
   BookOpen,
   Eye,
   ShieldCheck,
+  Download,
 } from "lucide-react";
 import { PROJECTS as ALL_PROJECTS, ProjectDetail } from "@/lib/projects";
 import { ProjectDetailModal } from "@/components/ProjectDetailModal";
 import { DeployedWebsitesModal } from "@/components/DeployedWebsitesModal";
+import { UcbDownloadModal } from "@/components/UcbDownloadModal";
 import { useLanguage } from "@/lib/LanguageContext";
 
 export default function ProjectsHubPage() {
@@ -29,6 +31,7 @@ export default function ProjectsHubPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<ProjectDetail | null>(null);
   const [isWebsitesModalOpen, setIsWebsitesModalOpen] = useState(false);
+  const [isUcbModalOpen, setIsUcbModalOpen] = useState(false);
 
   const clientShowcaseProject = ALL_PROJECTS.find((p) => p.id === "client-showcase") || null;
 
@@ -221,13 +224,6 @@ export default function ProjectsHubPage() {
                     </div>
 
                     <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                      {isClientShowcase && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 border border-emerald-500/40 text-emerald-300">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>{lang === "EN" ? "In Production" : "Sudah Digunakan"}</span>
-                        </span>
-                      )}
-
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
                           proj.status === "Active"
@@ -320,20 +316,34 @@ export default function ProjectsHubPage() {
                         </a>
 
                         {proj.liveUrl && (
-                          <a
-                            href={proj.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
-                          >
-                            <Globe className="w-3.5 h-3.5" />
-                            <span>
-                              {lang === "EN"
-                                ? proj.liveLabelEn || "Open the Websites"
-                                : proj.liveLabelId || "Buka Website"}
-                            </span>
-                            <ExternalLink className="w-3 h-3 text-white/80" />
-                          </a>
+                          proj.id === "universal-chiseled-bookshelf" ? (
+                            <button
+                              onClick={() => setIsUcbModalOpen(true)}
+                              className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-xs font-bold text-black transition-all shadow-sm"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                              <span>
+                                {lang === "EN"
+                                  ? proj.liveLabelEn || "Download"
+                                  : proj.liveLabelId || "Download"}
+                              </span>
+                            </button>
+                          ) : (
+                            <a
+                              href={proj.liveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
+                            >
+                              <Globe className="w-3.5 h-3.5" />
+                              <span>
+                                {lang === "EN"
+                                  ? proj.liveLabelEn || "Open the Websites"
+                                  : proj.liveLabelId || "Buka Website"}
+                              </span>
+                              <ExternalLink className="w-3 h-3 text-white/80" />
+                            </a>
+                          )
                         )}
                       </>
                     )}
@@ -370,6 +380,12 @@ export default function ProjectsHubPage() {
           setIsWebsitesModalOpen(false);
           setSelectedProject(clientShowcaseProject);
         }}
+      />
+
+      {/* UCB Download Modal */}
+      <UcbDownloadModal
+        isOpen={isUcbModalOpen}
+        onClose={() => setIsUcbModalOpen(false)}
       />
     </div>
   );

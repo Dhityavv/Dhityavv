@@ -84,7 +84,7 @@ export const DEPLOYED_CLIENT_WEBSITES: DeployedWebsite[] = [
     clientWhatsapp: "https://wa.me/6285183174542",
     url: "https://kejuuanimator-portfolio.vercel.app",
     category: "3D Animation & Video Exhibition",
-    status: "Active in Production",
+    status: "Active",
     descriptionEn:
       "Official production portfolio website built for professional 3D Animator & LRC Artist Juna (@sayycheseeeee). Features an ultra-fast zero-runtime vanilla stack, custom geometric portal SVG animation, and dual-render video modal.",
     descriptionId:
@@ -217,8 +217,8 @@ export const PROJECTS: ProjectDetail[] = [
         "Performa Ekstrem: Skor performa Lighthouse 100/100 dengan waktu render instan di desktop maupun ponsel.",
         "Verifikasi Pemakaian Nyata: Website telah diserahterimakan dan secara resmi digunakan oleh klien.",
       ],
-      liveStatusEn: "Active in Production & Actively Used",
-      liveStatusId: "Aktif digunakan secara publik oleh klien",
+      liveStatusEn: "Active",
+      liveStatusId: "Active",
       verifiedInUse: true,
       deployedWebsites: DEPLOYED_CLIENT_WEBSITES,
     },
@@ -271,6 +271,10 @@ export const PROJECTS: ProjectDetail[] = [
       "Pie menu interaktif berbasis keyboard (Tahan Z untuk Shading Mode, Tahan X untuk Kontrol Kamera)",
     ],
     repoUrl: "https://github.com/Dhityavv/Orbitry",
+    liveUrl: "https://orbitry.vercel.app",
+    liveLabel: "Open the Websites",
+    liveLabelEn: "Open the Websites",
+    liveLabelId: "Buka Website",
     longOverview:
       "Orbitry solves the barrier 3D artists face when sharing or inspecting models without launching heavy desktop software. Built on Three.js and jsblender with Zstandard decompression, Orbitry reads SDNA / AttributeStorage data structures directly in client memory, exporting to web standards instantly with complete asset privacy.",
     longOverviewEn:
@@ -305,7 +309,7 @@ export const PROJECTS: ProjectDetail[] = [
     subtitleEn: "2.5D Isometric Survival Town Web Game",
     subtitleId: "2.5D Isometric Survival Town Web Game",
     category: "Full-Stack Web",
-    status: "In Progress",
+    status: "Active",
     featured: true,
     description:
       "A 2.5D isometric browser survival town prototype uniting Phaser 3.90, Supabase Realtime, and atomic Postgres RPC. Explore forest and Central zones with guest/email authentication, WASD/click movement, transactional citizen ID generation, private inventory, resource gathering, cottage/garden construction, and player escrow marketplace.",
@@ -343,6 +347,10 @@ export const PROJECTS: ProjectDetail[] = [
       "Pasar berbasis escrow: barang dikunci saat dipasang dan transaksi dituntaskan dalam satu operasi",
     ],
     repoUrl: "https://github.com/Dhityavv/Rimba",
+    liveUrl: "https://rimba.vercel.app",
+    liveLabel: "Open the Websites",
+    liveLabelEn: "Open the Websites",
+    liveLabelId: "Buka Website",
     longOverview:
       "Rimba combines 2.5D canvas gameplay with robust relational database architecture. By enforcing crucial rules (inventory balance, boundary validation, movement speeds, and trade escrow) directly on PostgreSQL via transactional RPCs and Row Level Security, the game prevents client tampering.",
     longOverviewEn:
@@ -490,10 +498,10 @@ export const PROJECTS: ProjectDetail[] = [
       "Keamanan Data NBT Maksimal: Mengikuti spesifikasi serialisasi chunk resmi Minecraft, menjamin dunia survival tidak mengalami korupsi data",
     ],
     repoUrl: "https://github.com/Dhityavv/Universal-Chiseled-Bookshelf",
-    liveUrl: "https://discord.gg/VKsfPzC2g",
-    liveLabel: "Download on Discord",
-    liveLabelEn: "Download on Discord",
-    liveLabelId: "Unduh di Discord",
+    liveUrl: "https://discord.gg/sFC8P5DFEN",
+    liveLabel: "Download",
+    liveLabelEn: "Download",
+    liveLabelId: "Download",
     longOverview:
       "Minecraft survival players frequently struggle with cluttered chest rooms, unsightly item frames, and decorative blocks that lack real functional utility. The Chiseled Bookshelf introduced in modern vanilla updates was a welcome visual addition, yet was hampered by strict item-type constraints. Universal Chiseled Bookshelf bridges this gap by extending the block entity's internal capability without violating game immersion.\n\nBuilt natively on the Fabric Mod Loader framework, the mod hooks cleanly into block interaction and player raycast events. Players can naturally insert and extract items with intuitive right-click gestures, accompanied by authentic tactile sound effects and synchronized NBT data persistence. The mod seamlessly respects Minecraft's comparator redstone logic, emitting variable signal strengths based on slot occupancy, enabling secret book-switch doors, custom puzzle mechanisms, and automated redstone libraries. Whether playing on local singleplayer or on large Fabric SMP servers, Universal Chiseled Bookshelf runs with zero tick-rate degradation (rock-solid 20 TPS), zero desynchronization issues, and full compatibility with chunk saving formats.",
     longOverviewEn:
