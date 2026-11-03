@@ -22,10 +22,26 @@ export function ShowcaseGallery() {
   const { lang } = useLanguage();
   const [selectedItem, setSelectedItem] = useState<BlenderShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  // Default to index 2 (Redmi Note 13 4G Animation) matching the 3-card stage in photo 2
+  const [activeIndex, setActiveIndex] = useState<number>(2);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const isScrollingRef = useRef<boolean>(false);
+  // Touch and drag swipe state
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const mouseStartX = useRef<number | null>(null);
+  const isDragging = useRef<boolean>(false);
+  const wheelLock = useRef<boolean>(false);
+
+  // Detect viewport size for responsive coverflow translation offsets
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Prevent background scroll when modal lightbox is open
   useEffect(() => {
@@ -47,59 +63,183 @@ export function ShowcaseGallery() {
     setActivePhotoIdx(0);
   };
 
-  // Smoothly scroll the carousel to a specific card index
-  const scrollToCard = useCallback((index: number) => {
-    if (!carouselRef.current) return;
-    const container = carouselRef.current;
-    const cards = container.querySelectorAll<HTMLElement>("[data-carousel-card]");
-    if (cards[index]) {
-      const card = cards[index];
-      const scrollPos =
-        card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
-      isScrollingRef.current = true;
-      container.scrollTo({
-        left: scrollPos,
-        behavior: "smooth",
-      });
-      setActiveIndex(index);
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 500);
-    }
+  // Infinite looping prev/next navigation
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + BLENDER_SHOWCASE.length) % BLENDER_SHOWCASE.length);
   }, []);
 
-  // Detect which card is closest to the horizontal center during scroll
-  const handleScroll = useCallback(() => {
-    if (!carouselRef.current || isScrollingRef.current) return;
-    const container = carouselRef.current;
-    const cards = container.querySelectorAll<HTMLElement>("[data-carousel-card]");
-    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % BLENDER_SHOWCASE.length);
+  }, []);
 
-    let closestIdx = activeIndex;
-    let minDistance = Infinity;
+  // Keyboard navigation when modal is not open
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedItem) return;
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handlePrev, handleNext, selectedItem]);
 
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft + card.clientWidth / 2;
-      const dist = Math.abs(containerCenter - cardCenter);
-      if (dist < minDistance) {
-        minDistance = dist;
-        closestIdx = idx;
-      }
-    });
-
-    if (closestIdx !== activeIndex) {
-      setActiveIndex(closestIdx);
-    }
-  }, [activeIndex]);
-
-  const handlePrev = () => {
-    const nextIdx = Math.max(0, activeIndex - 1);
-    scrollToCard(nextIdx);
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
   };
 
-  const handleNext = () => {
-    const nextIdx = Math.min(BLENDER_SHOWCASE.length - 1, activeIndex + 1);
-    scrollToCard(nextIdx);
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - (touchStartY.current || 0);
+
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+      if (deltaX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  // Mouse drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseStartX.current = e.clientX;
+    isDragging.current = true;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging.current || mouseStartX.current === null) return;
+    const deltaX = e.clientX - mouseStartX.current;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    mouseStartX.current = null;
+    isDragging.current = false;
+  };
+
+  // Horizontal wheel / trackpad swipe
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
+    if (Math.abs(delta) > 30) {
+      if (wheelLock.current) return;
+      wheelLock.current = true;
+      if (delta > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+      setTimeout(() => {
+        wheelLock.current = false;
+      }, 350);
+    }
+  };
+
+  // Compute circular distance diff: -2, -1, 0, 1, 2
+  const getCardTransform = (idx: number) => {
+    let diff = (idx - activeIndex) % BLENDER_SHOWCASE.length;
+    if (diff < -2) diff += BLENDER_SHOWCASE.length;
+    if (diff > 2) diff -= BLENDER_SHOWCASE.length;
+
+    const isActive = diff === 0;
+    const isLeft = diff === -1;
+    const isRight = diff === 1;
+
+    let translateX = "0%";
+    let scale = 0.72;
+    let opacity = 0;
+    let zIndex = 0;
+    let pointerEvents: "auto" | "none" = "none";
+
+    if (isMobile) {
+      if (diff === 0) {
+        translateX = "0%";
+        scale = 1;
+        opacity = 1;
+        zIndex = 30;
+        pointerEvents = "auto";
+      } else if (diff === -1) {
+        translateX = "-78%";
+        scale = 0.86;
+        opacity = 0.55;
+        zIndex = 20;
+        pointerEvents = "auto";
+      } else if (diff === 1) {
+        translateX = "78%";
+        scale = 0.86;
+        opacity = 0.55;
+        zIndex = 20;
+        pointerEvents = "auto";
+      } else if (diff === -2) {
+        translateX = "-150%";
+        scale = 0.7;
+        opacity = 0;
+        zIndex = 10;
+        pointerEvents = "none";
+      } else if (diff === 2) {
+        translateX = "150%";
+        scale = 0.7;
+        opacity = 0;
+        zIndex = 10;
+        pointerEvents = "none";
+      }
+    } else {
+      if (diff === 0) {
+        translateX = "0%";
+        scale = 1;
+        opacity = 1;
+        zIndex = 30;
+        pointerEvents = "auto";
+      } else if (diff === -1) {
+        translateX = "-104%";
+        scale = 0.88;
+        opacity = 0.6;
+        zIndex = 20;
+        pointerEvents = "auto";
+      } else if (diff === 1) {
+        translateX = "104%";
+        scale = 0.88;
+        opacity = 0.6;
+        zIndex = 20;
+        pointerEvents = "auto";
+      } else if (diff === -2) {
+        translateX = "-208%";
+        scale = 0.75;
+        opacity = 0;
+        zIndex = 10;
+        pointerEvents = "none";
+      } else if (diff === 2) {
+        translateX = "208%";
+        scale = 0.75;
+        opacity = 0;
+        zIndex = 10;
+        pointerEvents = "none";
+      }
+    }
+
+    return {
+      diff,
+      isActive,
+      isLeft,
+      isRight,
+      style: {
+        transform: `translateX(${translateX}) scale(${scale})`,
+        opacity,
+        zIndex,
+        pointerEvents,
+        transition:
+          Math.abs(diff) === 2
+            ? "opacity 280ms ease"
+            : "transform 500ms cubic-bezier(0.25, 1, 0.5, 1), opacity 500ms ease, box-shadow 500ms ease, border-color 500ms ease",
+      },
+    };
   };
 
   return (
@@ -123,29 +263,21 @@ export function ShowcaseGallery() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* Arrow Controls on top right for quick navigation */}
+            {/* Arrow Controls on top right for quick cyclic navigation */}
             <div className="flex items-center gap-1.5 mr-2">
               <button
+                type="button"
                 onClick={handlePrev}
-                disabled={activeIndex === 0}
                 aria-label="Previous Project"
-                className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all ${
-                  activeIndex === 0
-                    ? "bg-[#161b22]/40 border-[#30363d]/40 text-[#8b949e]/40 cursor-not-allowed"
-                    : "bg-[#161b22] border-[#30363d] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] shadow-sm"
-                }`}
+                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
+                type="button"
                 onClick={handleNext}
-                disabled={activeIndex === BLENDER_SHOWCASE.length - 1}
                 aria-label="Next Project"
-                className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all ${
-                  activeIndex === BLENDER_SHOWCASE.length - 1
-                    ? "bg-[#161b22]/40 border-[#30363d]/40 text-[#8b949e]/40 cursor-not-allowed"
-                    : "bg-[#161b22] border-[#30363d] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] shadow-sm"
-                }`}
+                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -161,80 +293,69 @@ export function ShowcaseGallery() {
           </div>
         </div>
 
-        {/* Carousel Container with edge fade masks */}
+        {/* 3D Infinite Looping Carousel Stage */}
         <div className="relative py-4 -mx-4 sm:-mx-6">
-          {/* Subtle Left and Right Edge Vignette */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
+          {/* Edge Vignette Fades */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0d1117] to-transparent z-35" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0d1117] to-transparent z-35" />
 
-          {/* Floating Navigation Chevrons directly on Carousel */}
+          {/* Floating Navigation Chevrons directly on Carousel Stage */}
           <button
-            onClick={handlePrev}
-            disabled={activeIndex === 0}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handlePrev();
+            }}
             aria-label="Previous project card"
-            className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl border backdrop-blur-md flex items-center justify-center transition-all shadow-xl ${
-              activeIndex === 0
-                ? "bg-black/20 border-white/5 text-white/20 opacity-0 pointer-events-none"
-                : "bg-black/60 hover:bg-black/90 border-white/20 text-white hover:scale-105 hover:border-[#8A6FB5]"
-            }`}
+            className="absolute left-3 sm:left-6 md:left-[calc(50%-255px)] top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/75 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
-            onClick={handleNext}
-            disabled={activeIndex === BLENDER_SHOWCASE.length - 1}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNext();
+            }}
             aria-label="Next project card"
-            className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl border backdrop-blur-md flex items-center justify-center transition-all shadow-xl ${
-              activeIndex === BLENDER_SHOWCASE.length - 1
-                ? "bg-black/20 border-white/5 text-white/20 opacity-0 pointer-events-none"
-                : "bg-black/60 hover:bg-black/90 border-white/20 text-white hover:scale-105 hover:border-[#8A6FB5]"
-            }`}
+            className="absolute right-3 sm:right-6 md:right-[calc(50%-255px)] top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/75 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Smooth Horizontal Scroll Track */}
+          {/* Centered Stage Container */}
           <div
-            ref={carouselRef}
-            onScroll={handleScroll}
-            className="flex items-stretch gap-5 sm:gap-7 overflow-x-auto snap-x snap-mandatory px-[8vw] sm:px-[18vw] md:px-[24vw] py-4 scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            onWheel={handleWheel}
+            className="relative w-full h-[550px] sm:h-[600px] md:h-[640px] flex items-center justify-center select-none"
           >
             {BLENDER_SHOWCASE.map((item, idx) => {
-              const distance = Math.abs(idx - activeIndex);
-              const isActive = distance === 0;
-              const isNeighbor = distance === 1;
-
-              // Compute smooth scale, opacity, and elevation based on distance from center
-              let scaleClass = "scale-[0.84] opacity-35";
-              let shadowClass = "shadow-md";
-              let borderClass = "border-[#30363d]/60";
-              let zIndexClass = "z-0";
-
-              if (isActive) {
-                scaleClass = "scale-100 opacity-100";
-                shadowClass = "shadow-2xl shadow-[#8A6FB5]/25";
-                borderClass = "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40";
-                zIndexClass = "z-20";
-              } else if (isNeighbor) {
-                scaleClass = "scale-[0.93] opacity-65 hover:opacity-85 hover:scale-[0.95]";
-                shadowClass = "shadow-lg";
-                borderClass = "border-[#30363d]";
-                zIndexClass = "z-10";
-              }
+              const { diff, isActive, isLeft, isRight, style } = getCardTransform(idx);
 
               return (
                 <div
                   key={item.id}
-                  data-carousel-card
+                  style={style}
                   onClick={() => {
                     if (isActive) {
                       openModal(item);
+                    } else if (isLeft) {
+                      handlePrev();
+                    } else if (isRight) {
+                      handleNext();
                     } else {
-                      scrollToCard(idx);
+                      setActiveIndex(idx);
                     }
                   }}
-                  className={`group relative shrink-0 snap-center w-[84vw] max-w-[360px] sm:max-w-[420px] md:w-[440px] cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transition-all duration-500 ease-out transform-gpu ${scaleClass} ${shadowClass} ${borderClass} ${zIndexClass}`}
+                  className={`absolute w-[86vw] max-w-[340px] sm:max-w-[400px] md:w-[440px] cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transform-gpu ${
+                    isActive
+                      ? "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40 shadow-2xl shadow-[#8A6FB5]/25"
+                      : "border-[#30363d] shadow-lg hover:border-[#8A6FB5]/50 hover:opacity-85"
+                  }`}
                 >
                   {/* Media Container */}
                   <div className="relative aspect-[16/10] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
@@ -243,7 +364,7 @@ export function ShowcaseGallery() {
                       alt={item.title}
                       fill
                       className={`object-cover transition-transform duration-700 ${
-                        isActive ? "group-hover:scale-105" : ""
+                        isActive ? "hover:scale-105" : ""
                       }`}
                       unoptimized
                     />
@@ -261,12 +382,14 @@ export function ShowcaseGallery() {
                     {item.photos.length > 1 && (
                       <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
                         <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                        <span>{item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}</span>
+                        <span>
+                          {item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}
+                        </span>
                       </div>
                     )}
 
                     {/* Inspect / Zoom Icon Top Right */}
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
+                    <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all">
                       <Maximize2 className="w-4 h-4" />
                     </div>
                   </div>
@@ -275,15 +398,15 @@ export function ShowcaseGallery() {
                   <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider">
+                        <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider truncate">
                           {item.subtitle}
                         </span>
-                        <span className="text-[10px] text-[#8b949e] font-mono">
+                        <span className="text-[10px] text-[#8b949e] font-mono shrink-0">
                           {idx + 1} / {BLENDER_SHOWCASE.length}
                         </span>
                       </div>
 
-                      <h3 className="text-lg font-bold text-white group-hover:text-[#c7b2e8] transition-colors mb-2">
+                      <h3 className="text-lg font-bold text-white hover:text-[#c7b2e8] transition-colors mb-2">
                         {item.title}
                       </h3>
                       <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
@@ -319,7 +442,11 @@ export function ShowcaseGallery() {
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d1117] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-all shadow-sm"
                         >
                           <Eye className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                          <span>{item.photos.length > 1 ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}` : "Inspect"}</span>
+                          <span>
+                            {item.photos.length > 1
+                              ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}`
+                              : "Inspect"}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -329,12 +456,13 @@ export function ShowcaseGallery() {
             })}
           </div>
 
-          {/* Interactive Pagination Dots */}
+          {/* Interactive Pagination Dots (5 items looping indicator) */}
           <div className="flex items-center justify-center gap-2 mt-4">
             {BLENDER_SHOWCASE.map((item, idx) => (
               <button
                 key={item.id}
-                onClick={() => scrollToCard(idx)}
+                type="button"
+                onClick={() => setActiveIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}: ${item.title}`}
                 className={`transition-all duration-300 rounded-full ${
                   activeIndex === idx
@@ -354,7 +482,9 @@ export function ShowcaseGallery() {
             </div>
             <div>
               <h4 className="text-sm sm:text-base font-bold text-white">
-                {lang === "EN" ? "Explore All 16+ 3D Blender Works & Archive" : "Jelajahi Seluruh 16+ Karya & Arsip 3D Blender"}
+                {lang === "EN"
+                  ? "Explore All 16+ 3D Blender Works & Archive"
+                  : "Jelajahi Seluruh 16+ Karya & Arsip 3D Blender"}
               </h4>
               <p className="text-xs text-[#8b949e]">
                 {lang === "EN"
@@ -394,11 +524,10 @@ export function ShowcaseGallery() {
                       </span>
                     )}
                   </h3>
-                  <p className="text-xs text-[#8b949e]">
-                    {selectedItem.subtitle}
-                  </p>
+                  <p className="text-xs text-[#8b949e]">{selectedItem.subtitle}</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedItem(null)}
                   className="w-8 h-8 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-[#8b949e] hover:text-white hover:bg-[#30363d] transition-colors"
                 >
@@ -418,6 +547,7 @@ export function ShowcaseGallery() {
                 {selectedItem.photos.length > 1 && (
                   <>
                     <button
+                      type="button"
                       onClick={() =>
                         setActivePhotoIdx((prev) =>
                           prev === 0 ? selectedItem.photos.length - 1 : prev - 1
@@ -428,10 +558,9 @@ export function ShowcaseGallery() {
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
+                      type="button"
                       onClick={() =>
-                        setActivePhotoIdx((prev) =>
-                          (prev + 1) % selectedItem.photos.length
-                        )
+                        setActivePhotoIdx((prev) => (prev + 1) % selectedItem.photos.length)
                       }
                       className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all"
                     >
@@ -451,6 +580,7 @@ export function ShowcaseGallery() {
                   {selectedItem.photos.map((p, idx) => (
                     <button
                       key={idx}
+                      type="button"
                       onClick={() => setActivePhotoIdx(idx)}
                       className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-all shrink-0 ${
                         activePhotoIdx === idx
@@ -466,22 +596,16 @@ export function ShowcaseGallery() {
 
               {/* Modal Details Footer */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3">
-                <p className="text-sm text-[#c9d1d9] leading-relaxed">
-                  {selectedItem.description}
-                </p>
+                <p className="text-sm text-[#c9d1d9] leading-relaxed">{selectedItem.description}</p>
 
                 <div className="grid grid-cols-3 gap-2 text-xs pt-2">
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">Software</span>
-                    <span className="font-semibold text-white">
-                      {selectedItem.stats.tool}
-                    </span>
+                    <span className="font-semibold text-white">{selectedItem.stats.tool}</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">Style</span>
-                    <span className="font-semibold text-white">
-                      {selectedItem.stats.style}
-                    </span>
+                    <span className="font-semibold text-white">{selectedItem.stats.style}</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">Note</span>
