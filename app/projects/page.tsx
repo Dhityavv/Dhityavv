@@ -102,12 +102,12 @@ export default function ProjectsHubPage() {
             </div>
 
             <a
-              href="https://github.com/Dhityavv"
+              href="https://wa.me/6289638194578"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-[#8A6FB5] hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-emerald-400 hover:text-white transition-colors"
             >
-              <span>GitHub</span>
+              <span>WhatsApp</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>

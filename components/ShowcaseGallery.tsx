@@ -66,7 +66,7 @@ export function ShowcaseGallery() {
       id="showcase"
       className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative overflow-hidden"
     >
-      {/* Global Swiper custom styling for smooth Coverflow transitions */}
+      {/* Global Swiper custom styling: STRICTLY SHOW EXACTLY 3 CARDS AT A TIME */}
       <style jsx global>{`
         .showcase-swiper {
           overflow: visible !important;
@@ -76,83 +76,62 @@ export function ShowcaseGallery() {
           align-items: stretch;
           display: flex;
         }
+        /* Hide all slides further than 1 position away from center */
         .showcase-swiper .swiper-slide {
           transition: opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
             transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+          opacity: 0 !important;
+          pointer-events: none !important;
+          visibility: hidden !important;
         }
-        .showcase-swiper .swiper-slide:not(.swiper-slide-active) {
-          opacity: 0.55;
+        /* ONLY the active slide and immediate prev/next slides are visible */
+        .showcase-swiper .swiper-slide-prev,
+        .showcase-swiper .swiper-slide-next {
+          opacity: 0.58 !important;
+          pointer-events: auto !important;
+          visibility: visible !important;
         }
-        .showcase-swiper .swiper-slide:not(.swiper-slide-active):hover {
-          opacity: 0.85;
+        .showcase-swiper .swiper-slide-prev:hover,
+        .showcase-swiper .swiper-slide-next:hover {
+          opacity: 0.85 !important;
         }
         .showcase-swiper .swiper-slide-active {
           opacity: 1 !important;
-          z-index: 20;
+          pointer-events: auto !important;
+          visibility: visible !important;
+          z-index: 25;
         }
       `}</style>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header Row */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 max-md:mb-6">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
-              <Layers className="w-4 h-4" />
-              <span>{lang === "EN" ? "Blender 3D Portfolio" : "Portofolio 3D Blender"}</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              {lang === "EN" ? "Showcase & Renders" : "Galeri Karya & Render 3D"}
-            </h2>
-            <p className="text-sm text-[#8b949e] mt-1">
-              {lang === "EN"
-                ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive — scroll horizontally to explore"
-                : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender — geser ke samping untuk menjelajah"}
-            </p>
+        {/* Header Row: Clean, without < > or small Hub button as requested */}
+        <div className="mb-8 max-md:mb-6">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
+            <Layers className="w-4 h-4" />
+            <span>{lang === "EN" ? "Blender 3D Portfolio" : "Portofolio 3D Blender"}</span>
           </div>
-
-          <div className="flex items-center gap-2.5">
-            {/* Header navigation arrows */}
-            <div className="flex items-center gap-1.5 mr-2">
-              <button
-                type="button"
-                onClick={() => swiperInstance?.slidePrev()}
-                aria-label="Previous Project"
-                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => swiperInstance?.slideNext()}
-                aria-label="Next Project"
-                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            <Link
-              href="/blender"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
-            >
-              <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            {lang === "EN" ? "Showcase & Renders" : "Galeri Karya & Render 3D"}
+          </h2>
+          <p className="text-sm text-[#8b949e] mt-1">
+            {lang === "EN"
+              ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive — scroll horizontally to explore"
+              : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender — geser ke samping untuk menjelajah"}
+          </p>
         </div>
 
-        {/* Carousel Viewport with edge fades */}
+        {/* Carousel Viewport */}
         <div className="relative py-4 -mx-4 sm:-mx-6">
           {/* Edge Vignette Fades */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
 
-          {/* Floating Navigation Chevrons directly on Carousel sides */}
+          {/* Floating Navigation Chevrons directly beside the center GUI image */}
           <button
             type="button"
             onClick={() => swiperInstance?.slidePrev()}
             aria-label="Previous project card"
-            className="absolute left-2 sm:left-6 md:left-10 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl bg-black/80 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
+            className="absolute left-2 sm:left-[calc(50%-235px)] md:left-[calc(50%-255px)] top-[38%] -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/85 hover:bg-black border border-white/25 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -161,7 +140,7 @@ export function ShowcaseGallery() {
             type="button"
             onClick={() => swiperInstance?.slideNext()}
             aria-label="Next project card"
-            className="absolute right-2 sm:right-6 md:right-10 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl bg-black/80 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
+            className="absolute right-2 sm:right-[calc(50%-235px)] md:right-[calc(50%-255px)] top-[38%] -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/85 hover:bg-black border border-white/25 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -179,11 +158,11 @@ export function ShowcaseGallery() {
             slideToClickedSlide={true}
             keyboard={{ enabled: true }}
             mousewheel={{ forceToAxis: true, sensitivity: 1 }}
-            speed={550}
+            speed={500}
             coverflowEffect={{
               rotate: 0,
               stretch: 0,
-              depth: 120,
+              depth: 80,
               modifier: 1,
               scale: 0.88,
               slideShadows: false,
@@ -195,7 +174,7 @@ export function ShowcaseGallery() {
             onSlideChange={(swiper) => {
               setActiveRealIndex(swiper.realIndex);
             }}
-            className="showcase-swiper !py-6"
+            className="showcase-swiper !py-4"
           >
             {BLENDER_SHOWCASE.map((item, idx) => (
               <SwiperSlide
