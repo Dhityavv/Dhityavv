@@ -1,8 +1,24 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
+import {
+  EffectCoverflow,
+  Pagination,
+  Navigation,
+  Keyboard,
+  Mousewheel,
+} from "swiper/modules";
+
+// Swiper CSS styles
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import { useLanguage } from "@/lib/LanguageContext";
 import { BLENDER_SHOWCASE, BlenderShowcaseItem } from "@/lib/blender-showcase";
 import {
@@ -20,28 +36,10 @@ import {
 
 export function ShowcaseGallery() {
   const { lang } = useLanguage();
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [selectedItem, setSelectedItem] = useState<BlenderShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
-  // Default to index 2 (Redmi Note 13 4G Animation) matching the 3-card stage in photo 2
-  const [activeIndex, setActiveIndex] = useState<number>(2);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  // Touch and drag swipe state
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-  const mouseStartX = useRef<number | null>(null);
-  const isDragging = useRef<boolean>(false);
-  const wheelLock = useRef<boolean>(false);
-
-  // Detect viewport size for responsive coverflow translation offsets
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [activeRealIndex, setActiveRealIndex] = useState<number>(2);
 
   // Prevent background scroll when modal lightbox is open
   useEffect(() => {
@@ -63,187 +61,37 @@ export function ShowcaseGallery() {
     setActivePhotoIdx(0);
   };
 
-  // Infinite looping prev/next navigation
-  const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + BLENDER_SHOWCASE.length) % BLENDER_SHOWCASE.length);
-  }, []);
-
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % BLENDER_SHOWCASE.length);
-  }, []);
-
-  // Keyboard navigation when modal is not open
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedItem) return;
-      if (e.key === "ArrowLeft") handlePrev();
-      if (e.key === "ArrowRight") handleNext();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handlePrev, handleNext, selectedItem]);
-
-  // Touch handlers for mobile swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - (touchStartY.current || 0);
-
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-      if (deltaX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-    }
-    touchStartX.current = null;
-    touchStartY.current = null;
-  };
-
-  // Mouse drag handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    mouseStartX.current = e.clientX;
-    isDragging.current = true;
-  };
-
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (!isDragging.current || mouseStartX.current === null) return;
-    const deltaX = e.clientX - mouseStartX.current;
-    if (Math.abs(deltaX) > 50) {
-      if (deltaX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-    }
-    mouseStartX.current = null;
-    isDragging.current = false;
-  };
-
-  // Horizontal wheel / trackpad swipe
-  const handleWheel = (e: React.WheelEvent) => {
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
-    if (Math.abs(delta) > 30) {
-      if (wheelLock.current) return;
-      wheelLock.current = true;
-      if (delta > 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
-      setTimeout(() => {
-        wheelLock.current = false;
-      }, 350);
-    }
-  };
-
-  // Compute circular distance diff: -2, -1, 0, 1, 2
-  const getCardTransform = (idx: number) => {
-    let diff = (idx - activeIndex) % BLENDER_SHOWCASE.length;
-    if (diff < -2) diff += BLENDER_SHOWCASE.length;
-    if (diff > 2) diff -= BLENDER_SHOWCASE.length;
-
-    const isActive = diff === 0;
-    const isLeft = diff === -1;
-    const isRight = diff === 1;
-
-    let translateX = "0%";
-    let scale = 0.72;
-    let opacity = 0;
-    let zIndex = 0;
-    let pointerEvents: "auto" | "none" = "none";
-
-    if (isMobile) {
-      if (diff === 0) {
-        translateX = "0%";
-        scale = 1;
-        opacity = 1;
-        zIndex = 30;
-        pointerEvents = "auto";
-      } else if (diff === -1) {
-        translateX = "-78%";
-        scale = 0.86;
-        opacity = 0.55;
-        zIndex = 20;
-        pointerEvents = "auto";
-      } else if (diff === 1) {
-        translateX = "78%";
-        scale = 0.86;
-        opacity = 0.55;
-        zIndex = 20;
-        pointerEvents = "auto";
-      } else if (diff === -2) {
-        translateX = "-150%";
-        scale = 0.7;
-        opacity = 0;
-        zIndex = 10;
-        pointerEvents = "none";
-      } else if (diff === 2) {
-        translateX = "150%";
-        scale = 0.7;
-        opacity = 0;
-        zIndex = 10;
-        pointerEvents = "none";
-      }
-    } else {
-      if (diff === 0) {
-        translateX = "0%";
-        scale = 1;
-        opacity = 1;
-        zIndex = 30;
-        pointerEvents = "auto";
-      } else if (diff === -1) {
-        translateX = "-104%";
-        scale = 0.88;
-        opacity = 0.6;
-        zIndex = 20;
-        pointerEvents = "auto";
-      } else if (diff === 1) {
-        translateX = "104%";
-        scale = 0.88;
-        opacity = 0.6;
-        zIndex = 20;
-        pointerEvents = "auto";
-      } else if (diff === -2) {
-        translateX = "-208%";
-        scale = 0.75;
-        opacity = 0;
-        zIndex = 10;
-        pointerEvents = "none";
-      } else if (diff === 2) {
-        translateX = "208%";
-        scale = 0.75;
-        opacity = 0;
-        zIndex = 10;
-        pointerEvents = "none";
-      }
-    }
-
-    return {
-      diff,
-      isActive,
-      isLeft,
-      isRight,
-      style: {
-        transform: `translateX(${translateX}) scale(${scale})`,
-        opacity,
-        zIndex,
-        pointerEvents,
-        transition:
-          Math.abs(diff) === 2
-            ? "opacity 280ms ease"
-            : "transform 500ms cubic-bezier(0.25, 1, 0.5, 1), opacity 500ms ease, box-shadow 500ms ease, border-color 500ms ease",
-      },
-    };
-  };
-
   return (
-    <section id="showcase" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative overflow-hidden">
+    <section
+      id="showcase"
+      className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative overflow-hidden"
+    >
+      {/* Global Swiper custom styling for smooth Coverflow transitions */}
+      <style jsx global>{`
+        .showcase-swiper {
+          overflow: visible !important;
+          width: 100%;
+        }
+        .showcase-swiper .swiper-wrapper {
+          align-items: stretch;
+          display: flex;
+        }
+        .showcase-swiper .swiper-slide {
+          transition: opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+            transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .showcase-swiper .swiper-slide:not(.swiper-slide-active) {
+          opacity: 0.55;
+        }
+        .showcase-swiper .swiper-slide:not(.swiper-slide-active):hover {
+          opacity: 0.85;
+        }
+        .showcase-swiper .swiper-slide-active {
+          opacity: 1 !important;
+          z-index: 20;
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header Row */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 max-md:mb-6">
@@ -263,21 +111,21 @@ export function ShowcaseGallery() {
           </div>
 
           <div className="flex items-center gap-2.5">
-            {/* Arrow Controls on top right for quick cyclic navigation */}
+            {/* Header navigation arrows */}
             <div className="flex items-center gap-1.5 mr-2">
               <button
                 type="button"
-                onClick={handlePrev}
+                onClick={() => swiperInstance?.slidePrev()}
                 aria-label="Previous Project"
-                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95"
+                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
-                onClick={handleNext}
+                onClick={() => swiperInstance?.slideNext()}
                 aria-label="Next Project"
-                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95"
+                className="w-9 h-9 rounded-xl border border-[#30363d] bg-[#161b22] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] flex items-center justify-center transition-all shadow-sm hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -293,168 +141,179 @@ export function ShowcaseGallery() {
           </div>
         </div>
 
-        {/* 3D Infinite Looping Carousel Stage */}
+        {/* Carousel Viewport with edge fades */}
         <div className="relative py-4 -mx-4 sm:-mx-6">
           {/* Edge Vignette Fades */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0d1117] to-transparent z-35" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0d1117] to-transparent z-35" />
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-20 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
 
-          {/* Floating Navigation Chevrons directly on Carousel Stage */}
+          {/* Floating Navigation Chevrons directly on Carousel sides */}
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePrev();
-            }}
+            onClick={() => swiperInstance?.slidePrev()}
             aria-label="Previous project card"
-            className="absolute left-3 sm:left-6 md:left-[calc(50%-255px)] top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/75 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95"
+            className="absolute left-2 sm:left-6 md:left-10 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl bg-black/80 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleNext();
-            }}
+            onClick={() => swiperInstance?.slideNext()}
             aria-label="Next project card"
-            className="absolute right-3 sm:right-6 md:right-[calc(50%-255px)] top-1/2 -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/75 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95"
+            className="absolute right-2 sm:right-6 md:right-10 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl bg-black/80 hover:bg-black/95 border border-white/20 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Centered Stage Container */}
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onWheel={handleWheel}
-            className="relative w-full h-[550px] sm:h-[600px] md:h-[640px] flex items-center justify-center select-none"
+          {/* Swiper Coverflow Infinite Side-Scrolling Carousel */}
+          <Swiper
+            modules={[EffectCoverflow, Pagination, Navigation, Keyboard, Mousewheel]}
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView="auto"
+            initialSlide={2}
+            loop={true}
+            loopAdditionalSlides={3}
+            slideToClickedSlide={true}
+            keyboard={{ enabled: true }}
+            mousewheel={{ forceToAxis: true, sensitivity: 1 }}
+            speed={550}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 120,
+              modifier: 1,
+              scale: 0.88,
+              slideShadows: false,
+            }}
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
+              setActiveRealIndex(swiper.realIndex);
+            }}
+            onSlideChange={(swiper) => {
+              setActiveRealIndex(swiper.realIndex);
+            }}
+            className="showcase-swiper !py-6"
           >
-            {BLENDER_SHOWCASE.map((item, idx) => {
-              const { diff, isActive, isLeft, isRight, style } = getCardTransform(idx);
+            {BLENDER_SHOWCASE.map((item, idx) => (
+              <SwiperSlide
+                key={item.id}
+                className="!w-[84vw] !max-w-[340px] sm:!max-w-[400px] md:!w-[440px] !h-auto flex"
+              >
+                {({ isActive }) => (
+                  <div
+                    onClick={() => {
+                      if (isActive) {
+                        openModal(item);
+                      }
+                    }}
+                    className={`w-full cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transition-all duration-500 ease-out select-none ${
+                      isActive
+                        ? "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40 shadow-2xl shadow-[#8A6FB5]/25"
+                        : "border-[#30363d] shadow-lg hover:border-[#8A6FB5]/50"
+                    }`}
+                  >
+                    {/* Media Container */}
+                    <div className="relative aspect-[16/10] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
+                      <Image
+                        src={item.filename}
+                        alt={item.title}
+                        fill
+                        className={`object-cover transition-transform duration-700 ${
+                          isActive ? "hover:scale-105" : ""
+                        }`}
+                        unoptimized
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
 
-              return (
-                <div
-                  key={item.id}
-                  style={style}
-                  onClick={() => {
-                    if (isActive) {
-                      openModal(item);
-                    } else if (isLeft) {
-                      handlePrev();
-                    } else if (isRight) {
-                      handleNext();
-                    } else {
-                      setActiveIndex(idx);
-                    }
-                  }}
-                  className={`absolute w-[86vw] max-w-[340px] sm:max-w-[400px] md:w-[440px] cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transform-gpu ${
-                    isActive
-                      ? "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40 shadow-2xl shadow-[#8A6FB5]/25"
-                      : "border-[#30363d] shadow-lg hover:border-[#8A6FB5]/50 hover:opacity-85"
-                  }`}
-                >
-                  {/* Media Container */}
-                  <div className="relative aspect-[16/10] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
-                    <Image
-                      src={item.filename}
-                      alt={item.title}
-                      fill
-                      className={`object-cover transition-transform duration-700 ${
-                        isActive ? "hover:scale-105" : ""
-                      }`}
-                      unoptimized
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
+                      {/* Active Card Glow Pill */}
+                      {isActive && (
+                        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8A6FB5]/30 backdrop-blur-md border border-[#8A6FB5]/60 text-[10px] font-bold text-white shadow-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>{lang === "EN" ? "Featured 3D" : "Pilihan Unggulan"}</span>
+                        </div>
+                      )}
 
-                    {/* Active Card Glow Pill */}
-                    {isActive && (
-                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8A6FB5]/30 backdrop-blur-md border border-[#8A6FB5]/60 text-[10px] font-bold text-white shadow-sm">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>{lang === "EN" ? "Featured 3D" : "Pilihan Unggulan"}</span>
-                      </div>
-                    )}
-
-                    {/* Multi-angle photos badge */}
-                    {item.photos.length > 1 && (
-                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
-                        <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                        <span>
-                          {item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Inspect / Zoom Icon Top Right */}
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all">
-                      <Maximize2 className="w-4 h-4" />
-                    </div>
-                  </div>
-
-                  {/* Card Content Info */}
-                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-1">
-                        <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider truncate">
-                          {item.subtitle}
-                        </span>
-                        <span className="text-[10px] text-[#8b949e] font-mono shrink-0">
-                          {idx + 1} / {BLENDER_SHOWCASE.length}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg font-bold text-white hover:text-[#c7b2e8] transition-colors mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <div>
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {item.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2 py-0.5 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Card Footer Info */}
-                      <div className="pt-3.5 border-t border-[#30363d]/60 flex items-center justify-between text-xs">
-                        <span className="text-[#8A6FB5] font-medium font-mono text-[11px]">
-                          {item.stats.tool}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openModal(item);
-                          }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d1117] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-all shadow-sm"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                      {/* Multi-angle photos badge */}
+                      {item.photos.length > 1 && (
+                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                          <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
                           <span>
-                            {item.photos.length > 1
-                              ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}`
-                              : "Inspect"}
+                            {item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}
                           </span>
-                        </button>
+                        </div>
+                      )}
+
+                      {/* Inspect / Zoom Icon Top Right */}
+                      <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all">
+                        <Maximize2 className="w-4 h-4" />
+                      </div>
+                    </div>
+
+                    {/* Card Content Info */}
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider truncate">
+                            {item.subtitle}
+                          </span>
+                          <span className="text-[10px] text-[#8b949e] font-mono shrink-0">
+                            {idx + 1} / {BLENDER_SHOWCASE.length}
+                          </span>
+                        </div>
+
+                        <h3 className="text-lg font-bold text-white hover:text-[#c7b2e8] transition-colors mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div>
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {item.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Card Footer Info */}
+                        <div className="pt-3.5 border-t border-[#30363d]/60 flex items-center justify-between text-xs">
+                          <span className="text-[#8A6FB5] font-medium font-mono text-[11px]">
+                            {item.stats.tool}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openModal(item);
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d1117] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-all shadow-sm cursor-pointer"
+                          >
+                            <Eye className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                            <span>
+                              {item.photos.length > 1
+                                ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}`
+                                : "Inspect"}
+                            </span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                )}
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
           {/* Interactive Pagination Dots (5 items looping indicator) */}
           <div className="flex items-center justify-center gap-2 mt-4">
@@ -462,10 +321,10 @@ export function ShowcaseGallery() {
               <button
                 key={item.id}
                 type="button"
-                onClick={() => setActiveIndex(idx)}
+                onClick={() => swiperInstance?.slideToLoop(idx)}
                 aria-label={`Go to slide ${idx + 1}: ${item.title}`}
-                className={`transition-all duration-300 rounded-full ${
-                  activeIndex === idx
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  activeRealIndex === idx
                     ? "w-8 h-2 bg-[#8A6FB5] shadow-md shadow-[#8A6FB5]/50"
                     : "w-2 h-2 bg-[#30363d] hover:bg-[#8A6FB5]/50"
                 }`}
