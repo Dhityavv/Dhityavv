@@ -2,8 +2,10 @@
 
 import React from "react";
 import { ArrowUp, Box, Heart } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export function Footer() {
+  const { lang } = useLanguage();
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -29,16 +31,16 @@ export function Footer() {
         </div>
 
         <div className="flex items-center gap-2 text-xs text-[#8b949e]">
-          <span>Crafted with</span>
+          <span>{lang === "EN" ? "Crafted with" : "Dibuat dengan"}</span>
           <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-          <span>for 3D Art & Animation</span>
+          <span>{lang === "EN" ? "for 3D Art & Modern Web" : "untuk Karya 3D & Web Modern"}</span>
         </div>
 
         <button
           onClick={scrollToTop}
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#8b949e] hover:text-white hover:border-[#8A6FB5]/50 transition-colors"
         >
-          <span>Back to Top</span>
+          <span>{lang === "EN" ? "Back to Top" : "Kembali ke Atas"}</span>
           <ArrowUp className="w-3.5 h-3.5 text-[#8A6FB5]" />
         </button>
       </div>

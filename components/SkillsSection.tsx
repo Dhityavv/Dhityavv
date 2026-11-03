@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from "@/lib/LanguageContext";
 import {
   Wrench,
   Sparkles,
@@ -99,6 +100,7 @@ const PRACTICE_AREAS = [
 ];
 
 export function SkillsSection() {
+  const { lang } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   const categories = ["All", "3D & Art", "Gaming & Modding", "Development"];
@@ -114,13 +116,15 @@ export function SkillsSection() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#8A6FB5] mb-3">
             <Wrench className="w-3.5 h-3.5" />
-            <span>Tools & Workflow</span>
+            <span>{lang === "EN" ? "Tools & Workflow" : "Alat & Alur Kerja"}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Tools, Technologies & Interests
+            {lang === "EN" ? "Tools, Technologies & Interests" : "Alat, Teknologi & Keahlian"}
           </h2>
           <p className="text-sm text-[#8b949e] mt-2">
-            The software, frameworks, and creative disciplines I practice daily
+            {lang === "EN"
+              ? "The software, frameworks, and creative disciplines I practice daily"
+              : "Software, framework, dan keahlian kreatif yang saya gunakan sehari-hari"}
           </p>
 
           {/* Filter Bar */}

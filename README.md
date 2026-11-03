@@ -3,7 +3,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,100:8A6FB5&height=220&section=header&text=Dhitya&fontSize=72&fontColor=FFFFFF&fontAlignY=38&animation=fadeIn&desc=3D%20Artist%20%C2%B7%20Gamer%20%C2%B7%20Tinkerer&descSize=18&descAlignY=60" alt="header" width="100%" />
 <a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=8A6FB5&center=true&vCenter=true&width=620&lines=Animation+student+in+vocational+school;Building+medium-poly+worlds+in+Blender;Gamer+%7C+Minecraft+tinkerer;Learning+by+building+small+projects+with+AI" alt="typing animation" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=8A6FB5&center=true&vCenter=true&width=620&lines=Animation+student+in+vocational+school;Building+medium-poly+worlds+in+Blender;Gamer+%7C+Minecraft+tinkerer;Building+modern+web+apps+%26+client+websites" alt="typing animation" />
 </a>
 
 <br/>
@@ -27,28 +27,29 @@
 | 🎓 **Role** | Animation Student (SMK) / Aspiring 3D Artist |
 | 🧊 **Focus** | 3D Modeling, Medium-Poly Art, Environments |
 | 🎮 **Also Into** | Gaming, Minecraft Modding, Anime & Manhwa |
-| ⚡ **Currently** | practicing Blender, tinkering with small AI-assisted projects |
+| ⚡ **Currently** | practicing Blender, building web apps & client websites |
 
 </div>
 
-I'm a vocational school student majoring in Animation. Most of my time goes into **3D art in Blender**, and I love games, so I like making things that feel like they belong in one. Sometimes I also build small coding experiments with the help of AI, just to understand how things work and to have fun.
+I'm a vocational school student majoring in Animation. Most of my time goes into **3D art in Blender**, and I love games, so I like making things that feel like they belong in one. I also design and develop modern web applications, interactive 3D tools, and client websites that are fast, intuitive, and production-ready.
 
 ---
 
 ## 🎨 Showcase
 
-> A few of my Blender renders. More coming soon.
+> A few of my featured projects & creative works.
 
 <div align="center">
 
 | Project | What it is | Link |
 |---|---|---|
+| 🌐 **Client Web Showcase (Juna 3D Portfolio)** | Production personal portfolio website for 3D Animator & LRC Artist (Juna / kejuuanimator). Zero-dependency, <100ms load time, SVG portal animation, dual-render video comparison | <a href="https://kejuuanimator-portfolio.vercel.app" target="_blank" rel="noopener noreferrer">Live Website</a> · <a href="https://wa.me/6285183174542" target="_blank" rel="noopener noreferrer">Client WhatsApp</a> |
+| 🧊 **Orbitry** | Browser-based 3D asset previewer & model converter (.blend, .glb, .obj) with client-side parsing, Zstandard decompressor, and fast pie menus | <a href="https://github.com/Dhityavv/Orbitry" target="_blank" rel="noopener noreferrer">GitHub</a> |
+| 🌿 **Rimba — Survival Town 2.5D** | Isometric browser survival game featuring exploration, character creation, resource gathering, building, and a player-driven marketplace | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
 | 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Open the Website</a> |
 | 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://discord.gg/VKsfPzC2g" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
-| 🌿 **Rimba — Survival Town 2.5D** | Isometric browser survival game featuring exploration, character creation, resource gathering, building, and a player-driven marketplace | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
 
-<!-- TODO: upload your renders to an `assets/` folder in this repo and rename them render-1.png, render-2.png, render-3.png
-     (or change the file names above). Replace the italic titles too. -->
+</div>
 
 ---
 
@@ -71,34 +72,11 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 
 ---
 
-## 🚀 Small Projects
-
-> Little experiments and practice builds. Nothing huge, just things I learn from.
-
-| 🌿 **Rimba — Survival Town 2.5D** | Isometric browser survival game featuring exploration, character creation, resource gathering, building, and a player-driven marketplace | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
-<!-- TODO: replace the rows above once you push your projects. Delete rows you don't need. -->
-
----
-
-## 📊 GitHub Stats
-
-<div align="center">
-
-<img height="170" src="https://github-stats-extended.vercel.app/api?username=Dhityavv&show_icons=true&hide_border=false&bg_color=0D1117&title_color=8A6FB5&icon_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="stats" />
-<img height="170" src="https://github-stats-extended.vercel.app/api/top-langs/?username=Dhityavv&layout=compact&bg_color=0D1117&title_color=8A6FB5&text_color=C9D1D9&border_color=30363D" alt="top languages" />
-
-<br/>
-
-<img src="https://streak-stats.demolab.com?user=Dhityavv&background=0D1117&stroke=30363D&ring=8A6FB5&fire=8A6FB5&currStreakNum=FFFFFF&sideNums=FFFFFF&currStreakLabel=8A6FB5&sideLabels=C9D1D9&dates=8B949E&border=30363D" alt="streak" />
-
-</div>
-
----
-
 ## 📫 Let's Connect
 
 <div align="center">
 
+<a href="mailto:dhityanurhadi3011@gmail.com"><img src="https://img.shields.io/badge/Email-dhityanurhadi3011%40gmail.com-0D1117?style=for-the-badge&logo=gmail&logoColor=8A6FB5" /></a>
 <a href="https://www.tiktok.com/@dhityavv"><img src="https://img.shields.io/badge/TikTok-@dhityavv-0D1117?style=for-the-badge&logo=tiktok&logoColor=8A6FB5" /></a>
 <a href="https://www.instagram.com/dhityavv/"><img src="https://img.shields.io/badge/Instagram-@dhityavv-0D1117?style=for-the-badge&logo=instagram&logoColor=8A6FB5" /></a>
 <img src="https://img.shields.io/badge/Discord-@dhityavv-0D1117?style=for-the-badge&logo=discord&logoColor=8A6FB5" />

@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, Layers, User, Sparkles, Code2, ExternalLink } from "lucide-react";
+import { Box, Layers, User, Sparkles, Code2, ExternalLink, Globe } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { lang, setLang } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,49 +42,71 @@ export function Navbar() {
             href="#about"
             className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
           >
-            <User className="w-4 h-4" /> About
+            <User className="w-4 h-4" /> {lang === "EN" ? "About" : "Tentang"}
           </a>
           <a
             href="#showcase"
             className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
           >
-            <Layers className="w-4 h-4" /> 3D Showcase
+            <Layers className="w-4 h-4" /> {lang === "EN" ? "3D Showcase" : "Galeri 3D"}
           </a>
           <a
             href="#projects"
             className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
           >
-            <Box className="w-4 h-4" /> Projects
+            <Box className="w-4 h-4" /> {lang === "EN" ? "Projects" : "Proyek"}
           </a>
           <a
             href="#skills"
             className="hover:text-[#8A6FB5] transition-colors flex items-center gap-1.5"
           >
-            <Sparkles className="w-4 h-4" /> Skills & Tools
-          </a>
-          <a
-            href="#stats"
-            className="hover:text-[#8A6FB5] transition-colors"
-          >
-            Stats
+            <Sparkles className="w-4 h-4" /> {lang === "EN" ? "Skills & Tools" : "Skill & Alat"}
           </a>
           <a
             href="#connect"
             className="hover:text-[#8A6FB5] transition-colors"
           >
-            Connect
+            {lang === "EN" ? "Connect" : "Kontak"}
           </a>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Language Switcher Toggle EN / ID */}
+          <div
+            className="inline-flex items-center p-0.5 rounded-xl bg-[#161b22] border border-[#30363d] text-xs font-semibold shadow-inner"
+            role="group"
+            aria-label="Language selection"
+          >
+            <button
+              onClick={() => setLang("EN")}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                lang === "EN"
+                  ? "bg-[#8A6FB5] text-white shadow-sm"
+                  : "text-[#8b949e] hover:text-white"
+              }`}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLang("ID")}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                lang === "ID"
+                  ? "bg-[#8A6FB5] text-white shadow-sm"
+                  : "text-[#8b949e] hover:text-white"
+              }`}
+            >
+              ID
+            </button>
+          </div>
+
           <a
             href="https://github.com/Dhityavv"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 max-md:h-9 max-md:w-9 max-md:justify-center max-md:p-0 rounded-lg border border-[#30363d] bg-[#161b22] hover:bg-[#21262d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-white transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 max-md:h-8 max-md:w-8 max-md:justify-center max-md:p-0 rounded-lg border border-[#30363d] bg-[#161b22] hover:bg-[#21262d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-white transition-all shadow-sm"
           >
             <Code2 className="w-3.5 h-3.5 text-[#8A6FB5]" />
-            <span className="max-md:hidden">GitHub Profile</span>
+            <span className="max-md:hidden">GitHub</span>
             <ExternalLink className="w-3 h-3 text-[#8b949e] max-md:hidden" />
           </a>
         </div>

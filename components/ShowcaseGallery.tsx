@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/lib/LanguageContext";
 import { BLENDER_SHOWCASE } from "@/lib/blender-showcase";
 import {
   Layers,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 export function ShowcaseGallery() {
+  const { lang } = useLanguage();
   const [selectedItem, setSelectedItem] = useState<(typeof BLENDER_SHOWCASE)[number] | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   useEffect(() => {
@@ -47,13 +49,15 @@ export function ShowcaseGallery() {
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
               <Layers className="w-4 h-4" />
-              <span>Blender 3D Portfolio</span>
+              <span>{lang === "EN" ? "Blender 3D Portfolio" : "Portofolio 3D Blender"}</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Showcase & Renders
+              {lang === "EN" ? "Showcase & Renders" : "Galeri Karya & Render 3D"}
             </h2>
             <p className="text-sm text-[#8b949e] mt-1">
-              Handcrafted 3D renders and animations directly from Dhitya&apos;s Blender archive
+              {lang === "EN"
+                ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive"
+                : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender"}
             </p>
           </div>
 
@@ -61,7 +65,7 @@ export function ShowcaseGallery() {
             href="/blender"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 max-md:w-full max-md:justify-center rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
           >
-            <span>Open 3D Blender Hub</span>
+            <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>

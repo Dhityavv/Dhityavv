@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { LanguageProvider } from "@/lib/LanguageContext";
 
 export const metadata: Metadata = {
   title: "Dhitya - Animation Student Portfolio",
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body className="min-h-screen bg-[#0d1117] text-[#c9d1d9] antialiased selection:bg-[#8A6FB5]/30 selection:text-white">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

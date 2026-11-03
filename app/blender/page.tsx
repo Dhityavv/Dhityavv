@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useLanguage } from "@/lib/LanguageContext";
 import {
   ArrowLeft,
   Box,
@@ -636,6 +637,7 @@ const CATEGORIES = [
 ];
 
 export default function BlenderStudioPage() {
+  const { lang, setLang } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>("All Works");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<BlenderProject | null>(
@@ -696,19 +698,43 @@ export default function BlenderStudioPage() {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 text-xs font-semibold text-white transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#8A6FB5]" />
-              <span>Back to Portfolio</span>
+              <span>{lang === "EN" ? "Back to Portfolio" : "Kembali ke Portofolio"}</span>
             </Link>
             <span className="text-[#30363d] hidden sm:inline">/</span>
             <div className="hidden sm:flex items-center gap-2 text-xs text-[#8b949e]">
               <Box className="w-3.5 h-3.5 text-[#8A6FB5]" />
               <span className="font-semibold text-white">Dhitya Nurhadi</span>
-              <span>· 3D Blender Studio & Renders</span>
+              <span>· {lang === "EN" ? "3D Blender Studio & Renders" : "Studio & Render 3D Blender"}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {/* Language Toggle */}
+            <div className="inline-flex items-center p-0.5 rounded-xl bg-[#161b22] border border-[#30363d] text-xs font-semibold shadow-inner">
+              <button
+                onClick={() => setLang("EN")}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  lang === "EN"
+                    ? "bg-[#8A6FB5] text-white shadow-sm"
+                    : "text-[#8b949e] hover:text-white"
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLang("ID")}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  lang === "ID"
+                    ? "bg-[#8A6FB5] text-white shadow-sm"
+                    : "text-[#8b949e] hover:text-white"
+                }`}
+              >
+                ID
+              </button>
+            </div>
+
             <span className="text-xs px-3 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-[#8A6FB5] font-mono">
-              {ALL_BLENDER_PROJECTS.length} Works Catalogued
+              {ALL_BLENDER_PROJECTS.length} {lang === "EN" ? "Works Catalogued" : "Karya Terkatalog"}
             </span>
           </div>
         </div>

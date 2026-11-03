@@ -2,33 +2,45 @@
 
 import React from "react";
 import { User, GraduationCap, Box, Gamepad2, Zap, Palette, Compass } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export function AboutSection() {
+  const { lang } = useLanguage();
+
   const details = [
     {
       icon: <User className="w-4 h-4 text-[#8A6FB5]" />,
-      label: "Full Name",
+      label: lang === "EN" ? "Full Name" : "Nama Lengkap",
       value: "Dhitya Nurhadi",
     },
     {
       icon: <GraduationCap className="w-4 h-4 text-[#8A6FB5]" />,
-      label: "Role",
-      value: "Animation Student (SMK) / Aspiring 3D Artist",
+      label: lang === "EN" ? "Role" : "Peran",
+      value:
+        lang === "EN"
+          ? "Animation Student (SMK) / Aspiring 3D Artist"
+          : "Siswa Jurusan Animasi (SMK) / Calon 3D Artist",
     },
     {
       icon: <Box className="w-4 h-4 text-[#8A6FB5]" />,
-      label: "Focus",
-      value: "3D Modeling, Medium-Poly Art, Environments",
+      label: lang === "EN" ? "Focus" : "Fokus Utama",
+      value:
+        lang === "EN"
+          ? "3D Modeling, Medium-Poly Art, Environments"
+          : "Pemodelan 3D, Seni Medium-Poly, Lingkungan",
     },
     {
       icon: <Gamepad2 className="w-4 h-4 text-[#8A6FB5]" />,
-      label: "Also Into",
+      label: lang === "EN" ? "Also Into" : "Minat Lain",
       value: "Gaming, Minecraft Modding, Anime & Manhwa",
     },
     {
       icon: <Zap className="w-4 h-4 text-amber-400" />,
-      label: "Currently",
-      value: "Practicing Blender, tinkering with small AI-assisted projects",
+      label: lang === "EN" ? "Currently" : "Aktivitas Saat Ini",
+      value:
+        lang === "EN"
+          ? "Practicing Blender, building web apps & client websites"
+          : "Berlatih Blender, membangun web app & website klien",
     },
   ];
 
@@ -41,10 +53,12 @@ export function AboutSection() {
           </div>
           <div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              About Me
+              {lang === "EN" ? "About Me" : "Tentang Saya"}
             </h2>
             <p className="text-xs sm:text-sm text-[#8b949e]">
-              Vocational animation background, passions, and creative focus
+              {lang === "EN"
+                ? "Vocational animation background, passions, and creative focus"
+                : "Latar belakang animasi SMK, minat, dan fokus karya kreatif"}
             </p>
           </div>
         </div>
@@ -57,47 +71,64 @@ export function AboutSection() {
             <div>
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <Compass className="w-5 h-5 text-[#8A6FB5]" />
-                The Creative Journey
+                {lang === "EN" ? "The Creative Journey" : "Perjalanan Kreatif"}
               </h3>
-              <p className="text-sm sm:text-base leading-relaxed text-[#c9d1d9] mb-5">
-                I&apos;m a vocational school student majoring in{" "}
-                <span className="text-white font-medium underline decoration-[#8A6FB5] underline-offset-4">
-                  Animation
-                </span>
-                . Most of my time goes into{" "}
-                <span className="text-[#c7b2e8] font-semibold">
-                  3D art in Blender
-                </span>
-                , and I love games, so I like making things that feel like they
-                belong in one.
-              </p>
-              <p className="text-sm sm:text-base leading-relaxed text-[#8b949e] mb-6">
-                Sometimes I also build small coding experiments with the help of
-                AI, just to understand how things work and to have fun. Whether
-                it&apos;s crafting low/medium-poly architecture, sculpting lush
-                game environments, or experimenting with procedural tools, I&apos;m
-                always learning.
-              </p>
+
+              {lang === "EN" ? (
+                <>
+                  <p className="text-sm sm:text-base leading-relaxed text-[#c9d1d9] mb-5">
+                    I&apos;m a vocational high school student majoring in{" "}
+                    <span className="text-white font-medium underline decoration-[#8A6FB5] underline-offset-4">
+                      Animation
+                    </span>
+                    . Most of my creative time goes into{" "}
+                    <span className="text-[#c7b2e8] font-semibold">
+                      3D art in Blender
+                    </span>
+                    , and I love games, so I craft scenes and assets that feel like they belong inside one.
+                  </p>
+                  <p className="text-sm sm:text-base leading-relaxed text-[#8b949e] mb-6">
+                    I also design and develop modern web applications, interactive 3D tools, and client websites that are fast, intuitive, and production-ready. Whether it&apos;s crafting low/medium-poly architecture, sculpting lush game environments, or engineering clean web platforms, I&apos;m always learning and building.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm sm:text-base leading-relaxed text-[#c9d1d9] mb-5">
+                    Saya adalah siswa SMK jurusan{" "}
+                    <span className="text-white font-medium underline decoration-[#8A6FB5] underline-offset-4">
+                      Animasi
+                    </span>
+                    . Sebagian besar waktu berkarya saya dedikasikan untuk{" "}
+                    <span className="text-[#c7b2e8] font-semibold">
+                      seni 3D di Blender
+                    </span>
+                    . Kecintaan saya pada game mendorong saya membuat objek dan lingkungan yang bernuansa dunia game.
+                  </p>
+                  <p className="text-sm sm:text-base leading-relaxed text-[#8b949e] mb-6">
+                    Saya juga merancang dan mengembangkan aplikasi web modern, alat 3D interaktif, serta website klien yang cepat, intuitif, dan siap produksi. Baik itu membuat arsitektur low/medium-poly, lingkungan alam game, maupun rekayasa platform web yang modular, saya selalu belajar dan berkarya.
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="pt-4 border-t border-[#30363d]/80 flex flex-wrap gap-2 text-xs mt-auto">
               <span className="px-3 py-1.5 rounded-full bg-[#0d1117] border border-[#30363d] text-[#8b949e]">
-                📍 Vocational High School (SMK)
+                📍 {lang === "EN" ? "Vocational High School (SMK)" : "SMK Jurusan Animasi"}
               </span>
               <span className="px-3 py-1.5 rounded-full bg-[#0d1117] border border-[#30363d] text-[#8b949e]">
-                🎮 Game Environment Art
+                🎮 {lang === "EN" ? "Game Environment Art" : "Seni Lingkungan Game"}
               </span>
               <span className="px-3 py-1.5 rounded-full bg-[#0d1117] border border-[#30363d] text-[#8b949e]">
-                ⚡ AI-Assisted Prototyping
+                ⚡ {lang === "EN" ? "Web & Client Projects" : "Web Development & Proyek Klien"}
               </span>
             </div>
           </div>
 
-          {/* Quick Info Table - equal height */}
+          {/* Quick Info Table */}
           <div className="lg:col-span-5 bg-[#161b22] border border-[#30363d] rounded-2xl p-6 sm:p-8 max-md:p-5 shadow-xl flex flex-col justify-between h-full">
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wider text-[#8b949e] mb-4">
-                Quick Profile
+                {lang === "EN" ? "Quick Profile" : "Profil Singkat"}
               </h3>
               <div className="space-y-3 max-md:grid max-md:grid-cols-2 max-md:gap-2 max-md:space-y-0">
                 {details.map((item, idx) => (
@@ -122,8 +153,10 @@ export function AboutSection() {
             </div>
 
             <div className="pt-4 border-t border-[#30363d]/60 mt-4 flex items-center justify-between text-xs text-[#8b949e]">
-              <span>Location: Indonesia</span>
-              <span className="text-[#8A6FB5] font-semibold">Active Student</span>
+              <span>{lang === "EN" ? "Location: Indonesia" : "Lokasi: Indonesia"}</span>
+              <span className="text-[#8A6FB5] font-semibold">
+                {lang === "EN" ? "Active Student" : "Siswa Aktif"}
+              </span>
             </div>
           </div>
         </div>

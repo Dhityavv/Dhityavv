@@ -7,7 +7,6 @@ import { AboutSection } from "@/components/AboutSection";
 import { ShowcaseGallery } from "@/components/ShowcaseGallery";
 import { SkillsSection } from "@/components/SkillsSection";
 import { ProjectsSection } from "@/components/ProjectsSection";
-import { GitHubStatsSection } from "@/components/GitHubStatsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 
@@ -21,7 +20,6 @@ export default function Home() {
         <ShowcaseGallery />
         <ProjectsSection />
         <SkillsSection />
-        <GitHubStatsSection />
         <ContactSection />
       </main>
       <Footer />
