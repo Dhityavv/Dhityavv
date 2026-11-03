@@ -10,7 +10,6 @@ import {
   Layers,
   Sparkles,
   Clock,
-  Laptop,
   Eye,
   Film,
   BookOpen,
@@ -19,10 +18,6 @@ import {
   ShieldCheck,
   MessageSquare,
   Box,
-  Check,
-  Play,
-  RotateCw,
-  Pause,
 } from "lucide-react";
 import { ProjectDetail, DEPLOYED_CLIENT_WEBSITES } from "@/lib/projects";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -30,7 +25,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 interface ProjectDetailModalProps {
   project: ProjectDetail | null;
   onClose: () => void;
-  initialTab?: "overview" | "preview" | "architecture" | "deliverables" | "websites";
+  initialTab?: "overview" | "architecture" | "deliverables" | "websites";
 }
 
 export function ProjectDetailModal({
@@ -40,13 +35,8 @@ export function ProjectDetailModal({
 }: ProjectDetailModalProps) {
   const { lang } = useLanguage();
   const [activeTab, setActiveTab] = useState<
-    "overview" | "preview" | "architecture" | "deliverables" | "websites"
+    "overview" | "architecture" | "deliverables" | "websites"
   >(initialTab);
-
-  // Live iframe state for Juna's portfolio with paused videos
-  const [junaIframeDoc, setJunaIframeDoc] = useState<string | null>(null);
-  const [isLoadingIframe, setIsLoadingIframe] = useState<boolean>(false);
-  const [iframeKey, setIframeKey] = useState<number>(0);
 
   // Prevent background scroll when modal is open and handle ESC key
   useEffect(() => {
@@ -70,81 +60,11 @@ export function ProjectDetailModal({
     setActiveTab(initialTab);
   }, [project?.id, initialTab]);
 
-  // Fetch real website HTML for Juna portfolio and pause videos by default
-  useEffect(() => {
-    if (project?.id !== "client-showcase") return;
-
-    let isMounted = true;
-    setIsLoadingIframe(true);
-
-    fetch("https://kejuuanimator-portfolio.vercel.app")
-      .then((res) => res.text())
-      .then((html) => {
-        if (!isMounted) return;
-
-        // 1. Add base href so all relative assets (images, CSS, JS, fonts) resolve properly to Vercel
-        let modifiedHtml = html.replace(
-          "<head>",
-          `<head><base href="https://kejuuanimator-portfolio.vercel.app/">`
-        );
-
-        // 2. Remove autoplay attribute from all <video> tags so they don't load/play heavy data automatically
-        modifiedHtml = modifiedHtml.replace(
-          /<video([^>]*)autoplay/gi,
-          "<video$1"
-        );
-
-        // 3. Inject pause script to guarantee all videos remain paused by default for memory savings
-        const pauseScript = `
-          <script>
-            function forcePauseVideos() {
-              try {
-                var vids = document.querySelectorAll('video');
-                vids.forEach(function(v) {
-                  v.removeAttribute('autoplay');
-                  v.autoplay = false;
-                  v.pause();
-                });
-              } catch(e) {}
-            }
-            window.addEventListener('load', forcePauseVideos);
-            document.addEventListener('DOMContentLoaded', forcePauseVideos);
-            // Run on interval for the first few seconds to catch lazy video inits
-            var timer = setInterval(forcePauseVideos, 500);
-            setTimeout(function() { clearInterval(timer); }, 4000);
-          </script>
-        `;
-
-        if (modifiedHtml.includes("</body>")) {
-          modifiedHtml = modifiedHtml.replace("</body>", `${pauseScript}</body>`);
-        } else {
-          modifiedHtml += pauseScript;
-        }
-
-        setJunaIframeDoc(modifiedHtml);
-        setIsLoadingIframe(false);
-      })
-      .catch(() => {
-        if (!isMounted) return;
-        // If fetch fails (e.g. offline), fallback will be standard iframe
-        setIsLoadingIframe(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [project?.id, iframeKey]);
-
   if (!project) return null;
 
   const isClientShowcase = project.id === "client-showcase";
   const isOrbitry = project.id === "orbitry";
   const isRimba = project.id === "rimba";
-
-  const reloadIframe = () => {
-    setIsLoadingIframe(true);
-    setIframeKey((prev) => prev + 1);
-  };
 
   const title = lang === "EN" ? project.titleEn || project.title : project.titleId || project.title;
   const subtitle =
@@ -197,14 +117,16 @@ export function ProjectDetailModal({
                 </span>
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                    project.status === "Live"
+                    project.status === "Active"
                       ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
                       : project.status === "In Progress"
                       ? "bg-[#8A6FB5]/15 border-[#8A6FB5]/40 text-[#c7b2e8]"
+                      : project.status === "Under Review on Modrinth"
+                      ? "bg-amber-500/10 border-amber-500/30 text-amber-300"
                       : "bg-[#21262d] border-[#30363d] text-[#8b949e]"
                   }`}
                 >
-                  {project.status === "Live" && (
+                  {project.status === "Active" && (
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   )}
                   {project.status}
@@ -241,30 +163,8 @@ export function ProjectDetailModal({
                 : "text-[#8b949e] hover:text-white hover:bg-[#161b22]"
             }`}
           >
-            {isClientShowcase
-              ? lang === "EN"
-                ? "Client & Overview"
-                : "Profil Klien & Ringkasan"
-              : lang === "EN"
-              ? "Project Overview"
-              : "Ringkasan Proyek"}
+            {lang === "EN" ? "Project Overview" : "Ringkasan Proyek"}
           </button>
-
-          {isClientShowcase && (
-            <button
-              onClick={() => setActiveTab("preview")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                activeTab === "preview"
-                  ? "bg-[#8A6FB5] text-white shadow-md shadow-[#8A6FB5]/20"
-                  : "text-[#8b949e] hover:text-white hover:bg-[#161b22]"
-              }`}
-            >
-              <Laptop className="w-3.5 h-3.5" />
-              <span>
-                {lang === "EN" ? "Live Website Mockup" : "Mockup Website Asli"}
-              </span>
-            </button>
-          )}
 
           {isClientShowcase && (
             <button
@@ -277,7 +177,7 @@ export function ProjectDetailModal({
             >
               <Globe className="w-3.5 h-3.5 text-emerald-400" />
               <span>
-                {lang === "EN" ? "Live Sites in Use" : "Daftar Website Terpakai"}
+                {lang === "EN" ? "Active Sites in Use" : "Website Aktif Digunakan"}
               </span>
             </button>
           )}
@@ -316,131 +216,15 @@ export function ProjectDetailModal({
           {/* TAB 1: OVERVIEW */}
           {activeTab === "overview" && (
             <div className="space-y-6">
-              {/* Highlight Banner for Client Website */}
-              {isClientShowcase && project.clientShowcase && (
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-[#161b22] to-[#8A6FB5]/10 border border-emerald-500/30">
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
-                      <ShieldCheck className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                        <span>
-                          {lang === "EN"
-                            ? "Verified Production Website Actively Used by Client"
-                            : "Hasil Pembuatan Website Resmi yang Sudah Aktif Digunakan"}
-                        </span>
-                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-semibold">
-                          Live Production
-                        </span>
-                      </h4>
-                      <p className="text-xs text-[#8b949e] mt-1.5 leading-relaxed">
-                        {lang === "EN" ? (
-                          <>
-                            This professional portfolio was designed and engineered from scratch by{" "}
-                            <span className="text-white font-medium">Dhitya Nurhadi</span> for client{" "}
-                            <span className="text-emerald-300 font-semibold">{project.clientShowcase.clientName}</span>{" "}
-                            ({project.clientShowcase.clientRoleEn}). It is actively deployed at{" "}
-                            <a
-                              href="https://kejuuanimator-portfolio.vercel.app"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-white underline hover:text-emerald-400"
-                            >
-                              kejuuanimator-portfolio.vercel.app
-                            </a>{" "}
-                            for animation studio pitches and showcasing industry work.
-                          </>
-                        ) : (
-                          <>
-                            Website portofolio profesional ini dirancang dan dikembangkan dari nol oleh{" "}
-                            <span className="text-white font-medium">Dhitya Nurhadi</span> untuk klien{" "}
-                            <span className="text-emerald-300 font-semibold">{project.clientShowcase.clientName}</span>{" "}
-                            ({project.clientShowcase.clientRoleId}). Sudah aktif digunakan secara publik di{" "}
-                            <a
-                              href="https://kejuuanimator-portfolio.vercel.app"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-white underline hover:text-emerald-400"
-                            >
-                              kejuuanimator-portfolio.vercel.app
-                            </a>{" "}
-                            untuk pitch ke studio animasi dan representasi industri.
-                          </>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* General Project Description */}
               <div>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
-                  {lang === "EN" ? "Project Overview" : "Deskripsi Lengkap"}
+                  {lang === "EN" ? "Project Overview & Engineering Scope" : "Deskripsi Lengkap & Ruang Lingkup Rekayasa"}
                 </h3>
-                <p className="text-sm sm:text-base text-[#c9d1d9] leading-relaxed">
+                <div className="text-sm sm:text-base text-[#c9d1d9] leading-relaxed whitespace-pre-line">
                   {longOverview}
-                </p>
-              </div>
-
-              {/* Client Profile Box */}
-              {isClientShowcase && project.clientShowcase && (
-                <div className="p-5 rounded-2xl bg-[#0d1117] border border-[#30363d] space-y-4">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-emerald-400" />
-                    <span>{lang === "EN" ? "Client Profile & Objectives" : "Profil Klien & Kebutuhan Solusi"}</span>
-                  </h4>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-[#161b22] border border-[#30363d]/70">
-                      <span className="text-[#8b949e] block text-[11px]">
-                        {lang === "EN" ? "Client Name:" : "Nama Klien:"}
-                      </span>
-                      <span className="font-bold text-white text-sm">{project.clientShowcase.clientName}</span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-[#161b22] border border-[#30363d]/70">
-                      <span className="text-[#8b949e] block text-[11px]">
-                        {lang === "EN" ? "Industry / Discipline:" : "Profesi / Industri:"}
-                      </span>
-                      <span className="font-semibold text-emerald-300">
-                        {lang === "EN" ? project.clientShowcase.clientRoleEn : project.clientShowcase.clientRoleId}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-[#161b22] border border-[#30363d]/70">
-                      <span className="text-[#8b949e] block text-[11px]">
-                        {lang === "EN" ? "Product Category:" : "Tipe Produk Website:"}
-                      </span>
-                      <span className="font-semibold text-white">
-                        {lang === "EN" ? project.clientShowcase.siteTypeEn : project.clientShowcase.siteTypeId}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-[#161b22] border border-[#30363d]/70">
-                      <span className="text-[#8b949e] block text-[11px]">
-                        {lang === "EN" ? "Operational Status:" : "Status Operasional:"}
-                      </span>
-                      <span className="font-semibold text-emerald-400 flex items-center gap-1.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        {lang === "EN"
-                          ? project.clientShowcase.liveStatusEn
-                          : project.clientShowcase.liveStatusId}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-3.5 rounded-xl bg-[#161b22]/70 border border-[#30363d]/60 text-xs text-[#8b949e] leading-relaxed">
-                    <span className="font-semibold text-white block mb-1">
-                      {lang === "EN" ? "Client Purpose & Usage:" : "Tujuan Penggunaan Klien:"}
-                    </span>
-                    {lang === "EN"
-                      ? project.clientShowcase.usageDescriptionEn
-                      : project.clientShowcase.usageDescriptionId}
-                  </div>
                 </div>
-              )}
+              </div>
 
               {/* Orbitry Special Info */}
               {isOrbitry && (
@@ -533,111 +317,22 @@ export function ProjectDetailModal({
             </div>
           )}
 
-          {/* TAB 2: LIVE MOCKUP PREVIEW (REAL WEBSITE OF JUNA WITH VIDEOS PAUSED BY DEFAULT) */}
-          {activeTab === "preview" && isClientShowcase && (
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <span>
-                      {lang === "EN"
-                        ? "Live Mockup: Juna's Official Portfolio Website"
-                        : "Mockup GUI: Website Asli Portofolio Juna"}
-                    </span>
-                  </h3>
-                  <p className="text-xs text-[#8b949e]">
-                    {lang === "EN"
-                      ? "Direct embedded preview of kejuuanimator-portfolio.vercel.app with videos paused by default for lightweight performance."
-                      : "Menampilkan website asli kejuuanimator-portfolio.vercel.app dengan video dijeda default agar hemat memori dan ringan."}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] font-mono text-amber-300">
-                    <Pause className="w-3 h-3 text-amber-400" />
-                    <span>{lang === "EN" ? "Videos Paused" : "Video Dijeda Default"}</span>
-                  </span>
-
-                  <button
-                    onClick={reloadIframe}
-                    title="Reload Preview"
-                    className="p-1.5 rounded-lg bg-[#0d1117] border border-[#30363d] text-[#8b949e] hover:text-white transition-colors"
-                  >
-                    <RotateCw className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Simulated Browser Frame with REAL LIVE IFRAME */}
-              <div className="rounded-2xl border border-[#30363d] bg-[#0d1117] overflow-hidden shadow-2xl flex flex-col">
-                {/* Browser Address Bar */}
-                <div className="px-4 py-2.5 bg-[#161b22] border-b border-[#30363d] flex items-center justify-between gap-3 text-xs shrink-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-3 h-3 rounded-full bg-rose-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-                  </div>
-
-                  <div className="flex-1 max-w-md mx-auto px-3 py-1 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[#8b949e] text-[11px] font-mono flex items-center justify-center gap-2 truncate">
-                    <span className="text-emerald-400">🔒</span>
-                    <span className="text-white/90">https://kejuuanimator-portfolio.vercel.app</span>
-                  </div>
-
-                  <a
-                    href="https://kejuuanimator-portfolio.vercel.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0d1117] border border-[#30363d] text-[11px] text-[#8b949e] hover:text-white hover:border-emerald-500/50 transition-colors"
-                  >
-                    <span>{lang === "EN" ? "Open Tab" : "Buka Tab Baru"}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-
-                {/* Embedded Live Webpage Container */}
-                <div className="relative w-full h-[540px] sm:h-[620px] bg-[#0a0d12]">
-                  {isLoadingIframe && (
-                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#0d1117] gap-3 text-xs text-[#8b949e]">
-                      <div className="w-8 h-8 rounded-full border-2 border-[#8A6FB5] border-t-transparent animate-spin" />
-                      <span>{lang === "EN" ? "Loading real client website..." : "Memuat website klien asli..."}</span>
-                    </div>
-                  )}
-
-                  {junaIframeDoc ? (
-                    <iframe
-                      key={iframeKey}
-                      srcDoc={junaIframeDoc}
-                      title="Juna Portfolio Live Mockup"
-                      sandbox="allow-scripts allow-same-origin allow-popups"
-                      className="w-full h-full border-0"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <iframe
-                      key={iframeKey}
-                      src="https://kejuuanimator-portfolio.vercel.app"
-                      title="Juna Portfolio Live Mockup"
-                      allow="autoplay 'none'"
-                      className="w-full h-full border-0"
-                      loading="lazy"
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB: WEBSITES IN PRODUCTION */}
+          {/* TAB 2: ACTIVE SITES IN USE (CLIENT DISCUSSION EXCLUSIVELY HERE) */}
           {activeTab === "websites" && isClientShowcase && (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
-                <h3 className="text-sm font-bold text-white">
-                  {lang === "EN" ? "Live Client Websites in Production" : "Daftar Website Klien yang Sudah Dipakai"}
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-emerald-400" />
+                  <span>
+                    {lang === "EN"
+                      ? "Active Client Websites in Production"
+                      : "Daftar Website Klien yang Aktif Digunakan"}
+                  </span>
                 </h3>
-                <p className="text-xs text-[#8b949e]">
+                <p className="text-xs text-[#8b949e] mt-1">
                   {lang === "EN"
-                    ? "Official production websites engineered by Dhitya Nurhadi and actively deployed:"
-                    : "Website resmi produksi yang dirancang dan dibangun oleh Dhitya Nurhadi yang sudah aktif digunakan:"}
+                    ? "Official production websites engineered by Dhitya Nurhadi and actively deployed in professional industries:"
+                    : "Website resmi produksi yang dirancang dan dibangun oleh Dhitya Nurhadi yang telah resmi digunakan di industri:"}
                 </p>
               </div>
 
@@ -669,7 +364,10 @@ export function ProjectDetailModal({
                     </p>
 
                     {/* Key deliverables */}
-                    <div className="space-y-1.5 mb-4 p-3 rounded-xl bg-[#161b22] border border-[#30363d]/60 text-xs">
+                    <div className="space-y-1.5 mb-4 p-3.5 rounded-xl bg-[#161b22] border border-[#30363d]/60 text-xs">
+                      <span className="font-semibold text-white block mb-1">
+                        {lang === "EN" ? "Key Deliverables & Implementations:" : "Deliverables & Hasil Implementasi:"}
+                      </span>
                       {(lang === "EN" ? site.deliverablesEn : site.deliverablesId).map(
                         (d, idx) => (
                           <div key={idx} className="flex items-start gap-2 text-[#8b949e]">
@@ -680,8 +378,8 @@ export function ProjectDetailModal({
                       )}
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#30363d]/50">
+                    {/* Actions for this deployed site */}
+                    <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-[#30363d]/50">
                       <a
                         href={site.url}
                         target="_blank"
@@ -689,7 +387,7 @@ export function ProjectDetailModal({
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-xs font-bold text-black transition-all shadow-md shadow-emerald-500/20"
                       >
                         <Globe className="w-3.5 h-3.5" />
-                        <span>{lang === "EN" ? "Visit Live Site" : "Kunjungi Website Asli"}</span>
+                        <span>{lang === "EN" ? "Visit Active Site" : "Kunjungi Website Asli"}</span>
                         <ExternalLink className="w-3 h-3 text-black/80" />
                       </a>
 
@@ -705,13 +403,17 @@ export function ProjectDetailModal({
                         </a>
                       )}
 
-                      <button
-                        onClick={() => setActiveTab("preview")}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#8A6FB5]/20 hover:bg-[#8A6FB5]/30 border border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-colors ml-auto"
-                      >
-                        <Laptop className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                        <span>{lang === "EN" ? "View in Mockup GUI" : "Buka di Mockup GUI"}</span>
-                      </button>
+                      {site.clientInstagramUrl && (
+                        <a
+                          href={site.clientInstagramUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-pink-500/50 text-xs font-semibold text-pink-300 transition-colors"
+                        >
+                          <span>{site.clientHandle || "Instagram"}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -803,30 +505,6 @@ export function ProjectDetailModal({
                   </div>
                 ))}
               </div>
-
-              {isClientShowcase && project.clientShowcase && (
-                <div className="space-y-3 pt-4 border-t border-[#30363d]/80">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">
-                    {lang === "EN"
-                      ? "Deliverables Handed Over to Client:"
-                      : "Deliverables yang Diserahkan ke Klien:"}
-                  </h4>
-                  <div className="space-y-2">
-                    {(lang === "EN"
-                      ? project.clientShowcase.deliverablesEn
-                      : project.clientShowcase.deliverablesId
-                    ).map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-2.5 text-xs text-[#8b949e] p-2 rounded-lg bg-[#0d1117]/50"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#8A6FB5]" />
-                        <span className="text-white/90">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>
@@ -834,66 +512,65 @@ export function ProjectDetailModal({
         {/* Footer Actions */}
         <div className="px-5 py-4 sm:px-6 bg-[#0d1117] border-t border-[#30363d] flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="text-xs text-[#8b949e] flex items-center gap-2">
-            <span>{lang === "EN" ? "Official links and repositories" : "Repositori & Live Link Resmi"}</span>
+            <span>{lang === "EN" ? "Official links and repositories" : "Repositori & Link Resmi"}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
             {isClientShowcase ? (
-              <button
-                onClick={() => setActiveTab("websites")}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-emerald-500/40 hover:border-emerald-400 text-xs font-semibold text-emerald-300 transition-all shadow-sm"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{lang === "EN" ? "Client Sites List" : "Daftar Website Terpakai"}</span>
-              </button>
+              <>
+                {/* Dhitya's Repository Button */}
+                <a
+                  href="https://github.com/Dhityavv"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 hover:bg-[#21262d] text-xs font-semibold text-white transition-all shadow-sm"
+                >
+                  <Code2 className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                  <span>{lang === "EN" ? "View Repository" : "Lihat Repositori"}</span>
+                  <ExternalLink className="w-3 h-3 text-[#8b949e]" />
+                </a>
+
+                {/* Direct Contact Me WhatsApp Button */}
+                <a
+                  href="https://wa.me/6289638194578"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-xs font-bold text-black transition-all shadow-md shadow-emerald-500/20"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>{lang === "EN" ? "Contact Me" : "Hubungi Saya"}</span>
+                </a>
+              </>
             ) : (
-              <a
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 hover:bg-[#21262d] text-xs font-semibold text-white transition-all shadow-sm"
-              >
-                <Code2 className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                <span>{lang === "EN" ? "View Repository" : "Lihat Repositori"}</span>
-                <ExternalLink className="w-3 h-3 text-[#8b949e]" />
-              </a>
-            )}
+              <>
+                <a
+                  href={project.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-[#8A6FB5]/60 hover:bg-[#21262d] text-xs font-semibold text-white transition-all shadow-sm"
+                >
+                  <Code2 className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                  <span>{lang === "EN" ? "View Repository" : "Lihat Repositori"}</span>
+                  <ExternalLink className="w-3 h-3 text-[#8b949e]" />
+                </a>
 
-            {isClientShowcase && project.clientShowcase?.clientWhatsapp && (
-              <a
-                href={project.clientShowcase.clientWhatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-emerald-500/50 text-xs font-semibold text-emerald-300 transition-colors"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>{lang === "EN" ? "Contact Client" : "Hubungi Klien"}</span>
-              </a>
-            )}
-
-            {isClientShowcase && project.clientShowcase?.clientInstagramUrl && (
-              <a
-                href={project.clientShowcase.clientInstagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#161b22] border border-[#30363d] hover:border-pink-500/50 text-xs font-semibold text-pink-300 transition-colors"
-              >
-                <span>Instagram</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{lang === "EN" ? project.liveLabelEn || "Open Website" : project.liveLabelId || "Buka Website"}</span>
-                <ExternalLink className="w-3 h-3 text-white/80" />
-              </a>
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>
+                      {lang === "EN"
+                        ? project.liveLabelEn || "Open the Websites"
+                        : project.liveLabelId || "Buka Website"}
+                    </span>
+                    <ExternalLink className="w-3 h-3 text-white/80" />
+                  </a>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -73,4 +73,41 @@ export const BLENDER_SHOWCASE: BlenderShowcaseItem[] = [
       renderNote: "Camera animation & lighting",
     },
   },
+  {
+    id: "ikan-v1",
+    title: "3 Types of Fish v1",
+    subtitle: "Three Fish Models · Version 1",
+    filename: "/assets/Ikan 1 v1.png",
+    photos: [
+      { label: "Ikan 1 v1", url: "/assets/Ikan 1 v1.png" },
+      { label: "Ikan 2 v1", url: "/assets/Ikan 2 v1.png" },
+      { label: "Ikan 3 v1", url: "/assets/Ikan 3 v1.png" },
+    ],
+    description:
+      "A 3D character study of three distinct fish species modeled in Blender with clean quad topology, aquatic body curves, and stylized fin geometries.",
+    tags: ["Creatures", "Fish", "Characters"],
+    stats: {
+      tool: "Blender · Cycles",
+      style: "Creature & Character",
+      renderNote: "Three angle variations",
+    },
+  },
+  {
+    id: "tedung-keraton",
+    title: "Tedung Keraton",
+    subtitle: "Traditional Balinese Ceremonial Umbrella",
+    filename: "/assets/Tedung Keraton.png",
+    photos: [
+      { label: "Front Angle", url: "/assets/Tedung Keraton.png" },
+      { label: "Perspective Angle", url: "/assets/Tedung Keraton 2.png" },
+    ],
+    description:
+      "An authentic 3D recreation of the Balinese Tedung Keraton ceremonial umbrella, featuring tiered golden fabric draping, timber carving, and ritual tassel details.",
+    tags: ["Props", "Balinese Culture", "Traditional Umbrella"],
+    stats: {
+      tool: "Blender · Cycles",
+      style: "Cultural Heritage Prop",
+      renderNote: "Multi-angle render study",
+    },
+  },
 ];

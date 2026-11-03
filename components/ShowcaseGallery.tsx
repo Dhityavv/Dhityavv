@@ -1,28 +1,33 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/LanguageContext";
-import { BLENDER_SHOWCASE } from "@/lib/blender-showcase";
+import { BLENDER_SHOWCASE, BlenderShowcaseItem } from "@/lib/blender-showcase";
 import {
   Layers,
   Box,
   Maximize2,
   X,
-  Sparkles,
-  Info,
   ExternalLink,
   ArrowRight,
   Images,
   ChevronLeft,
   ChevronRight,
+  Eye,
 } from "lucide-react";
 
 export function ShowcaseGallery() {
   const { lang } = useLanguage();
-  const [selectedItem, setSelectedItem] = useState<(typeof BLENDER_SHOWCASE)[number] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<BlenderShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isScrollingRef = useRef<boolean>(false);
+
+  // Prevent background scroll when modal lightbox is open
   useEffect(() => {
     if (!selectedItem) return;
 
@@ -37,15 +42,71 @@ export function ShowcaseGallery() {
     };
   }, [selectedItem]);
 
-  const openModal = (item: (typeof BLENDER_SHOWCASE)[number]) => {
+  const openModal = (item: BlenderShowcaseItem) => {
     setSelectedItem(item);
     setActivePhotoIdx(0);
   };
 
+  // Smoothly scroll the carousel to a specific card index
+  const scrollToCard = useCallback((index: number) => {
+    if (!carouselRef.current) return;
+    const container = carouselRef.current;
+    const cards = container.querySelectorAll<HTMLElement>("[data-carousel-card]");
+    if (cards[index]) {
+      const card = cards[index];
+      const scrollPos =
+        card.offsetLeft - (container.clientWidth - card.clientWidth) / 2;
+      isScrollingRef.current = true;
+      container.scrollTo({
+        left: scrollPos,
+        behavior: "smooth",
+      });
+      setActiveIndex(index);
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 500);
+    }
+  }, []);
+
+  // Detect which card is closest to the horizontal center during scroll
+  const handleScroll = useCallback(() => {
+    if (!carouselRef.current || isScrollingRef.current) return;
+    const container = carouselRef.current;
+    const cards = container.querySelectorAll<HTMLElement>("[data-carousel-card]");
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+
+    let closestIdx = activeIndex;
+    let minDistance = Infinity;
+
+    cards.forEach((card, idx) => {
+      const cardCenter = card.offsetLeft + card.clientWidth / 2;
+      const dist = Math.abs(containerCenter - cardCenter);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIdx = idx;
+      }
+    });
+
+    if (closestIdx !== activeIndex) {
+      setActiveIndex(closestIdx);
+    }
+  }, [activeIndex]);
+
+  const handlePrev = () => {
+    const nextIdx = Math.max(0, activeIndex - 1);
+    scrollToCard(nextIdx);
+  };
+
+  const handleNext = () => {
+    const nextIdx = Math.min(BLENDER_SHOWCASE.length - 1, activeIndex + 1);
+    scrollToCard(nextIdx);
+  };
+
   return (
-    <section id="showcase" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 max-md:mb-7">
+    <section id="showcase" className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header Row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 max-md:mb-6">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
               <Layers className="w-4 h-4" />
@@ -56,85 +117,233 @@ export function ShowcaseGallery() {
             </h2>
             <p className="text-sm text-[#8b949e] mt-1">
               {lang === "EN"
-                ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive"
-                : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender"}
+                ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive — scroll horizontally to explore"
+                : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender — geser ke samping untuk menjelajah"}
             </p>
           </div>
 
-          <Link
-            href="/blender"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 max-md:w-full max-md:justify-center rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
-          >
-            <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          <div className="flex items-center gap-2.5">
+            {/* Arrow Controls on top right for quick navigation */}
+            <div className="flex items-center gap-1.5 mr-2">
+              <button
+                onClick={handlePrev}
+                disabled={activeIndex === 0}
+                aria-label="Previous Project"
+                className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all ${
+                  activeIndex === 0
+                    ? "bg-[#161b22]/40 border-[#30363d]/40 text-[#8b949e]/40 cursor-not-allowed"
+                    : "bg-[#161b22] border-[#30363d] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] shadow-sm"
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={activeIndex === BLENDER_SHOWCASE.length - 1}
+                aria-label="Next Project"
+                className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-all ${
+                  activeIndex === BLENDER_SHOWCASE.length - 1
+                    ? "bg-[#161b22]/40 border-[#30363d]/40 text-[#8b949e]/40 cursor-not-allowed"
+                    : "bg-[#161b22] border-[#30363d] text-white hover:border-[#8A6FB5] hover:text-[#c7b2e8] shadow-sm"
+                }`}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            <Link
+              href="/blender"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#8A6FB5] to-[#71529e] hover:from-[#967cc2] hover:to-[#7e5eb0] text-xs font-semibold text-white shadow-md shadow-[#8A6FB5]/20 hover:shadow-[#8A6FB5]/35 transition-all shrink-0"
+            >
+              <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
 
-        {/* Gallery Grid */}
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto -mx-4 px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
-          {BLENDER_SHOWCASE.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => openModal(item)}
-              className="group w-[84vw] max-w-[360px] shrink-0 snap-start md:w-auto md:max-w-none cursor-pointer bg-[#161b22] border border-[#30363d] rounded-2xl overflow-hidden hover:border-[#8A6FB5] transition-all duration-300 hover:shadow-xl hover:shadow-[#8A6FB5]/10 flex flex-col"
-            >
-              {/* Media Container */}
-              <div className="relative aspect-[4/3] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
-                <Image
-                  src={item.filename}
-                  alt={item.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-80" />
+        {/* Carousel Container with edge fade masks */}
+        <div className="relative py-4 -mx-4 sm:-mx-6">
+          {/* Subtle Left and Right Edge Vignette */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
 
-                {/* Multi-photo badge */}
-                {item.photos.length > 1 && (
-                  <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
-                    <Images className="w-3 h-3 text-[#8A6FB5]" />
-                    <span>{item.photos.length} Angles</span>
+          {/* Floating Navigation Chevrons directly on Carousel */}
+          <button
+            onClick={handlePrev}
+            disabled={activeIndex === 0}
+            aria-label="Previous project card"
+            className={`absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl border backdrop-blur-md flex items-center justify-center transition-all shadow-xl ${
+              activeIndex === 0
+                ? "bg-black/20 border-white/5 text-white/20 opacity-0 pointer-events-none"
+                : "bg-black/60 hover:bg-black/90 border-white/20 text-white hover:scale-105 hover:border-[#8A6FB5]"
+            }`}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={handleNext}
+            disabled={activeIndex === BLENDER_SHOWCASE.length - 1}
+            aria-label="Next project card"
+            className={`absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-2xl border backdrop-blur-md flex items-center justify-center transition-all shadow-xl ${
+              activeIndex === BLENDER_SHOWCASE.length - 1
+                ? "bg-black/20 border-white/5 text-white/20 opacity-0 pointer-events-none"
+                : "bg-black/60 hover:bg-black/90 border-white/20 text-white hover:scale-105 hover:border-[#8A6FB5]"
+            }`}
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Smooth Horizontal Scroll Track */}
+          <div
+            ref={carouselRef}
+            onScroll={handleScroll}
+            className="flex items-stretch gap-5 sm:gap-7 overflow-x-auto snap-x snap-mandatory px-[8vw] sm:px-[18vw] md:px-[24vw] py-4 scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden"
+          >
+            {BLENDER_SHOWCASE.map((item, idx) => {
+              const distance = Math.abs(idx - activeIndex);
+              const isActive = distance === 0;
+              const isNeighbor = distance === 1;
+
+              // Compute smooth scale, opacity, and elevation based on distance from center
+              let scaleClass = "scale-[0.84] opacity-35";
+              let shadowClass = "shadow-md";
+              let borderClass = "border-[#30363d]/60";
+              let zIndexClass = "z-0";
+
+              if (isActive) {
+                scaleClass = "scale-100 opacity-100";
+                shadowClass = "shadow-2xl shadow-[#8A6FB5]/25";
+                borderClass = "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40";
+                zIndexClass = "z-20";
+              } else if (isNeighbor) {
+                scaleClass = "scale-[0.93] opacity-65 hover:opacity-85 hover:scale-[0.95]";
+                shadowClass = "shadow-lg";
+                borderClass = "border-[#30363d]";
+                zIndexClass = "z-10";
+              }
+
+              return (
+                <div
+                  key={item.id}
+                  data-carousel-card
+                  onClick={() => {
+                    if (isActive) {
+                      openModal(item);
+                    } else {
+                      scrollToCard(idx);
+                    }
+                  }}
+                  className={`group relative shrink-0 snap-center w-[84vw] max-w-[360px] sm:max-w-[420px] md:w-[440px] cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transition-all duration-500 ease-out transform-gpu ${scaleClass} ${shadowClass} ${borderClass} ${zIndexClass}`}
+                >
+                  {/* Media Container */}
+                  <div className="relative aspect-[16/10] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
+                    <Image
+                      src={item.filename}
+                      alt={item.title}
+                      fill
+                      className={`object-cover transition-transform duration-700 ${
+                        isActive ? "group-hover:scale-105" : ""
+                      }`}
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
+
+                    {/* Active Card Glow Pill */}
+                    {isActive && (
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8A6FB5]/30 backdrop-blur-md border border-[#8A6FB5]/60 text-[10px] font-bold text-white shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>{lang === "EN" ? "Featured 3D" : "Pilihan Unggulan"}</span>
+                      </div>
+                    )}
+
+                    {/* Multi-angle photos badge */}
+                    {item.photos.length > 1 && (
+                      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                        <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                        <span>{item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}</span>
+                      </div>
+                    )}
+
+                    {/* Inspect / Zoom Icon Top Right */}
+                    <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
+                      <Maximize2 className="w-4 h-4" />
+                    </div>
                   </div>
-                )}
 
-                {/* Zoom Icon Top Right */}
-                <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:scale-110 transition-all">
-                  <Maximize2 className="w-4 h-4" />
-                </div>
-              </div>
+                  {/* Card Content Info */}
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider">
+                          {item.subtitle}
+                        </span>
+                        <span className="text-[10px] text-[#8b949e] font-mono">
+                          {idx + 1} / {BLENDER_SHOWCASE.length}
+                        </span>
+                      </div>
 
-              {/* Info Container */}
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-white group-hover:text-[#c7b2e8] transition-colors mb-1">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[#8b949e] line-clamp-2 mb-4">
-                    {item.description}
-                  </p>
-                </div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-[#c7b2e8] transition-colors mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
+                        {item.description}
+                      </p>
+                    </div>
 
-                <div>
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {item.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    <div>
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-1.5 mb-4">
+                        {item.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2 py-0.5 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Card Footer Info */}
+                      <div className="pt-3.5 border-t border-[#30363d]/60 flex items-center justify-between text-xs">
+                        <span className="text-[#8A6FB5] font-medium font-mono text-[11px]">
+                          {item.stats.tool}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openModal(item);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d1117] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-all shadow-sm"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                          <span>{item.photos.length > 1 ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}` : "Inspect"}</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-[#8A6FB5] font-medium">
-                    <span>{item.stats.tool}</span>
-                    <span className="flex items-center gap-1 text-[#8b949e] group-hover:text-white transition-colors">
-                      {item.photos.length > 1 ? `View ${item.photos.length} Renders` : "Inspect"} <Maximize2 className="w-3 h-3" />
-                    </span>
-                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              );
+            })}
+          </div>
+
+          {/* Interactive Pagination Dots */}
+          <div className="flex items-center justify-center gap-2 mt-4">
+            {BLENDER_SHOWCASE.map((item, idx) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToCard(idx)}
+                aria-label={`Go to slide ${idx + 1}: ${item.title}`}
+                className={`transition-all duration-300 rounded-full ${
+                  activeIndex === idx
+                    ? "w-8 h-2 bg-[#8A6FB5] shadow-md shadow-[#8A6FB5]/50"
+                    : "w-2 h-2 bg-[#30363d] hover:bg-[#8A6FB5]/50"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Dedicated Gallery Action Banner */}
@@ -145,10 +354,12 @@ export function ShowcaseGallery() {
             </div>
             <div>
               <h4 className="text-sm sm:text-base font-bold text-white">
-                Explore All 16+ 3D Blender Works & Archive
+                {lang === "EN" ? "Explore All 16+ 3D Blender Works & Archive" : "Jelajahi Seluruh 16+ Karya & Arsip 3D Blender"}
               </h4>
               <p className="text-xs text-[#8b949e]">
-                Dedicated website with complete cultural flags, fish revisions, katana, ricefield, and turnarounds.
+                {lang === "EN"
+                  ? "Dedicated 3D Hub with complete cultural flags, fish revisions, katana, ricefield, and turnarounds."
+                  : "Hub 3D khusus dengan bendera budaya lengkap, revisi ikan, katana, persawahan, dan animasi produk."}
               </p>
             </div>
           </div>
@@ -157,7 +368,7 @@ export function ShowcaseGallery() {
             href="/blender"
             className="inline-flex items-center gap-2 px-5 py-2.5 max-md:w-full max-md:justify-center rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
           >
-            <span>Open 3D Blender Hub</span>
+            <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
