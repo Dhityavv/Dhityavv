@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/LanguageContext";
 import { BLENDER_SHOWCASE, BlenderShowcaseItem } from "@/lib/blender-showcase";
 import {
   Layers,
-  Box,
   Maximize2,
   X,
   ExternalLink,
@@ -24,7 +23,7 @@ export function ShowcaseGallery() {
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
 
-  // 3D Cylinder / Carousel state
+  // 3D Cylinder state
   const rotationRef = useRef<number>(0);
   const targetRotationRef = useRef<number>(0);
   const isDraggingRef = useRef<boolean>(false);
@@ -37,14 +36,11 @@ export function ShowcaseGallery() {
   // Prevent background scroll when modal lightbox is open
   useEffect(() => {
     if (!selectedItem) {
-      // Resume auto-rotate when modal closes
       setAutoRotate(true);
       return;
     }
 
-    // Pause auto-rotate when modal is open
     setAutoRotate(false);
-
     const bodyOverflow = document.body.style.overflow;
     const documentOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
@@ -56,18 +52,16 @@ export function ShowcaseGallery() {
     };
   }, [selectedItem]);
 
-  // Animation Loop for 3D Carousel rotation
+  // Smooth Animation Loop
   useEffect(() => {
     const animate = (time: number) => {
       const delta = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0.016;
       lastTimeRef.current = time;
 
       if (autoRotate && !isDraggingRef.current && !selectedItem) {
-        // Smooth constant rotation (~8.5 degrees per second)
-        targetRotationRef.current += 8.5 * delta;
+        targetRotationRef.current += 9 * delta;
       }
 
-      // Smooth interpolation (lerp) toward target rotation
       const diff = targetRotationRef.current - rotationRef.current;
       rotationRef.current += diff * 0.08;
 
@@ -97,7 +91,7 @@ export function ShowcaseGallery() {
     if (!isDraggingRef.current) return;
     const deltaX = e.clientX - startXRef.current;
     dragDistanceRef.current += Math.abs(deltaX);
-    targetRotationRef.current += deltaX * 0.28;
+    targetRotationRef.current += deltaX * 0.3;
     startXRef.current = e.clientX;
   };
 
@@ -105,18 +99,15 @@ export function ShowcaseGallery() {
     isDraggingRef.current = false;
   };
 
-  // Wheel horizontal scroll handler
   const handleWheel = (e: React.WheelEvent) => {
-    // If scrolling horizontally or with shift/alt, rotate the world
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY * 0.5;
-    if (Math.abs(delta) > 5) {
+    if (Math.abs(delta) > 4) {
       targetRotationRef.current -= delta * 0.08;
     }
   };
 
   const openModal = (item: BlenderShowcaseItem) => {
-    // Only open if the user didn't drag significantly
-    if (dragDistanceRef.current > 8) return;
+    if (dragDistanceRef.current > 10) return;
     setSelectedItem(item);
     setActivePhotoIdx(0);
   };
@@ -124,43 +115,41 @@ export function ShowcaseGallery() {
   const items = BLENDER_SHOWCASE;
   const count = items.length;
   const angleStep = 360 / count;
-
-  // Responsive radius calculation
-  // Radius determines distance of card from center cylinder
-  const radius = 430; // standard 3D depth
+  const radius = 430;
 
   return (
     <section
       id="showcase"
-      className="py-14 sm:py-20 border-t border-[#30363d]/60 relative overflow-hidden select-none"
+      className="py-14 sm:py-24 border-t border-[#30363d]/60 relative select-none overflow-visible"
     >
-      {/* 3D Space Styling */}
+      {/* 3D Global Perspective without any bounding clipping */}
       <style jsx global>{`
-        .cylinder-viewport {
-          perspective: 1100px;
-          perspective-origin: 50% 48%;
+        .cylinder-viewport-open {
+          perspective: 1200px;
+          perspective-origin: 50% 46%;
           width: 100%;
-          min-height: 520px;
+          min-height: 560px;
           display: flex;
           justify-content: center;
           align-items: center;
           position: relative;
           touch-action: pan-y;
+          overflow: visible !important;
         }
         @media (max-width: 640px) {
-          .cylinder-viewport {
+          .cylinder-viewport-open {
             perspective: 850px;
-            min-height: 480px;
+            min-height: 490px;
           }
         }
-        .cylinder-world {
+        .cylinder-world-open {
           transform-style: preserve-3d;
           width: 0;
           height: 0;
           position: relative;
           will-change: transform;
         }
-        .cylinder-card {
+        .cylinder-card-open {
           position: absolute;
           width: 250px;
           height: 360px;
@@ -170,26 +159,26 @@ export function ShowcaseGallery() {
           cursor: pointer;
           transition: border-color 0.3s ease, box-shadow 0.3s ease;
           border-radius: 18px;
-          background: rgba(22, 27, 34, 0.75);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
+          background: rgba(22, 27, 34, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
         }
         @media (max-width: 640px) {
-          .cylinder-card {
+          .cylinder-card-open {
             width: 210px;
             height: 310px;
             left: -105px;
             top: -155px;
           }
         }
-        .cylinder-card:hover {
-          border-color: rgba(138, 111, 181, 0.8);
-          box-shadow: 0 0 30px rgba(138, 111, 181, 0.4), 0 20px 45px rgba(0, 0, 0, 0.8);
+        .cylinder-card-open:hover {
+          border-color: rgba(138, 111, 181, 0.9);
+          box-shadow: 0 0 35px rgba(138, 111, 181, 0.45), 0 25px 50px rgba(0, 0, 0, 0.85);
         }
-        /* Glass reflection effect below each card (like in mybinidharyl) */
-        .card-reflection {
+        /* Floor glass reflection extending naturally below */
+        .card-reflection-open {
           position: absolute;
           width: 250px;
           height: 250px;
@@ -204,7 +193,7 @@ export function ShowcaseGallery() {
           overflow: hidden;
         }
         @media (max-width: 640px) {
-          .card-reflection {
+          .card-reflection-open {
             width: 210px;
             height: 200px;
             top: 315px;
@@ -212,9 +201,12 @@ export function ShowcaseGallery() {
         }
       `}</style>
 
+      {/* Radial soft ambient glow in the section background */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_52%,rgba(138,111,181,0.14)_0%,transparent_60%)] -z-10" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header Row */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
               <Layers className="w-4 h-4" />
@@ -230,7 +222,6 @@ export function ShowcaseGallery() {
             </p>
           </div>
 
-          {/* Quick Hub link & auto-rotate toggle */}
           <div className="flex items-center gap-3">
             <Link
               href="/blender"
@@ -242,26 +233,19 @@ export function ShowcaseGallery() {
           </div>
         </div>
 
-        {/* 3D Cylinder Interactive Carousel Area */}
+        {/* 3D Cylinder Stage - OPEN (No bounding box / No clipping borders) */}
         <div
-          className="relative py-4 rounded-3xl bg-gradient-to-b from-[#090d16]/80 via-[#0d1117] to-[#070a0f] border border-[#30363d]/60 overflow-hidden shadow-2xl"
+          className="relative py-8 overflow-visible"
           onWheel={handleWheel}
         >
-          {/* Radial ambient glow in center floor */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_65%,rgba(138,111,181,0.18)_0%,transparent_65%)]" />
-
-          {/* Vignette edge fades */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-[#0d1117] to-transparent z-20" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-[#0d1117] to-transparent z-20" />
-
-          {/* Navigation arrow buttons for easy stepping */}
+          {/* Navigation arrow buttons positioned at the edges */}
           <button
             type="button"
             onClick={() => {
               targetRotationRef.current += angleStep;
             }}
             aria-label="Previous artwork"
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/75 hover:bg-black border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -272,20 +256,20 @@ export function ShowcaseGallery() {
               targetRotationRef.current -= angleStep;
             }}
             aria-label="Next artwork"
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/75 hover:bg-black border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Interactive 3D Viewport */}
+          {/* Interactive 3D Viewport: Completely unconstrained */}
           <div
-            className="cylinder-viewport cursor-grab active:cursor-grabbing"
+            className="cylinder-viewport-open cursor-grab active:cursor-grabbing"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
           >
-            <div ref={worldRef} className="cylinder-world">
+            <div ref={worldRef} className="cylinder-world-open">
               {items.map((item, index) => {
                 const angle = index * angleStep;
                 const rad = angle * (Math.PI / 180);
@@ -302,7 +286,7 @@ export function ShowcaseGallery() {
                 return (
                   <div
                     key={item.id}
-                    className="cylinder-card group flex flex-col justify-between overflow-hidden"
+                    className="cylinder-card-open group flex flex-col justify-between overflow-hidden"
                     style={{
                       transform: `translateX(${x}px) translateZ(${z}px) rotateY(${angle}deg)`,
                     }}
@@ -320,13 +304,13 @@ export function ShowcaseGallery() {
                       <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-90" />
 
                       {/* Zoom button on thumbnail */}
-                      <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-xl bg-black/70 border border-white/15 flex items-center justify-center text-white/90 group-hover:scale-110 transition-transform">
+                      <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-xl bg-black/75 border border-white/15 flex items-center justify-center text-white/90 group-hover:scale-110 transition-transform">
                         <Maximize2 className="w-3.5 h-3.5" />
                       </div>
 
                       {/* Angles count pill if multi-angle */}
                       {item.photos.length > 1 && (
-                        <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                        <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/85 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
                           <Images className="w-3 h-3 text-[#8A6FB5]" />
                           <span>
                             {item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}
@@ -367,8 +351,8 @@ export function ShowcaseGallery() {
                       </div>
                     </div>
 
-                    {/* Floor Reflection effect below the card (like in photo / mybinidharyl) */}
-                    <div className="card-reflection">
+                    {/* Floor Reflection effect below the card */}
+                    <div className="card-reflection-open">
                       <Image
                         src={item.filename}
                         alt=""
@@ -383,40 +367,42 @@ export function ShowcaseGallery() {
             </div>
           </div>
 
-          {/* Bottom Right Floating Auto-Rotate Toggle Switch (Exact like photo) */}
-          <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#161b22]/90 border border-white/15 backdrop-blur-md shadow-xl">
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-              <RotateCw
-                className={`w-3.5 h-3.5 text-[#8A6FB5] ${autoRotate ? "animate-spin" : ""}`}
-                style={{ animationDuration: "6s" }}
-              />
-              AUTO-ROTATE
-            </span>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={autoRotate}
-              onClick={() => setAutoRotate(!autoRotate)}
-              className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
-                autoRotate ? "bg-[#8A6FB5]" : "bg-white/20"
-              }`}
-            >
-              <span
-                className={`block w-3.5 h-3.5 rounded-full bg-white transition-transform ${
-                  autoRotate ? "translate-x-4.5" : "translate-x-1"
-                }`}
-              />
-            </button>
-          </div>
+          {/* Floating Controls Bar at Bottom */}
+          <div className="flex items-center justify-between mt-2 pt-2 px-2">
+            <div className="flex items-center gap-2 text-xs text-[#8b949e]">
+              <span className="w-2 h-2 rounded-full bg-[#8A6FB5] animate-ping" />
+              <span>
+                {lang === "EN"
+                  ? "Click any card to inspect · Drag or swipe horizontally to rotate"
+                  : "Klik kartu untuk melihat detail · Geser ke samping untuk memutar"}
+              </span>
+            </div>
 
-          {/* Bottom Center Indicator info */}
-          <div className="absolute bottom-4 left-4 z-30 hidden sm:flex items-center gap-2 text-xs text-[#8b949e]">
-            <span className="w-2 h-2 rounded-full bg-[#8A6FB5] animate-ping" />
-            <span>
-              {lang === "EN"
-                ? "Click any card to inspect · Drag to rotate 360°"
-                : "Klik kartu untuk melihat detail · Geser untuk memutar 360°"}
-            </span>
+            {/* Auto Rotate Switch Button */}
+            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#161b22]/90 border border-[#30363d] backdrop-blur-md shadow-lg">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+                <RotateCw
+                  className={`w-3.5 h-3.5 text-[#8A6FB5] ${autoRotate ? "animate-spin" : ""}`}
+                  style={{ animationDuration: "6s" }}
+                />
+                AUTO-ROTATE
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={autoRotate}
+                onClick={() => setAutoRotate(!autoRotate)}
+                className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
+                  autoRotate ? "bg-[#8A6FB5]" : "bg-white/20"
+                }`}
+              >
+                <span
+                  className={`block w-3.5 h-3.5 rounded-full bg-white transition-transform ${
+                    autoRotate ? "translate-x-4.5" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -469,7 +455,6 @@ export function ShowcaseGallery() {
                   className="max-h-[60vh] max-w-full object-contain rounded-lg shadow-lg"
                 />
 
-                {/* Left/Right controls if multiple photos */}
                 {selectedItem.photos.length > 1 && (
                   <>
                     <button
