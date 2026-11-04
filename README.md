@@ -47,7 +47,7 @@ I'm a vocational school student majoring in Animation. Most of my time goes into
 | 🧊 **Orbitry** | Browser-based 3D asset previewer & model converter (.blend, .glb, .obj) with client-side parsing, Zstandard decompressor, and fast pie menus | <a href="https://github.com/Dhityavv/Orbitry" target="_blank" rel="noopener noreferrer">GitHub</a> |
 | 🌿 **Rimba — Survival Town 2.5D** | Isometric browser survival game featuring exploration, character creation, resource gathering, building, and a player-driven marketplace | <a href="https://github.com/Dhityavv/Rimba" target="_blank" rel="noopener noreferrer">GitHub</a> |
 | 🎬 **Filra** | Responsive movie discovery and rating app built with Next.js, TMDB, Clerk, and Supabase | <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">Open the Website</a> |
-| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://discord.gg/VKsfPzC2g" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
+| 📚 **Universal Chiseled Bookshelf** | Minecraft vanilla+ expansion to store more items in bookshelves without extra blocks | <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="[https://discord.gg/VKsfPzC2g](https://discord.gg/sFC8P5DFEN)" target="_blank" rel="noopener noreferrer">Download on Discord</a> |
 
 </div>
 
