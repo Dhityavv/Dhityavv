@@ -242,7 +242,8 @@ export function ShowcaseGallery() {
           <button
             type="button"
             onClick={() => {
-              targetRotationRef.current += angleStep;
+              // Click left chevron -> rotate scene to the left / counter-clockwise (show previous card)
+              targetRotationRef.current -= angleStep;
             }}
             aria-label="Previous artwork"
             className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/75 hover:bg-black border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
@@ -253,7 +254,8 @@ export function ShowcaseGallery() {
           <button
             type="button"
             onClick={() => {
-              targetRotationRef.current -= angleStep;
+              // Click right chevron -> rotate scene to the right / clockwise (show next card)
+              targetRotationRef.current += angleStep;
             }}
             aria-label="Next artwork"
             className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/75 hover:bg-black border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"

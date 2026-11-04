@@ -5,9 +5,13 @@ export type ProjectStatus =
   | "Coming Soon"
   | "Under Review on Modrinth";
 
+export type WebsiteAvailability = "Purchased & Active" | "Ready to Buy";
+
 export interface DeployedWebsite {
   id: string;
   title: string;
+  titleEn?: string;
+  titleId?: string;
   clientName: string;
   clientHandle?: string;
   clientInstagramUrl?: string;
@@ -15,6 +19,9 @@ export interface DeployedWebsite {
   url: string;
   category: string;
   status: string;
+  availability: WebsiteAvailability;
+  techStack: string[];
+  frameworkType: "Next.js" | "HTML5 / Vanilla Stack";
   descriptionEn: string;
   descriptionId: string;
   deliverablesEn: string[];
@@ -78,28 +85,93 @@ export const DEPLOYED_CLIENT_WEBSITES: DeployedWebsite[] = [
   {
     id: "juna-portfolio",
     title: "Juna — 3D Animator & LRC Portfolio",
+    titleEn: "Juna — 3D Animator & LRC Portfolio",
+    titleId: "Juna — Portofolio 3D Animator & LRC",
     clientName: "Juna",
     clientHandle: "@sayycheseeeee",
     clientInstagramUrl: "https://www.instagram.com/sayycheseeeee",
     clientWhatsapp: "https://wa.me/6285183174542",
     url: "https://kejuuanimator-portfolio.vercel.app",
-    category: "3D Animation & Video Exhibition",
+    category: "Personal Portfolio & Exhibition",
     status: "Active",
+    availability: "Purchased & Active",
+    techStack: ["HTML5", "CSS3 Glassmorphism", "Pure JavaScript", "SVG Animation", "Vercel"],
+    frameworkType: "HTML5 / Vanilla Stack",
     descriptionEn:
-      "Official production portfolio website built for professional 3D Animator & LRC Artist Juna (@sayycheseeeee). Features an ultra-fast zero-runtime vanilla stack, custom geometric portal SVG animation, and dual-render video modal.",
+      "Commissioned & purchased production portfolio website custom-built for professional 3D Animator & LRC Artist Juna (@sayycheseeeee). Engineered with an ultra-fast zero-runtime stack (<100ms load speed), custom rotating geometric SVG portal, and dual-render video comparison.",
     descriptionId:
-      "Website portofolio resmi produksi yang dibangun khusus untuk 3D Animator & LRC Artist profesional Juna (@sayycheseeeee). Menghadirkan stack vanilla ultra-cepat tanpa dependensi runtime, animasi portal geometris SVG kustom, dan modal video dual-render.",
+      "Website portofolio resmi pesanan yang telah dibeli & aktif digunakan oleh 3D Animator & LRC Artist profesional Juna (@sayycheseeeee). Dirancang dengan stack vanilla tanpa dependensi runtime untuk akses super cepat (<100ms), animasi portal SVG geometris kustom, dan video komparasi dual-render.",
     deliverablesEn: [
-      "Responsive Portfolio Homepage with dynamic monochrome aesthetic",
+      "Custom responsive portfolio layout with dynamic dark aesthetic",
       "Interactive All-Projects archive gallery with category filters",
       "Hardware-accelerated video dialog player (Final Render vs Viewport)",
       "Instant 1-tap WhatsApp consultation & Instagram connection",
     ],
     deliverablesId: [
-      "Beranda portofolio responsif dengan estetika gelap monokromik dinamis",
+      "Tata letak portofolio responsif dengan estetika gelap dinamis",
       "Galeri arsip All-Projects interaktif dengan filter kategori proyek",
-      "Pemutar video native HTML5 hardware-accelerated (Final Render vs Viewport)",
-      "Tombol kontak langsung 1-ketukan ke WhatsApp klien & profil Instagram",
+      "Pemutar dialog video native HTML5 (Final Render vs Viewport)",
+      "Integrasi tombol WhatsApp & profil Instagram klien langsung",
+    ],
+  },
+  {
+    id: "template-website-1",
+    title: "Minimalist Modern Portfolio & Agency (Template 1)",
+    titleEn: "Minimalist Modern Portfolio & Agency (Template 1)",
+    titleId: "Portofolio Minimalis Modern & Agensi (Template 1)",
+    clientName: "Ready to Own",
+    clientHandle: "Template Website #1",
+    url: "https://templatewebsite1bydhitya.netlify.app",
+    category: "Full-Stack Next.js Portfolio",
+    status: "Active",
+    availability: "Ready to Buy",
+    techStack: ["Next.js 16", "React 19", "Tailwind CSS v4", "Framer Motion", "TypeScript", "Netlify"],
+    frameworkType: "Next.js",
+    descriptionEn:
+      "A complete, ready-to-buy Next.js portfolio website template. Built with Next.js 16, React 19, Tailwind CSS v4, and smooth Framer Motion animations. Ideal for developers, designers, agencies, and creative professionals seeking an ultra-modern, editorial-style online identity.",
+    descriptionId:
+      "Template website portofolio siap pakai & siap beli berbasis Next.js modern. Dibangun menggunakan Next.js 16, React 19, Tailwind CSS v4, dan animasi halus Framer Motion. Sangat cocok untuk developer, desainer, freelancer, maupun agensi kreatif yang menginginkan identitas web kelas atas bertaraf editorial.",
+    deliverablesEn: [
+      "Production-ready Next.js 16 & React 19 architecture with App Router",
+      "High-converting editorial design layout with typography hierarchy",
+      "Pre-built Work showcase, About story, and interactive Contact section",
+      "Ready to be customized with your branding, domain, and content immediately",
+    ],
+    deliverablesId: [
+      "Arsitektur produksi siap pakai Next.js 16 & React 19 App Router",
+      "Desain tipografi editorial modern dengan konversi pengunjung tinggi",
+      "Sudah lengkap dengan showcase karya, cerita profile, dan form kontak interaktif",
+      "Langsung siap dikustomisasi nama, warna, konten, dan domain milik Anda",
+    ],
+  },
+  {
+    id: "template-website-2",
+    title: "HS Premium Design Studio & Agency (Template 2)",
+    titleEn: "HS Premium Design Studio & Agency (Template 2)",
+    titleId: "HS Studio Desain Premium & Agensi (Template 2)",
+    clientName: "Ready to Own",
+    clientHandle: "Template Website #2",
+    url: "https://templatewebsite2bydhitya.netlify.app",
+    category: "Creative Agency & Studio Website",
+    status: "Active",
+    availability: "Ready to Buy",
+    techStack: ["HTML5 Semantic", "CSS3 Custom Animations", "Vanilla JS", "SVG Chrome Ornaments", "Netlify"],
+    frameworkType: "HTML5 / Vanilla Stack",
+    descriptionEn:
+      "A stunning, ready-to-buy studio website featuring metallic chrome SVG ornaments, continuous infinite marquee, animated stat counters, dynamic client testimonial carousel slider, and interactive project cards with high-conversion contact form.",
+    descriptionId:
+      "Template website agensi & studio desain premium siap beli. Menghadirkan ornamen chrome SVG futuristik, teks marquee berjalan terus menerus, penghitung statistik beranimasi, slider testimoni klien interaktif, galeri proyek berkelas, serta formulir pemesanan langsung.",
+    deliverablesEn: [
+      "Zero-dependency ultra-lightweight HTML5 & CSS3 stack (instant 100/100 speed)",
+      "Futuristic chrome iridescent gradient vector illustrations",
+      "Animated statistics counter and interactive client review carousel",
+      "Ready to deploy immediately for your studio, agency, or personal brand",
+    ],
+    deliverablesId: [
+      "Stack HTML5 & CSS3 ringan tanpa dependensi (kecepatan maksimal 100/100)",
+      "Ilustrasi vektor chrome dengan gradien warna hologram modern",
+      "Counter angka statistik otomatis dan slider ulasan testimoni klien",
+      "Tinggal ganti teks & logo Anda, langsung siap online untuk bisnis Anda",
     ],
   },
 ];
@@ -107,115 +179,115 @@ export const DEPLOYED_CLIENT_WEBSITES: DeployedWebsite[] = [
 export const PROJECTS: ProjectDetail[] = [
   {
     id: "client-showcase",
-    title: "Project Showcase: Client Websites",
-    titleEn: "Project Showcase: Client Websites",
-    titleId: "Project Showcase: Hasil Pembuatan Website",
-    subtitle: "Production Portfolio Websites — Active & In Real-World Use",
-    subtitleEn: "Production Portfolio Websites — Active & In Real-World Use",
-    subtitleId: "Website Portofolio Profesional Klien · Aktif Digunakan di Industri Animasi",
+    title: "Custom Web Development & Ready-to-Buy Websites",
+    titleEn: "Custom Web Development & Ready-to-Buy Websites",
+    titleId: "Jasa Pembuatan Website Kustom & Website Siap Pakai",
+    subtitle: "Custom Web Engineering Orders & Production-Ready Website Templates",
+    subtitleEn: "Custom Web Engineering Orders & Production-Ready Website Templates",
+    subtitleId: "Buka Jasa Pembuatan Website Kustom & Koleksi Website Siap Beli",
     category: "Client Showcase",
     status: "Active",
     featured: true,
     description:
-      "Showcase of custom production websites engineered for clients and actively used in real-world creative industries. Featured is the official portfolio of 3D Animator & LRC Artist Juna (kejuuanimator-portfolio.vercel.app), engineered with a zero-runtime architecture for instant loading (<100ms), geometric SVG portal animation, and dual-render video comparison.",
+      "I engineer bespoke, high-performance websites for clients, businesses, and creators — from full-stack Next.js applications to ultra-fast zero-runtime HTML/CSS/JS websites. Explore ordered websites actively deployed for clients as well as ready-to-buy completed website templates that you can purchase and launch immediately.",
     descriptionEn:
-      "Showcase of custom production websites engineered for clients and actively used in real-world creative industries. Featured is the official portfolio of 3D Animator & LRC Artist Juna (kejuuanimator-portfolio.vercel.app), engineered with a zero-runtime architecture for instant loading (<100ms), geometric SVG portal animation, and dual-render video comparison.",
+      "I engineer bespoke, high-performance websites for clients, businesses, and creators — from full-stack Next.js applications to ultra-fast zero-runtime HTML/CSS/JS websites. Explore ordered websites actively deployed for clients as well as ready-to-buy completed website templates that you can purchase and launch immediately.",
     descriptionId:
-      "Showcase hasil pembuatan website kustom untuk klien yang telah live dan aktif digunakan. Salah satu karya unggulan adalah website portofolio resmi 3D Animator & LRC Artist (Juna / kejuuanimator-portfolio.vercel.app). Dibangun dengan arsitektur Zero-Dependency Vanilla yang menghasilkan kecepatan muat instan (<100ms), animasi portal SVG geometris yang memukau, navigasi glassmorphic modern, serta dual-render video showcase.",
+      "Saya membuka jasa pembuatan website profesional untuk klien, bisnis, kreator, dan personal — mulai dari web aplikasi modern Next.js hingga website berkecepatan tinggi berbasis HTML/CSS/JS. Jelajahi portofolio website yang sudah dibeli dan aktif digunakan klien, serta website siap pakai yang sudah jadi dan bisa langsung dibeli hari ini.",
     techStack: [
-      "HTML5 Semantic",
-      "Modern CSS3 Glassmorphism",
-      "Pure JavaScript",
-      "SVG Vector Animation",
-      "Vercel Edge Network",
-      "Responsive Layout",
+      "Next.js 16",
+      "React 19",
+      "HTML5 / CSS3",
+      "Tailwind CSS",
+      "TypeScript",
+      "JavaScript",
+      "Framer Motion",
+      "Netlify & Vercel",
     ],
     features: [
-      "Actively used by industry clients for studio pitches and professional representation",
-      "Zero-runtime dependency architecture (<100ms load time) with zero framework bloat",
-      "Custom rotating geometric portal SVG animation with radial glow",
-      "Dual-render video modal: instant switching between Final Render and Viewport Wireframe",
-      "Mobile-first responsive design with direct WhatsApp & social booking integration",
+      "Open for website commission orders: Personal portfolios, company profiles, landing pages, and interactive web tools",
+      "Choice of modern full-stack frameworks (Next.js / React) or lightweight zero-runtime vanilla stacks",
+      "Browse ready-to-buy website templates built and deployed for instant acquisition",
+      "Includes responsive mobile design, fast load speed (>95 Lighthouse), and custom animations",
+      "Direct 1-on-1 consultation via WhatsApp with quick delivery and custom revision support",
     ],
     featuresEn: [
-      "Actively used by industry clients for studio pitches and professional representation",
-      "Zero-runtime dependency architecture (<100ms load time) with zero framework bloat",
-      "Custom rotating geometric portal SVG animation with radial glow",
-      "Dual-render video modal: instant switching between Final Render and Viewport Wireframe",
-      "Mobile-first responsive design with direct WhatsApp & social booking integration",
+      "Open for website commission orders: Personal portfolios, company profiles, landing pages, and interactive web tools",
+      "Choice of modern full-stack frameworks (Next.js / React) or lightweight zero-runtime vanilla stacks",
+      "Browse ready-to-buy website templates built and deployed for instant acquisition",
+      "Includes responsive mobile design, fast load speed (>95 Lighthouse), and custom animations",
+      "Direct 1-on-1 consultation via WhatsApp with quick delivery and custom revision support",
     ],
     featuresId: [
-      "Sudah aktif dipakai klien sebagai media portofolio resmi industri animasi",
-      "Zero-runtime dependency (<100ms load time) tanpa framework berat di browser",
-      "Intro animasi portal SVG geometris kustom dengan efek glow dinamis",
-      "Dual-render video modal: toggle instan antara Final Render dan Viewport Render",
-      "Desain responsif mobile-first dengan integrasi langsung WhatsApp & Instagram",
+      "Buka pesanan pembuatan website kustom: Portofolio pribadi, company profile bisnis, landing page, dan web apps interaktif",
+      "Tersedia pilihan framework Next.js / React modern maupun teknologi Vanilla HTML/CSS/JS super ringan",
+      "Tersedia katalog website yang sudah jadi dan menganggur, siap langsung Anda beli dan pakai sekarang",
+      "Semua website sudah responsif di HP/laptop, kecepatan tinggi (>95 Lighthouse), dan animasi estetis",
+      "Konsultasi langsung 1-on-1 via WhatsApp dengan pengerjaan terarah dan dukungan revisi",
     ],
     repoUrl: "https://github.com/Dhityavv",
     liveUrl: "https://kejuuanimator-portfolio.vercel.app",
-    liveLabel: "Open the Websites",
-    liveLabelEn: "Open the Websites",
-    liveLabelId: "Buka Website",
+    liveLabel: "Browse Websites",
+    liveLabelEn: "Browse Websites",
+    liveLabelId: "Lihat Koleksi Website",
     longOverview:
-      "This showcase presents bespoke production web development engineered for clients who require durable, ultra-fast websites with distinct visual identities and custom interactive capabilities. Each web build is tailored from the ground up—prioritizing performance, responsive geometry, clean semantic code, and zero unnecessary runtime bloat to guarantee enduring production longevity.",
+      "I provide professional custom web development services for individuals, businesses, and creators who need modern, standout websites tailored to their exact goals. Every project is crafted with high attention to speed, clean maintainable code, responsive aesthetics, and intuitive user experiences.\n\nIn addition to custom orders from scratch, I also build and maintain ready-to-buy website templates (available in Next.js and pure HTML/CSS/JS). These websites are fully designed, functional, and deployed—meaning you can acquire them immediately without waiting for long development timelines. Simply pick the design you love, and I will personalize it with your brand, content, and domain.",
     longOverviewEn:
-      "This showcase presents bespoke production web development engineered for clients who require durable, ultra-fast websites with distinct visual identities and custom interactive capabilities. Each web build is tailored from the ground up—prioritizing performance, responsive geometry, clean semantic code, and zero unnecessary runtime bloat to guarantee enduring production longevity.",
+      "I provide professional custom web development services for individuals, businesses, and creators who need modern, standout websites tailored to their exact goals. Every project is crafted with high attention to speed, clean maintainable code, responsive aesthetics, and intuitive user experiences.\n\nIn addition to custom orders from scratch, I also build and maintain ready-to-buy website templates (available in Next.js and pure HTML/CSS/JS). These websites are fully designed, functional, and deployed—meaning you can acquire them immediately without waiting for long development timelines. Simply pick the design you love, and I will personalize it with your brand, content, and domain.",
     longOverviewId:
-      "Showcase ini mempersembahkan hasil pembuatan website produksi kustom untuk klien yang membutuhkan website berkinerja tinggi, berkecepatan instan, dan memiliki identitas visual yang khas. Setiap website dirancang dan dibangun dari nol dengan fokus utama pada efisiensi performa, tata letak responsif, kode semantik yang bersih, serta bebas dari bloatware runtime sehingga dapat digunakan dalam jangka panjang secara andal.",
+      "Saya menyediakan layanan jasa pembuatan website profesional bagi Anda yang membutuhkan website modern, elegan, dan berkinerja tinggi sesuai kebutuhan. Setiap website dikerjakan dengan standar performa tinggi, struktur kode yang rapi, tampilan responsif di semua perangkat, serta desain visual yang berkarakter.\n\nSelain melayani pesanan pembuatan website dari nol (kustom), saya juga memiliki koleksi website yang sudah jadi dan menganggur (tersedia dalam Next.js maupun HTML/CSS/JS). Website ini sudah live dan siap digunakan, sehingga Anda bisa langsung membelinya tanpa harus menunggu proses pembuatan dari awal. Anda cukup memilih desain yang disukai, dan saya akan bantu sesuaikan dengan nama, logo, konten, serta domain milik Anda.",
     architecturePoints: [
-      "Zero Runtime Overhead: Pure HTML5, CSS3, and Vanilla JS so browsers download zero heavy framework JavaScript bundles.",
-      "Hardware-Accelerated Video Dialog: Native HTML5 dialog element optimized for 60 FPS video playback without stutter or frame drops.",
-      "Custom Geometric Portal SVG: Trigonometrically calculated orbital vector emblem with dynamic radial gradients.",
-      "Clean URL Architecture: Vercel routing rewrites /all-project to all-project.html without trailing file extensions.",
+      "Tailored Tech Stack: Built using Next.js 16 App Router for complex dynamic projects, or Vanilla HTML5/CSS3/JS for ultra-lightweight zero-dependency websites.",
+      "High Performance Engineering: Optimized assets, responsive image scaling, and semantic layouts ensuring fast load times on all network speeds.",
+      "Seamless Deployment & Domain: Hosted on global edge networks (Vercel and Netlify) with instant SSL encryption and custom domain configuration.",
+      "Fast Turnaround & Handover: Ready templates can be deployed immediately; custom bespoke builds are delivered with step-by-step updates and revisions.",
     ],
     architecturePointsEn: [
-      "Zero Runtime Overhead: Pure HTML5, CSS3, and Vanilla JS so browsers download zero heavy framework JavaScript bundles.",
-      "Hardware-Accelerated Video Dialog: Native HTML5 dialog element optimized for 60 FPS video playback without stutter or frame drops.",
-      "Custom Geometric Portal SVG: Trigonometrically calculated orbital vector emblem with dynamic radial gradients.",
-      "Clean URL Architecture: Vercel routing rewrites /all-project to all-project.html without trailing file extensions.",
+      "Tailored Tech Stack: Built using Next.js 16 App Router for complex dynamic projects, or Vanilla HTML5/CSS3/JS for ultra-lightweight zero-dependency websites.",
+      "High Performance Engineering: Optimized assets, responsive image scaling, and semantic layouts ensuring fast load times on all network speeds.",
+      "Seamless Deployment & Domain: Hosted on global edge networks (Vercel and Netlify) with instant SSL encryption and custom domain configuration.",
+      "Fast Turnaround & Handover: Ready templates can be deployed immediately; custom bespoke builds are delivered with step-by-step updates and revisions.",
     ],
     architecturePointsId: [
-      "Zero Runtime Overhead: Murni HTML5, CSS3, dan Vanilla JS sehingga browser tidak perlu mengunduh bundle JavaScript framework yang besar.",
-      "Hardware-Accelerated Video Dialog: Menggunakan elemen dialog native HTML5 yang dioptimalkan untuk pemutaran video 60 FPS tanpa lag atau frame drop.",
-      "Custom Geometric Portal SVG: Animasi portal geometris orbital yang dihitung dengan trigonometri SVG presisi tinggi dan gradien dinamis.",
-      "Clean URL Architecture: Konfigurasi routing Vercel untuk rewrite /all-project menuju all-project.html tanpa ekstensi file di address bar.",
+      "Pilihan Teknologi Fleksibel: Menggunakan Next.js 16 App Router untuk proyek dinamis modern, atau Vanilla HTML5/CSS3/JS murni untuk website super ringan tanpa dependensi.",
+      "Rekayasa Performa Tinggi: Optimasi aset, skala gambar responsif, dan struktur kode semantik untuk kecepatan akses maksimal.",
+      "Deployment & Setup Domain: Dihosting di jaringan edge global (Vercel & Netlify) dengan enkripsi SSL otomatis dan kemudahan pasang domain sendiri.",
+      "Serah Terima Cepat: Website template yang sudah jadi bisa langsung diambil & online, sedangkan website kustom dikerjakan secara transparan dengan revisi.",
     ],
     clientShowcase: {
-      clientName: "Juna",
-      clientRoleEn: "3D Animator & Lighting / Rendering / Compositing (LRC) Artist",
-      clientRoleId: "3D Animator & Lighting / Rendering / Compositing (LRC) Artist",
-      clientInstagram: "@sayycheseeeee",
-      clientInstagramUrl: "https://www.instagram.com/sayycheseeeee",
-      clientWhatsapp: "https://wa.me/6285183174542",
+      clientName: "Dhitya Web Service",
+      clientRoleEn: "Web Engineer & Digital Solutions",
+      clientRoleId: "Web Engineer & Solusi Digital",
+      clientInstagram: "@dhityanurhadi",
+      clientInstagramUrl: "https://www.instagram.com",
+      clientWhatsapp: "https://wa.me/6289638194578",
       usageDescriptionEn:
-        "Official production portfolio actively used by Juna to showcase 3D animation, character rigging, creature walk-cycles, and lighting breakdowns to animation studios and commercial clients.",
+        "Bespoke web development services and production-ready websites open for acquisition. Clients can order custom website development or purchase ready-made completed websites.",
       usageDescriptionId:
-        "Website portofolio resmi yang aktif digunakan oleh Juna untuk mempresentasikan karya animasi 3D, character rigging, creature walk-cycles, dan breakdown lighting kepada studio animasi dan calon klien komersial.",
-      siteTypeEn: "Professional 3D Artist Portfolio & Interactive Video Exhibition",
-      siteTypeId: "Portofolio Profesional 3D Artist & Pameran Video Interaktif",
+        "Layanan pembuatan website kustom serta koleksi website siap pakai yang siap dibeli. Pembeli dapat memesan pembuatan website baru dari nol atau langsung membeli website yang sudah jadi.",
+      siteTypeEn: "Custom Web Development & Production Ready Websites",
+      siteTypeId: "Jasa Pembuatan Website Kustom & Website Siap Beli",
       deliverablesEn: [
-        "Complete responsive personal portfolio (Homepage & All-Projects Archive)",
-        "Rotating geometric portal SVG animation emblem with dynamic glow",
-        "Interactive dual-mode video modal dialog (Final Render / Viewport)",
-        "Dynamic category filter system with responsive card & list views",
-        "Direct one-tap WhatsApp and Instagram consultation CTA links",
+        "Bespoke website development based on client request & design preferences",
+        "Ready-to-buy pre-built website templates in Next.js and HTML5 stacks",
+        "Direct consultation and quick setup for custom domain & hosting",
+        "Mobile responsive optimization, SEO fundamentals, and custom interactive features",
       ],
       deliverablesId: [
-        "Website portofolio personal lengkap (Halaman Utama & Arsip All-Projects)",
-        "Intro animasi portal SVG geometris dengan simbol kosmik dan rotasi orbital",
-        "Modal video interaktif dengan switcher dua mode (Final Render / Viewport)",
-        "Filter kategori dinamis dan galeri proyek responsif (mode kartu & list)",
-        "Tombol panggilan aksi langsung ke WhatsApp dan tautan profil Instagram",
+        "Jasa pembuatan website baru sesuai kebutuhan dan preferensi desain Anda",
+        "Koleksi website siap beli yang sudah jadi (tersedia versi Next.js dan HTML5)",
+        "Konsultasi 1-on-1 dan bantuan pasang domain serta hosting hingga online",
+        "Optimasi responsif mobile, dasar-dasar SEO, dan animasi interaktif kustom",
       ],
       keyHighlightsEn: [
-        "100% Zero-Dependency: No node modules required in the browser, guaranteeing permanent durability.",
-        "Extreme Performance: Perfect 100/100 performance score with instant rendering across mobile and desktop.",
-        "Verified Production Usage: Fully delivered and actively utilized by the client in industry communications.",
+        "Open for Custom Web Development: Ready to build custom websites for businesses, creators, and freelancers.",
+        "Ready-to-Buy Stock: Browse completed websites and acquire them instantly.",
+        "Flexible Stacks: Next.js 16 modern dynamic apps or zero-dependency pure HTML/CSS/JS.",
       ],
       keyHighlightsId: [
-        "100% Zero-Dependency: Tidak memerlukan runtime node modules di browser, menjamin keawetan website.",
-        "Performa Ekstrem: Skor performa Lighthouse 100/100 dengan waktu render instan di desktop maupun ponsel.",
-        "Verifikasi Pemakaian Nyata: Website telah diserahterimakan dan secara resmi digunakan oleh klien.",
+        "Buka Jasa Pembuatan Website: Siap membuatkan website custom untuk bisnis, kreator, dan profesional.",
+        "Koleksi Website Siap Beli: Tersedia website yang sudah selesai dan tinggal dibeli langsung.",
+        "Pilihan Stack Fleksibel: Mulai dari Next.js 16 modern hingga Vanilla HTML/CSS/JS super ringan.",
       ],
       liveStatusEn: "Active",
       liveStatusId: "Active",
