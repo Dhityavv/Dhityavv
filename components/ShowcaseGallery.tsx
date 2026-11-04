@@ -1,24 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperType } from "swiper";
-import {
-  EffectCoverflow,
-  Pagination,
-  Navigation,
-  Keyboard,
-  Mousewheel,
-} from "swiper/modules";
-
-// Swiper CSS styles
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
 import { useLanguage } from "@/lib/LanguageContext";
 import { BLENDER_SHOWCASE, BlenderShowcaseItem } from "@/lib/blender-showcase";
 import {
@@ -31,19 +15,35 @@ import {
   Images,
   ChevronLeft,
   ChevronRight,
-  Eye,
+  RotateCw,
 } from "lucide-react";
 
 export function ShowcaseGallery() {
   const { lang } = useLanguage();
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [selectedItem, setSelectedItem] = useState<BlenderShowcaseItem | null>(null);
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
-  const [activeRealIndex, setActiveRealIndex] = useState<number>(2);
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+
+  // 3D Cylinder / Carousel state
+  const rotationRef = useRef<number>(0);
+  const targetRotationRef = useRef<number>(0);
+  const isDraggingRef = useRef<boolean>(false);
+  const startXRef = useRef<number>(0);
+  const dragDistanceRef = useRef<number>(0);
+  const worldRef = useRef<HTMLDivElement | null>(null);
+  const animFrameIdRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number>(0);
 
   // Prevent background scroll when modal lightbox is open
   useEffect(() => {
-    if (!selectedItem) return;
+    if (!selectedItem) {
+      // Resume auto-rotate when modal closes
+      setAutoRotate(true);
+      return;
+    }
+
+    // Pause auto-rotate when modal is open
+    setAutoRotate(false);
 
     const bodyOverflow = document.body.style.overflow;
     const documentOverflow = document.documentElement.style.overflow;
@@ -56,309 +56,371 @@ export function ShowcaseGallery() {
     };
   }, [selectedItem]);
 
+  // Animation Loop for 3D Carousel rotation
+  useEffect(() => {
+    const animate = (time: number) => {
+      const delta = lastTimeRef.current ? (time - lastTimeRef.current) / 1000 : 0.016;
+      lastTimeRef.current = time;
+
+      if (autoRotate && !isDraggingRef.current && !selectedItem) {
+        // Smooth constant rotation (~8.5 degrees per second)
+        targetRotationRef.current += 8.5 * delta;
+      }
+
+      // Smooth interpolation (lerp) toward target rotation
+      const diff = targetRotationRef.current - rotationRef.current;
+      rotationRef.current += diff * 0.08;
+
+      if (worldRef.current) {
+        worldRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+      }
+
+      animFrameIdRef.current = requestAnimationFrame(animate);
+    };
+
+    animFrameIdRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animFrameIdRef.current) {
+        cancelAnimationFrame(animFrameIdRef.current);
+      }
+    };
+  }, [autoRotate, selectedItem]);
+
+  // Pointer & Drag handlers
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    dragDistanceRef.current = 0;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const deltaX = e.clientX - startXRef.current;
+    dragDistanceRef.current += Math.abs(deltaX);
+    targetRotationRef.current += deltaX * 0.28;
+    startXRef.current = e.clientX;
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  // Wheel horizontal scroll handler
+  const handleWheel = (e: React.WheelEvent) => {
+    // If scrolling horizontally or with shift/alt, rotate the world
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY * 0.5;
+    if (Math.abs(delta) > 5) {
+      targetRotationRef.current -= delta * 0.08;
+    }
+  };
+
   const openModal = (item: BlenderShowcaseItem) => {
+    // Only open if the user didn't drag significantly
+    if (dragDistanceRef.current > 8) return;
     setSelectedItem(item);
     setActivePhotoIdx(0);
   };
 
+  const items = BLENDER_SHOWCASE;
+  const count = items.length;
+  const angleStep = 360 / count;
+
+  // Responsive radius calculation
+  // Radius determines distance of card from center cylinder
+  const radius = 430; // standard 3D depth
+
   return (
     <section
       id="showcase"
-      className="py-16 max-md:py-12 border-t border-[#30363d]/60 relative overflow-hidden"
+      className="py-14 sm:py-20 border-t border-[#30363d]/60 relative overflow-hidden select-none"
     >
-      {/* Global Swiper custom styling: STRICTLY SHOW EXACTLY 3 CARDS AT A TIME */}
+      {/* 3D Space Styling */}
       <style jsx global>{`
-        .showcase-swiper {
-          overflow: visible !important;
+        .cylinder-viewport {
+          perspective: 1100px;
+          perspective-origin: 50% 48%;
           width: 100%;
-        }
-        .showcase-swiper .swiper-wrapper {
-          align-items: stretch;
+          min-height: 520px;
           display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          touch-action: pan-y;
         }
-        /* Hide all slides further than 1 position away from center */
-        .showcase-swiper .swiper-slide {
-          transition: opacity 0.45s cubic-bezier(0.25, 1, 0.5, 1),
-            transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-          opacity: 0 !important;
-          pointer-events: none !important;
-          visibility: hidden !important;
-        }
-        /* ONLY the active slide and immediate prev slide on desktop */
-        .showcase-swiper .swiper-slide-prev {
-          opacity: 0.58 !important;
-          pointer-events: auto !important;
-          visibility: visible !important;
-        }
-        .showcase-swiper .swiper-slide-prev:hover {
-          opacity: 0.85 !important;
-        }
-        /* Hide right slide (swiper-slide-next) on narrow/mobile viewports so only the active card is featured */
         @media (max-width: 640px) {
-          .showcase-swiper .swiper-slide-prev,
-          .showcase-swiper .swiper-slide-next {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            visibility: hidden !important;
+          .cylinder-viewport {
+            perspective: 850px;
+            min-height: 480px;
           }
         }
-        @media (min-width: 641px) {
-          .showcase-swiper .swiper-slide-next {
-            opacity: 0.58 !important;
-            pointer-events: auto !important;
-            visibility: visible !important;
-          }
-          .showcase-swiper .swiper-slide-next:hover {
-            opacity: 0.85 !important;
+        .cylinder-world {
+          transform-style: preserve-3d;
+          width: 0;
+          height: 0;
+          position: relative;
+          will-change: transform;
+        }
+        .cylinder-card {
+          position: absolute;
+          width: 250px;
+          height: 360px;
+          left: -125px;
+          top: -180px;
+          transform-style: preserve-3d;
+          cursor: pointer;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
+          border-radius: 18px;
+          background: rgba(22, 27, 34, 0.75);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
+        }
+        @media (max-width: 640px) {
+          .cylinder-card {
+            width: 210px;
+            height: 310px;
+            left: -105px;
+            top: -155px;
           }
         }
-        .showcase-swiper .swiper-slide-active {
-          opacity: 1 !important;
-          pointer-events: auto !important;
-          visibility: visible !important;
-          z-index: 25;
+        .cylinder-card:hover {
+          border-color: rgba(138, 111, 181, 0.8);
+          box-shadow: 0 0 30px rgba(138, 111, 181, 0.4), 0 20px 45px rgba(0, 0, 0, 0.8);
+        }
+        /* Glass reflection effect below each card (like in mybinidharyl) */
+        .card-reflection {
+          position: absolute;
+          width: 250px;
+          height: 250px;
+          top: 365px;
+          left: 0;
+          transform: scaleY(-1);
+          opacity: 0.22;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 65%);
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, transparent 65%);
+          pointer-events: none;
+          border-radius: 18px;
+          overflow: hidden;
+        }
+        @media (max-width: 640px) {
+          .card-reflection {
+            width: 210px;
+            height: 200px;
+            top: 315px;
+          }
         }
       `}</style>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Header Row: Clean, without < > or small Hub button as requested */}
-        <div className="mb-8 max-md:mb-6">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
-            <Layers className="w-4 h-4" />
-            <span>{lang === "EN" ? "Blender 3D Portfolio" : "Portofolio 3D Blender"}</span>
+        {/* Header Row */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8A6FB5] mb-2">
+              <Layers className="w-4 h-4" />
+              <span>{lang === "EN" ? "Blender 3D Portfolio" : "Portofolio 3D Blender"}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              {lang === "EN" ? "Showcase & Renders" : "Galeri Karya & Render 3D"}
+            </h2>
+            <p className="text-sm text-[#8b949e] mt-1">
+              {lang === "EN"
+                ? "3D cylinder showcase directly from Dhitya's Blender archive — drag or swipe to rotate"
+                : "Galeri 3D melingkar langsung dari arsip Blender Dhitya — geser untuk memutar karya"}
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            {lang === "EN" ? "Showcase & Renders" : "Galeri Karya & Render 3D"}
-          </h2>
-          <p className="text-sm text-[#8b949e] mt-1">
-            {lang === "EN"
-              ? "Handcrafted 3D renders and animations directly from Dhitya's Blender archive — scroll horizontally to explore"
-              : "Koleksi render 3D dan animasi buatan Dhitya langsung dari arsip Blender — geser ke samping untuk menjelajah"}
-          </p>
+
+          {/* Quick Hub link & auto-rotate toggle */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/blender"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#161b22] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-bold text-[#c7b2e8] hover:text-white transition-all shadow-sm"
+            >
+              <span>{lang === "EN" ? "Open 3D Hub" : "Buka Hub 3D"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
         </div>
 
-        {/* Carousel Viewport */}
-        <div className="relative py-4 -mx-4 sm:-mx-6">
-          {/* Edge Vignette Fades */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-[#0d1117] to-transparent z-30" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-[#0d1117] to-transparent z-30" />
+        {/* 3D Cylinder Interactive Carousel Area */}
+        <div
+          className="relative py-4 rounded-3xl bg-gradient-to-b from-[#090d16]/80 via-[#0d1117] to-[#070a0f] border border-[#30363d]/60 overflow-hidden shadow-2xl"
+          onWheel={handleWheel}
+        >
+          {/* Radial ambient glow in center floor */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_65%,rgba(138,111,181,0.18)_0%,transparent_65%)]" />
 
-          {/* Floating Navigation Chevrons directly beside the center GUI image */}
+          {/* Vignette edge fades */}
+          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-[#0d1117] to-transparent z-20" />
+          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-[#0d1117] to-transparent z-20" />
+
+          {/* Navigation arrow buttons for easy stepping */}
           <button
             type="button"
-            onClick={() => swiperInstance?.slidePrev()}
-            aria-label="Previous project card"
-            className="absolute left-2 sm:left-[calc(50%-235px)] md:left-[calc(50%-255px)] top-[38%] -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/85 hover:bg-black border border-white/25 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
+            onClick={() => {
+              targetRotationRef.current += angleStep;
+            }}
+            aria-label="Previous artwork"
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             type="button"
-            onClick={() => swiperInstance?.slideNext()}
-            aria-label="Next project card"
-            className="absolute right-2 sm:right-[calc(50%-235px)] md:right-[calc(50%-255px)] top-[38%] -translate-y-1/2 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/85 hover:bg-black border border-white/25 hover:border-[#8A6FB5] text-white hover:text-[#c7b2e8] backdrop-blur-md flex items-center justify-center transition-all shadow-2xl hover:scale-110 active:scale-95 cursor-pointer"
+            onClick={() => {
+              targetRotationRef.current -= angleStep;
+            }}
+            aria-label="Next artwork"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#8A6FB5] text-white flex items-center justify-center backdrop-blur-md transition-all shadow-xl hover:scale-110 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Swiper Coverflow Infinite Side-Scrolling Carousel */}
-          <Swiper
-            modules={[EffectCoverflow, Pagination, Navigation, Keyboard, Mousewheel]}
-            effect="coverflow"
-            grabCursor={true}
-            centeredSlides={true}
-            slidesPerView="auto"
-            initialSlide={2}
-            loop={true}
-            loopAdditionalSlides={3}
-            slideToClickedSlide={true}
-            keyboard={{ enabled: true }}
-            mousewheel={{ forceToAxis: true, sensitivity: 1 }}
-            speed={500}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 0,
-              depth: 80,
-              modifier: 1,
-              scale: 0.88,
-              slideShadows: false,
-            }}
-            onSwiper={(swiper) => {
-              setSwiperInstance(swiper);
-              setActiveRealIndex(swiper.realIndex);
-            }}
-            onSlideChange={(swiper) => {
-              setActiveRealIndex(swiper.realIndex);
-            }}
-            className="showcase-swiper !py-4"
+          {/* Interactive 3D Viewport */}
+          <div
+            className="cylinder-viewport cursor-grab active:cursor-grabbing"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
           >
-            {BLENDER_SHOWCASE.map((item, idx) => (
-              <SwiperSlide
-                key={item.id}
-                className="!w-[84vw] !max-w-[340px] sm:!max-w-[400px] md:!w-[440px] !h-auto flex"
-              >
-                {({ isActive }) => (
+            <div ref={worldRef} className="cylinder-world">
+              {items.map((item, index) => {
+                const angle = index * angleStep;
+                const rad = angle * (Math.PI / 180);
+                const x = radius * Math.sin(rad);
+                const z = radius * Math.cos(rad);
+
+                const itemTitle =
+                  lang === "EN" ? item.titleEn || item.title : item.titleId || item.title;
+                const itemSubtitle =
+                  lang === "EN"
+                    ? item.subtitleEn || item.subtitle
+                    : item.subtitleId || item.subtitle;
+
+                return (
                   <div
-                    onClick={() => {
-                      if (isActive) {
-                        openModal(item);
-                      }
+                    key={item.id}
+                    className="cylinder-card group flex flex-col justify-between overflow-hidden"
+                    style={{
+                      transform: `translateX(${x}px) translateZ(${z}px) rotateY(${angle}deg)`,
                     }}
-                    className={`w-full cursor-pointer bg-[#161b22] rounded-3xl overflow-hidden border flex flex-col justify-between transition-all duration-500 ease-out select-none ${
-                      isActive
-                        ? "border-[#8A6FB5] ring-1 ring-[#8A6FB5]/40 shadow-2xl shadow-[#8A6FB5]/25"
-                        : "border-[#30363d] shadow-lg hover:border-[#8A6FB5]/50"
-                    }`}
+                    onClick={() => openModal(item)}
                   >
-                    {/* Media Container */}
-                    <div className="relative aspect-[16/10] w-full bg-[#0d1117] overflow-hidden flex items-center justify-center">
+                    {/* Top Image Thumbnail */}
+                    <div className="relative aspect-[16/11] w-full bg-[#0d1117] overflow-hidden">
                       <Image
                         src={item.filename}
                         alt={item.title}
                         fill
-                        className={`object-cover transition-transform duration-700 ${
-                          isActive ? "hover:scale-105" : ""
-                        }`}
+                        className="object-cover transition-transform duration-700 group-hover:scale-108"
                         unoptimized
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-85" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#161b22] via-transparent to-transparent opacity-90" />
 
-                      {/* Active Card Glow Pill */}
-                      {isActive && (
-                        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8A6FB5]/30 backdrop-blur-md border border-[#8A6FB5]/60 text-[10px] font-bold text-white shadow-sm">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>{lang === "EN" ? "Featured 3D" : "Pilihan Unggulan"}</span>
-                        </div>
-                      )}
+                      {/* Zoom button on thumbnail */}
+                      <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-xl bg-black/70 border border-white/15 flex items-center justify-center text-white/90 group-hover:scale-110 transition-transform">
+                        <Maximize2 className="w-3.5 h-3.5" />
+                      </div>
 
-                      {/* Multi-angle photos badge */}
+                      {/* Angles count pill if multi-angle */}
                       {item.photos.length > 1 && (
-                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
-                          <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
+                        <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
+                          <Images className="w-3 h-3 text-[#8A6FB5]" />
                           <span>
                             {item.photos.length} {lang === "EN" ? "Angles" : "Sudut"}
                           </span>
                         </div>
                       )}
-
-                      {/* Inspect / Zoom Icon Top Right */}
-                      <div className="absolute top-3 right-3 w-8 h-8 rounded-xl bg-[#0d1117]/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:scale-110 transition-all">
-                        <Maximize2 className="w-4 h-4" />
-                      </div>
                     </div>
 
-                    {/* Card Content Info */}
-                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                    {/* Card Content */}
+                    <div className="p-4 flex-1 flex flex-col justify-between">
                       <div>
-                        <div className="flex items-center justify-between gap-2 mb-1">
-                          <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider truncate">
-                            {lang === "EN" ? item.subtitleEn || item.subtitle : item.subtitleId || item.subtitle}
+                        <div className="flex items-center justify-between gap-1 mb-1">
+                          <span className="text-[10px] font-mono text-[#8A6FB5] uppercase font-semibold tracking-wider truncate">
+                            {itemSubtitle}
                           </span>
-                          <span className="text-[10px] text-[#8b949e] font-mono shrink-0">
-                            {idx + 1} / {BLENDER_SHOWCASE.length}
+                          <span className="text-[9px] font-mono text-[#8b949e] shrink-0">
+                            {index + 1}/{count}
                           </span>
                         </div>
-
-                        <h3 className="text-lg font-bold text-white hover:text-[#c7b2e8] transition-colors mb-2">
-                          {lang === "EN" ? item.titleEn || item.title : item.titleId || item.title}
-                        </h3>
-                        <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
-                          {lang === "EN" ? item.descriptionEn || item.description : item.descriptionId || item.description}
+                        <h4 className="text-sm font-bold text-white group-hover:text-[#c7b2e8] transition-colors line-clamp-1">
+                          {itemTitle}
+                        </h4>
+                        <p className="text-[11px] text-[#8b949e] line-clamp-2 mt-1 leading-snug">
+                          {lang === "EN"
+                            ? item.descriptionEn || item.description
+                            : item.descriptionId || item.description}
                         </p>
                       </div>
 
-                      <div>
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {(lang === "EN" ? item.tagsEn || item.tags : item.tagsId || item.tags).map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-0.5 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Card Footer Info */}
-                        <div className="pt-3.5 border-t border-[#30363d]/60 flex items-center justify-between text-xs">
-                          <span className="text-[#8A6FB5] font-medium font-mono text-[11px]">
-                            {item.stats.tool}
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openModal(item);
-                            }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0d1117] hover:bg-[#8A6FB5]/20 border border-[#30363d] hover:border-[#8A6FB5]/50 text-xs font-semibold text-[#c7b2e8] hover:text-white transition-all shadow-sm cursor-pointer"
-                          >
-                            <Eye className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                            <span>
-                              {item.photos.length > 1
-                                ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}`
-                                : lang === "EN" ? "Inspect" : "Periksa"}
-                            </span>
-                          </button>
-                        </div>
+                      {/* Footer Info & Click hint */}
+                      <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px]">
+                        <span className="text-[#8A6FB5] font-mono font-semibold">
+                          {item.stats.tool}
+                        </span>
+                        <span className="px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-white font-medium group-hover:bg-[#8A6FB5] group-hover:border-[#8A6FB5] transition-colors">
+                          {lang === "EN" ? "Open Details" : "Lihat Detail"}
+                        </span>
                       </div>
                     </div>
-                  </div>
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
 
-          {/* Interactive Pagination Dots (5 items looping indicator) */}
-          <div className="flex items-center justify-center gap-2 mt-4">
-            {BLENDER_SHOWCASE.map((item, idx) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => swiperInstance?.slideToLoop(idx)}
-                aria-label={`Go to slide ${idx + 1}: ${item.title}`}
-                className={`transition-all duration-300 rounded-full cursor-pointer ${
-                  activeRealIndex === idx
-                    ? "w-8 h-2 bg-[#8A6FB5] shadow-md shadow-[#8A6FB5]/50"
-                    : "w-2 h-2 bg-[#30363d] hover:bg-[#8A6FB5]/50"
+                    {/* Floor Reflection effect below the card (like in photo / mybinidharyl) */}
+                    <div className="card-reflection">
+                      <Image
+                        src={item.filename}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Bottom Right Floating Auto-Rotate Toggle Switch (Exact like photo) */}
+          <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#161b22]/90 border border-white/15 backdrop-blur-md shadow-xl">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+              <RotateCw
+                className={`w-3.5 h-3.5 text-[#8A6FB5] ${autoRotate ? "animate-spin" : ""}`}
+                style={{ animationDuration: "6s" }}
+              />
+              AUTO-ROTATE
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={autoRotate}
+              onClick={() => setAutoRotate(!autoRotate)}
+              className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
+                autoRotate ? "bg-[#8A6FB5]" : "bg-white/20"
+              }`}
+            >
+              <span
+                className={`block w-3.5 h-3.5 rounded-full bg-white transition-transform ${
+                  autoRotate ? "translate-x-4.5" : "translate-x-1"
                 }`}
               />
-            ))}
+            </button>
+          </div>
+
+          {/* Bottom Center Indicator info */}
+          <div className="absolute bottom-4 left-4 z-30 hidden sm:flex items-center gap-2 text-xs text-[#8b949e]">
+            <span className="w-2 h-2 rounded-full bg-[#8A6FB5] animate-ping" />
+            <span>
+              {lang === "EN"
+                ? "Click any card to inspect · Drag to rotate 360°"
+                : "Klik kartu untuk melihat detail · Geser untuk memutar 360°"}
+            </span>
           </div>
         </div>
 
-        {/* Dedicated Gallery Action Banner */}
-        <div className="mt-8 max-md:mt-5 p-6 max-md:p-4 rounded-2xl bg-gradient-to-r from-[#161b22] via-[#1a202c] to-[#161b22] border border-[#30363d] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div className="flex items-center gap-3.5 max-md:items-start">
-            <div className="w-10 h-10 rounded-xl bg-[#8A6FB5]/20 border border-[#8A6FB5]/40 flex items-center justify-center text-[#8A6FB5] shrink-0">
-              <Box className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-sm sm:text-base font-bold text-white">
-                {lang === "EN"
-                  ? "Explore All 16+ 3D Blender Works & Archive"
-                  : "Jelajahi Seluruh 16+ Karya & Arsip 3D Blender"}
-              </h4>
-              <p className="text-xs text-[#8b949e]">
-                {lang === "EN"
-                  ? "Dedicated 3D Hub with complete cultural flags, fish revisions, katana, ricefield, and turnarounds."
-                  : "Hub 3D khusus dengan bendera budaya lengkap, revisi ikan, katana, persawahan, dan animasi produk."}
-              </p>
-            </div>
-          </div>
-
-          <Link
-            href="/blender"
-            className="inline-flex items-center gap-2 px-5 py-2.5 max-md:w-full max-md:justify-center rounded-xl bg-[#8A6FB5] hover:bg-[#795ea3] text-xs font-bold text-white shadow-md shadow-[#8A6FB5]/25 hover:shadow-[#8A6FB5]/40 transition-all shrink-0 hover:-translate-y-0.5"
-          >
-            <span>{lang === "EN" ? "Open 3D Blender Hub" : "Buka Blender 3D Hub"}</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {/* Modal Lightbox */}
+        {/* Modal Lightbox / Details GUI (re-activates auto-rotate upon closing) */}
         {selectedItem && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
@@ -372,21 +434,28 @@ export function ShowcaseGallery() {
               <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between bg-[#0d1117]/60">
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <span>{lang === "EN" ? selectedItem.titleEn || selectedItem.title : selectedItem.titleId || selectedItem.title}</span>
+                    <span>
+                      {lang === "EN"
+                        ? selectedItem.titleEn || selectedItem.title
+                        : selectedItem.titleId || selectedItem.title}
+                    </span>
                     {selectedItem.photos.length > 1 && (
                       <span className="text-xs px-2 py-0.5 rounded-md bg-[#8A6FB5]/20 text-[#c7b2e8] border border-[#8A6FB5]/30">
-                        {activePhotoIdx + 1} {lang === "EN" ? "of" : "dari"} {selectedItem.photos.length}
+                        {activePhotoIdx + 1} {lang === "EN" ? "of" : "dari"}{" "}
+                        {selectedItem.photos.length}
                       </span>
                     )}
                   </h3>
                   <p className="text-xs text-[#8b949e]">
-                    {lang === "EN" ? selectedItem.subtitleEn || selectedItem.subtitle : selectedItem.subtitleId || selectedItem.subtitle}
+                    {lang === "EN"
+                      ? selectedItem.subtitleEn || selectedItem.subtitle
+                      : selectedItem.subtitleId || selectedItem.subtitle}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedItem(null)}
-                  className="w-8 h-8 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-[#8b949e] hover:text-white hover:bg-[#30363d] transition-colors"
+                  className="w-8 h-8 rounded-lg bg-[#21262d] border border-[#30363d] flex items-center justify-center text-[#8b949e] hover:text-white hover:bg-[#30363d] transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -410,7 +479,7 @@ export function ShowcaseGallery() {
                           prev === 0 ? selectedItem.photos.length - 1 : prev - 1
                         )
                       }
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -419,7 +488,7 @@ export function ShowcaseGallery() {
                       onClick={() =>
                         setActivePhotoIdx((prev) => (prev + 1) % selectedItem.photos.length)
                       }
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-9 h-9 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -439,7 +508,7 @@ export function ShowcaseGallery() {
                       key={idx}
                       type="button"
                       onClick={() => setActivePhotoIdx(idx)}
-                      className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-all shrink-0 ${
+                      className={`px-3 py-1 rounded-lg text-xs font-medium border flex items-center gap-1.5 transition-all shrink-0 cursor-pointer ${
                         activePhotoIdx === idx
                           ? "bg-[#8A6FB5] border-[#8A6FB5] text-white"
                           : "bg-[#161b22] border-[#30363d] text-[#8b949e] hover:text-white"
@@ -454,7 +523,9 @@ export function ShowcaseGallery() {
               {/* Modal Details Footer */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3">
                 <p className="text-sm text-[#c9d1d9] leading-relaxed">
-                  {lang === "EN" ? selectedItem.descriptionEn || selectedItem.description : selectedItem.descriptionId || selectedItem.description}
+                  {lang === "EN"
+                    ? selectedItem.descriptionEn || selectedItem.description
+                    : selectedItem.descriptionId || selectedItem.description}
                 </p>
 
                 <div className="grid grid-cols-3 gap-2 text-xs pt-2">
@@ -465,20 +536,27 @@ export function ShowcaseGallery() {
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">{lang === "EN" ? "Style" : "Gaya Desain"}</span>
                     <span className="font-semibold text-white">
-                      {lang === "EN" ? selectedItem.stats.styleEn || selectedItem.stats.style : selectedItem.stats.styleId || selectedItem.stats.style}
+                      {lang === "EN"
+                        ? selectedItem.stats.styleEn || selectedItem.stats.style
+                        : selectedItem.stats.styleId || selectedItem.stats.style}
                     </span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
                     <span className="text-[#8b949e] block">{lang === "EN" ? "Note" : "Catatan Teknis"}</span>
                     <span className="font-semibold text-white truncate block">
-                      {lang === "EN" ? selectedItem.stats.renderNoteEn || selectedItem.stats.renderNote : selectedItem.stats.renderNoteId || selectedItem.stats.renderNote}
+                      {lang === "EN"
+                        ? selectedItem.stats.renderNoteEn || selectedItem.stats.renderNote
+                        : selectedItem.stats.renderNoteId || selectedItem.stats.renderNote}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex flex-wrap gap-1.5">
-                    {(lang === "EN" ? selectedItem.tagsEn || selectedItem.tags : selectedItem.tagsId || selectedItem.tags).map((tag) => (
+                    {(lang === "EN"
+                      ? selectedItem.tagsEn || selectedItem.tags
+                      : selectedItem.tagsId || selectedItem.tags
+                    ).map((tag) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d] text-[11px] text-[#8A6FB5]"
