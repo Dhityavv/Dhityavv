@@ -164,7 +164,7 @@ export function UcbDownloadModal({ isOpen, onClose }: UcbDownloadModalProps) {
 
         {/* Footer info */}
         <div className="px-5 py-3 bg-[#0d1117] border-t border-[#30363d] flex items-center justify-between text-[11px] text-[#8b949e]">
-          <span>Minecraft 1.20+ · Fabric Mod Loader</span>
+          <span>Minecraft 26.3 · Fabric Mod Loader</span>
           <span>Open Source</span>
         </div>
       </div>
