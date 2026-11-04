@@ -84,16 +84,33 @@ export function ShowcaseGallery() {
           pointer-events: none !important;
           visibility: hidden !important;
         }
-        /* ONLY the active slide and immediate prev/next slides are visible */
-        .showcase-swiper .swiper-slide-prev,
-        .showcase-swiper .swiper-slide-next {
+        /* ONLY the active slide and immediate prev slide on desktop */
+        .showcase-swiper .swiper-slide-prev {
           opacity: 0.58 !important;
           pointer-events: auto !important;
           visibility: visible !important;
         }
-        .showcase-swiper .swiper-slide-prev:hover,
-        .showcase-swiper .swiper-slide-next:hover {
+        .showcase-swiper .swiper-slide-prev:hover {
           opacity: 0.85 !important;
+        }
+        /* Hide right slide (swiper-slide-next) on narrow/mobile viewports so only the active card is featured */
+        @media (max-width: 640px) {
+          .showcase-swiper .swiper-slide-prev,
+          .showcase-swiper .swiper-slide-next {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+          }
+        }
+        @media (min-width: 641px) {
+          .showcase-swiper .swiper-slide-next {
+            opacity: 0.58 !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+          }
+          .showcase-swiper .swiper-slide-next:hover {
+            opacity: 0.85 !important;
+          }
         }
         .showcase-swiper .swiper-slide-active {
           opacity: 1 !important;
