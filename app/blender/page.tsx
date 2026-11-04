@@ -31,7 +31,11 @@ export interface RenderPhoto {
 export interface BlenderProject {
   id: string;
   title: string;
+  titleEn?: string;
+  titleId?: string;
   subtitle: string;
+  subtitleEn?: string;
+  subtitleId?: string;
   category:
     | "Architecture"
     | "Environment & Nature"
@@ -42,14 +46,24 @@ export interface BlenderProject {
   photos: RenderPhoto[];
   videoUrl?: string;
   description: string;
+  descriptionEn?: string;
+  descriptionId?: string;
   tags: string[];
+  tagsEn?: string[];
+  tagsId?: string[];
   stats: {
     engine: string;
     style: string;
+    styleEn?: string;
+    styleId?: string;
     polyCount: string;
     lighting: string;
+    lightingEn?: string;
+    lightingId?: string;
   };
   features: string[];
+  featuresEn?: string[];
+  featuresId?: string[];
 }
 
 const ALL_BLENDER_PROJECTS: BlenderProject[] = [
@@ -627,17 +641,17 @@ const ALL_BLENDER_PROJECTS: BlenderProject[] = [
   },
 ];
 
-const CATEGORIES = [
-  "All Works",
-  "Architecture",
-  "Environment & Nature",
-  "Characters & Creatures",
-  "Props & Objects",
-  "Animation & Motion",
-];
-
 export default function BlenderStudioPage() {
   const { lang, setLang } = useLanguage();
+
+  const categories = [
+    { id: "All Works", label: lang === "EN" ? "All Works" : "Semua Karya" },
+    { id: "Architecture", label: lang === "EN" ? "Architecture" : "Arsitektur" },
+    { id: "Environment & Nature", label: lang === "EN" ? "Environment & Nature" : "Lingkungan & Alam" },
+    { id: "Characters & Creatures", label: lang === "EN" ? "Characters & Creatures" : "Karakter & Makhluk" },
+    { id: "Props & Objects", label: lang === "EN" ? "Props & Objects" : "Properti & Objek" },
+    { id: "Animation & Motion", label: lang === "EN" ? "Animation & Motion" : "Animasi & Gerak" },
+  ];
   const [activeCategory, setActiveCategory] = useState<string>("All Works");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<BlenderProject | null>(
@@ -747,16 +761,17 @@ export default function BlenderStudioPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[280px] bg-[#8A6FB5]/10 blur-[120px] pointer-events-none rounded-full" />
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#161b22] border border-[#30363d] text-xs font-semibold text-[#8A6FB5] mb-4">
             <Box className="w-3.5 h-3.5" />
-            <span>Complete 3D Blender Archive</span>
+            <span>{lang === "EN" ? "Complete 3D Blender Archive" : "Arsip Lengkap 3D Blender"}</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Blender 3D Works & Renders
+            {lang === "EN" ? "Blender 3D Works & Renders" : "Galeri Karya & Render 3D Blender"}
           </h1>
           <p className="text-sm sm:text-base text-[#8b949e] leading-relaxed">
-            Full gallery of 3D architecture, cultural artifacts, environments,
-            character models, and product animations modeled by{" "}
-            <span className="text-white font-medium">Dhitya Nurhadi</span> in
-            Blender.
+            {lang === "EN"
+              ? "Full gallery of 3D architecture, cultural artifacts, environments, character models, and product animations modeled by "
+              : "Galeri lengkap arsitektur 3D, artefak budaya, tata lingkungan, model karakter, dan animasi produk yang dibuat oleh "}
+            <span className="text-white font-medium">Dhitya Nurhadi</span>
+            {lang === "EN" ? " in Blender." : " di Blender."}
           </p>
         </div>
 
@@ -764,17 +779,17 @@ export default function BlenderStudioPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2.5 rounded-2xl bg-[#161b22] border border-[#30363d] mb-10 shadow-lg">
           {/* Category Pills */}
           <div className="flex flex-wrap gap-1.5">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
-                  activeCategory === cat
+                  activeCategory === cat.id
                     ? "bg-[#8A6FB5] text-white shadow-md shadow-[#8A6FB5]/25"
                     : "text-[#8b949e] hover:text-white hover:bg-[#0d1117]"
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -784,7 +799,7 @@ export default function BlenderStudioPage() {
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#8b949e]" />
             <input
               type="text"
-              placeholder="Search render or tag..."
+              placeholder={lang === "EN" ? "Search render or tag..." : "Cari render atau tag..."}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#0d1117] border border-[#30363d] rounded-xl text-white placeholder-[#8b949e] focus:outline-none focus:border-[#8A6FB5]"
@@ -834,14 +849,28 @@ export default function BlenderStudioPage() {
                   ) : (
                     <Box className="w-3 h-3 text-[#8A6FB5]" />
                   )}
-                  <span>{work.category}</span>
+                  <span>
+                    {lang === "EN"
+                      ? work.category
+                      : work.category === "Architecture"
+                      ? "Arsitektur"
+                      : work.category === "Environment & Nature"
+                      ? "Lingkungan & Alam"
+                      : work.category === "Characters & Creatures"
+                      ? "Karakter & Makhluk"
+                      : work.category === "Props & Objects"
+                      ? "Properti & Objek"
+                      : "Animasi & Gerak"}
+                  </span>
                 </div>
 
                 {/* Multi-Photo Count Badge */}
                 {work.photos.length > 1 && (
                   <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-0.5 rounded bg-[#0d1117]/90 backdrop-blur-md border border-white/15 text-[10px] font-mono text-white">
                     <Images className="w-3 h-3 text-[#8A6FB5]" />
-                    <span>{work.photos.length} Renders</span>
+                    <span>
+                      {work.photos.length} {lang === "EN" ? "Renders" : "Render"}
+                    </span>
                   </div>
                 )}
 
@@ -855,13 +884,13 @@ export default function BlenderStudioPage() {
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
                   <div className="text-xs text-[#8A6FB5] font-mono mb-1">
-                    {work.subtitle}
+                    {lang === "EN" ? work.subtitleEn || work.subtitle : work.subtitleId || work.subtitle}
                   </div>
                   <h3 className="text-lg font-bold text-white group-hover:text-[#c7b2e8] transition-colors mb-2">
-                    {work.title}
+                    {lang === "EN" ? work.titleEn || work.title : work.titleId || work.title}
                   </h3>
                   <p className="text-xs text-[#8b949e] leading-relaxed mb-4 line-clamp-2">
-                    {work.description}
+                    {lang === "EN" ? work.descriptionEn || work.description : work.descriptionId || work.description}
                   </p>
                 </div>
 
@@ -869,13 +898,13 @@ export default function BlenderStudioPage() {
                   {/* Technical Specs Strip */}
                   <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-[#0d1117] border border-[#30363d]/80 text-[11px] mb-4">
                     <div>
-                      <span className="text-[#8b949e] block">Render Engine</span>
+                      <span className="text-[#8b949e] block">{lang === "EN" ? "Render Engine" : "Engine Render"}</span>
                       <span className="font-semibold text-white truncate block">
                         {work.stats.engine}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[#8b949e] block">Tris</span>
+                      <span className="text-[#8b949e] block">{lang === "EN" ? "Tris" : "Poligon (Tris)"}</span>
                       <span className="font-semibold text-white truncate block">
                         {work.stats.polyCount}
                       </span>
@@ -883,7 +912,7 @@ export default function BlenderStudioPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-1.5 mb-4">
-                    {work.tags.map((tag) => (
+                    {(lang === "EN" ? work.tagsEn || work.tags : work.tagsId || work.tags).map((tag) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d]/60 text-[10px] text-[#8b949e]"
@@ -896,10 +925,10 @@ export default function BlenderStudioPage() {
                   <div className="pt-3 border-t border-[#30363d]/60 flex items-center justify-between text-xs text-[#8A6FB5] font-semibold">
                     <span>
                       {work.videoUrl
-                        ? "Click to Watch Animation"
+                        ? lang === "EN" ? "Click to Watch Animation" : "Klik untuk Tonton Animasi"
                         : work.photos.length > 1
-                        ? `Click to View ${work.photos.length} Renders`
-                        : "Click to Inspect Render"}
+                        ? lang === "EN" ? `Click to View ${work.photos.length} Renders` : `Klik untuk Lihat ${work.photos.length} Render`
+                        : lang === "EN" ? "Click to Inspect Render" : "Klik untuk Periksa Render"}
                     </span>
                     <Maximize2 className="w-3.5 h-3.5" />
                   </div>
@@ -923,15 +952,26 @@ export default function BlenderStudioPage() {
               <div className="px-5 py-3.5 border-b border-[#30363d] flex items-center justify-between bg-[#0d1117]/85">
                 <div>
                   <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <span>{selectedProject.title}</span>
+                    <span>{lang === "EN" ? selectedProject.titleEn || selectedProject.title : selectedProject.titleId || selectedProject.title}</span>
                     {selectedProject.photos.length > 1 && (
                       <span className="text-xs px-2 py-0.5 rounded-md bg-[#8A6FB5]/20 text-[#c7b2e8] border border-[#8A6FB5]/30">
-                        {activePhotoIndex + 1} of {selectedProject.photos.length}
+                        {activePhotoIndex + 1} {lang === "EN" ? "of" : "dari"} {selectedProject.photos.length}
                       </span>
                     )}
                   </h3>
                   <p className="text-xs text-[#8b949e]">
-                    {selectedProject.subtitle} · {selectedProject.category}
+                    {lang === "EN" ? selectedProject.subtitleEn || selectedProject.subtitle : selectedProject.subtitleId || selectedProject.subtitle} ·{" "}
+                    {lang === "EN"
+                      ? selectedProject.category
+                      : selectedProject.category === "Architecture"
+                      ? "Arsitektur"
+                      : selectedProject.category === "Environment & Nature"
+                      ? "Lingkungan & Alam"
+                      : selectedProject.category === "Characters & Creatures"
+                      ? "Karakter & Makhluk"
+                      : selectedProject.category === "Props & Objects"
+                      ? "Properti & Objek"
+                      : "Animasi & Gerak"}
                   </p>
                 </div>
                 <button
@@ -971,14 +1011,14 @@ export default function BlenderStudioPage() {
                     <button
                       onClick={handlePrevPhoto}
                       className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all hover:scale-105"
-                      title="Previous angle"
+                      title={lang === "EN" ? "Previous angle" : "Sudut sebelumnya"}
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handleNextPhoto}
                       className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md transition-all hover:scale-105"
-                      title="Next angle"
+                      title={lang === "EN" ? "Next angle" : "Sudut berikutnya"}
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -986,12 +1026,12 @@ export default function BlenderStudioPage() {
                 )}
               </div>
 
-              {/* Thumbnails Row for Multi-Render items (e.g. Bendera, Tedung, Ninja, Ikan) */}
+              {/* Thumbnails Row for Multi-Render items */}
               {selectedProject.photos.length > 1 && (
                 <div className="px-5 py-2.5 bg-[#0d1117] border-t border-[#30363d] flex items-center gap-2 overflow-x-auto">
                   <span className="text-[11px] font-semibold text-[#8b949e] shrink-0 mr-2 flex items-center gap-1">
                     <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                    Angles / Variations:
+                    {lang === "EN" ? "Angles / Variations:" : "Sudut Pandang / Variasi:"}
                   </span>
                   {selectedProject.photos.map((p, idx) => (
                     <button
@@ -1012,18 +1052,18 @@ export default function BlenderStudioPage() {
               {/* Details and Technical Specs */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3.5">
                 <p className="text-sm text-[#c9d1d9] leading-relaxed">
-                  {selectedProject.description}
+                  {lang === "EN" ? selectedProject.descriptionEn || selectedProject.description : selectedProject.descriptionId || selectedProject.description}
                 </p>
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Render Engine</span>
+                    <span className="text-[#8b949e] block">{lang === "EN" ? "Render Engine" : "Engine Render"}</span>
                     <span className="font-semibold text-white truncate block">
                       {selectedProject.stats.engine}
                     </span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Tris</span>
+                    <span className="text-[#8b949e] block">{lang === "EN" ? "Tris" : "Poligon (Tris)"}</span>
                     <span className="font-semibold text-white">
                       {selectedProject.stats.polyCount}
                     </span>
@@ -1032,7 +1072,7 @@ export default function BlenderStudioPage() {
 
                 <div className="flex items-center justify-between pt-2 border-t border-[#30363d]/60">
                   <div className="flex flex-wrap gap-1.5">
-                    {selectedProject.tags.map((tag) => (
+                    {(lang === "EN" ? selectedProject.tagsEn || selectedProject.tags : selectedProject.tagsId || selectedProject.tags).map((tag) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d] text-[11px] text-[#8A6FB5]"
@@ -1050,7 +1090,8 @@ export default function BlenderStudioPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white transition-colors"
                   >
-                    Open Current Asset <ExternalLink className="w-3.5 h-3.5" />
+                    <span>{lang === "EN" ? "Open Current Asset" : "Buka Aset Gambar"}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </div>
@@ -1067,9 +1108,9 @@ export default function BlenderStudioPage() {
             className="hover:text-white transition-colors flex items-center gap-1.5"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-[#8A6FB5]" />
-            <span>Return to Portfolio</span>
+            <span>{lang === "EN" ? "Return to Portfolio" : "Kembali ke Portofolio"}</span>
           </Link>
-          <span>Blender 3D Studio & Works · Dhitya Nurhadi</span>
+          <span>{lang === "EN" ? "Blender 3D Studio & Works · Dhitya Nurhadi" : "Studio & Karya 3D Blender · Dhitya Nurhadi"}</span>
         </div>
       </footer>
     </div>

@@ -253,7 +253,7 @@ export function ShowcaseGallery() {
                       <div>
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <span className="text-[11px] font-mono text-[#8A6FB5] font-semibold uppercase tracking-wider truncate">
-                            {item.subtitle}
+                            {lang === "EN" ? item.subtitleEn || item.subtitle : item.subtitleId || item.subtitle}
                           </span>
                           <span className="text-[10px] text-[#8b949e] font-mono shrink-0">
                             {idx + 1} / {BLENDER_SHOWCASE.length}
@@ -261,17 +261,17 @@ export function ShowcaseGallery() {
                         </div>
 
                         <h3 className="text-lg font-bold text-white hover:text-[#c7b2e8] transition-colors mb-2">
-                          {item.title}
+                          {lang === "EN" ? item.titleEn || item.title : item.titleId || item.title}
                         </h3>
                         <p className="text-xs text-[#8b949e] line-clamp-2 leading-relaxed mb-4">
-                          {item.description}
+                          {lang === "EN" ? item.descriptionEn || item.description : item.descriptionId || item.description}
                         </p>
                       </div>
 
                       <div>
                         {/* Tags */}
                         <div className="flex flex-wrap gap-1.5 mb-4">
-                          {item.tags.map((tag) => (
+                          {(lang === "EN" ? item.tagsEn || item.tags : item.tagsId || item.tags).map((tag) => (
                             <span
                               key={tag}
                               className="px-2 py-0.5 rounded-lg bg-[#0d1117] border border-[#30363d]/80 text-[10px] text-[#8b949e]"
@@ -299,7 +299,7 @@ export function ShowcaseGallery() {
                             <span>
                               {item.photos.length > 1
                                 ? `${lang === "EN" ? "View" : "Lihat"} ${item.photos.length}`
-                                : "Inspect"}
+                                : lang === "EN" ? "Inspect" : "Periksa"}
                             </span>
                           </button>
                         </div>
@@ -372,14 +372,16 @@ export function ShowcaseGallery() {
               <div className="px-5 py-4 border-b border-[#30363d] flex items-center justify-between bg-[#0d1117]/60">
                 <div>
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <span>{selectedItem.title}</span>
+                    <span>{lang === "EN" ? selectedItem.titleEn || selectedItem.title : selectedItem.titleId || selectedItem.title}</span>
                     {selectedItem.photos.length > 1 && (
                       <span className="text-xs px-2 py-0.5 rounded-md bg-[#8A6FB5]/20 text-[#c7b2e8] border border-[#8A6FB5]/30">
-                        {activePhotoIdx + 1} of {selectedItem.photos.length}
+                        {activePhotoIdx + 1} {lang === "EN" ? "of" : "dari"} {selectedItem.photos.length}
                       </span>
                     )}
                   </h3>
-                  <p className="text-xs text-[#8b949e]">{selectedItem.subtitle}</p>
+                  <p className="text-xs text-[#8b949e]">
+                    {lang === "EN" ? selectedItem.subtitleEn || selectedItem.subtitle : selectedItem.subtitleId || selectedItem.subtitle}
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -430,7 +432,7 @@ export function ShowcaseGallery() {
                 <div className="px-5 py-2.5 bg-[#0d1117] border-t border-[#30363d] flex items-center gap-2 overflow-x-auto">
                   <span className="text-[11px] font-semibold text-[#8b949e] shrink-0 mr-1 flex items-center gap-1">
                     <Images className="w-3.5 h-3.5 text-[#8A6FB5]" />
-                    Angles:
+                    {lang === "EN" ? "Angles:" : "Sudut Pandang:"}
                   </span>
                   {selectedItem.photos.map((p, idx) => (
                     <button
@@ -443,7 +445,7 @@ export function ShowcaseGallery() {
                           : "bg-[#161b22] border-[#30363d] text-[#8b949e] hover:text-white"
                       }`}
                     >
-                      <span>{p.label}</span>
+                      <span>{lang === "EN" ? p.labelEn || p.label : p.labelId || p.label}</span>
                     </button>
                   ))}
                 </div>
@@ -451,28 +453,32 @@ export function ShowcaseGallery() {
 
               {/* Modal Details Footer */}
               <div className="p-5 border-t border-[#30363d] bg-[#161b22] space-y-3">
-                <p className="text-sm text-[#c9d1d9] leading-relaxed">{selectedItem.description}</p>
+                <p className="text-sm text-[#c9d1d9] leading-relaxed">
+                  {lang === "EN" ? selectedItem.descriptionEn || selectedItem.description : selectedItem.descriptionId || selectedItem.description}
+                </p>
 
                 <div className="grid grid-cols-3 gap-2 text-xs pt-2">
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Software</span>
+                    <span className="text-[#8b949e] block">{lang === "EN" ? "Software" : "Software"}</span>
                     <span className="font-semibold text-white">{selectedItem.stats.tool}</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Style</span>
-                    <span className="font-semibold text-white">{selectedItem.stats.style}</span>
+                    <span className="text-[#8b949e] block">{lang === "EN" ? "Style" : "Gaya Desain"}</span>
+                    <span className="font-semibold text-white">
+                      {lang === "EN" ? selectedItem.stats.styleEn || selectedItem.stats.style : selectedItem.stats.styleId || selectedItem.stats.style}
+                    </span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-[#0d1117] border border-[#30363d]">
-                    <span className="text-[#8b949e] block">Note</span>
+                    <span className="text-[#8b949e] block">{lang === "EN" ? "Note" : "Catatan Teknis"}</span>
                     <span className="font-semibold text-white truncate block">
-                      {selectedItem.stats.renderNote}
+                      {lang === "EN" ? selectedItem.stats.renderNoteEn || selectedItem.stats.renderNote : selectedItem.stats.renderNoteId || selectedItem.stats.renderNote}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex flex-wrap gap-1.5">
-                    {selectedItem.tags.map((tag) => (
+                    {(lang === "EN" ? selectedItem.tagsEn || selectedItem.tags : selectedItem.tagsId || selectedItem.tags).map((tag) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 rounded bg-[#0d1117] border border-[#30363d] text-[11px] text-[#8A6FB5]"
@@ -487,7 +493,8 @@ export function ShowcaseGallery() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#21262d] hover:bg-[#30363d] text-xs font-semibold text-white transition-colors"
                   >
-                    Open Current Asset <ExternalLink className="w-3.5 h-3.5" />
+                    <span>{lang === "EN" ? "Open Current Asset" : "Buka Aset Gambar"}</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </div>

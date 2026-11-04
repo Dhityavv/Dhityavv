@@ -38,7 +38,7 @@ export default function ProjectsHubPage() {
   const categories = [
     { id: "All", label: lang === "EN" ? "All Projects" : "Semua Proyek" },
     { id: "Full-Stack Web", label: "Full-Stack Web" },
-    { id: "Game Modding", label: "Game Modding" },
+    { id: "Game Modding", label: lang === "EN" ? "Game Modding" : "Modifikasi Game" },
     { id: "Client Showcase", label: lang === "EN" ? "Client Showcase" : "Portofolio Klien" },
   ];
 
@@ -362,7 +362,7 @@ export default function ProjectsHubPage() {
             <ArrowLeft className="w-3.5 h-3.5 text-[#8A6FB5]" />
             <span>{lang === "EN" ? "Return to Portfolio" : "Kembali ke Portofolio"}</span>
           </Link>
-          <span>Projects Directory · Dhitya Nurhadi</span>
+          <span>{lang === "EN" ? "Projects Directory · Dhitya Nurhadi" : "Direktori Proyek · Dhitya Nurhadi"}</span>
         </div>
       </footer>
 
