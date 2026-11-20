@@ -83,8 +83,8 @@
   
   ### 🎬 Filra
   <details>
-    <summary>Movie discovery & rating app</summary>
-    <p>Built with Next.js, TMDB, Clerk, and Supabase. Responsive UI, user authentication, and fast search.</p>
+    <summary>Movie discovery & rating platform</summary>
+    <p>Built with Next.js, Tailwind, Supabase, and Clerk. Responsive UI, user authentication, and fast search.</p>
     <a href="https://github.com/Dhityavv/Filra" target="_blank" rel="noopener noreferrer">📂 GitHub</a> |
     <a href="https://filra.vercel.app" target="_blank" rel="noopener noreferrer">🚀 Live Demo</a>
   </details>
@@ -92,7 +92,7 @@
   ### 📚 Universal Chiseled Bookshelf
   <details>
     <summary>Minecraft vanilla+ expansion</summary>
-    <p>Store more items in bookshelves without extra blocks. Compatible with Fabric mod loader.</p>
+    <p>Store more items in bookshelves without extra blocks. Works with Fabric mod loader.</p>
     <a href="https://github.com/Dhityavv/Universal-Chiseled-Bookshelf" target="_blank" rel="noopener noreferrer">📂 GitHub</a> |
     <a href="https://discord.gg/sFC8P5DFEN" target="_blank" rel="noopener noreferrer">💬 Discord Download</a>
   </details>
