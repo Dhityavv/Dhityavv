@@ -1,18 +1,6 @@
 <!-- ============ HEADER ============ -->
 <div align="center">
 
-<style>
-  @keyframes fadeInDown {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  .animated-header { animation: fadeInDown 1.5s ease-out; }
-  @media (prefers-color-scheme: dark) {
-    body { color: #e5e5e5; background-color: #0D1117; }
-    a { color: #8A6FB5; }
-  }
-</style>
-
 <img class="animated-header" src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,100:8A6FB5&height=220&section=header&text=Dhitya&fontSize=72&fontColor=FFFFFF&fontAlignY=38&animation=fadeIn&desc=3D%20Artist%20%C2%B7%20Gamer%20%C2%B7%20Tinkerer&descSize=18&descAlignY=60" alt="header" width="100%" />
 <a href="https://git.io/typing-svg">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&duration=3500&pause=1000&color=8A6FB5&center=true&vCenter=true&width=620&lines=Animation+student+in+vocational+school;Building+medium-poly+worlds+in+Blender;Gamer+%7C+Minecraft+tinkerer;Building+modern+web+apps+%26+client+websites" alt="typing animation" />
