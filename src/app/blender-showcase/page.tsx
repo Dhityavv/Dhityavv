@@ -8,6 +8,7 @@ import { ArrowLeft, Box, X, Sun, Moon, Eye, Play } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { ALL_BLENDER_ARCHIVES } from '@/data/portfolioData';
 import { RenderItem } from '@/types/portfolio';
+import { ArtworkMediaStage } from '@/components/ArtworkMediaStage';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
 import { Toast } from '@/components/Toast';
@@ -308,33 +309,12 @@ export default function BlenderShowcasePage() {
               </div>
 
               <div data-lenis-prevent className="overflow-y-auto no-scrollbar p-4 sm:p-6 space-y-4">
-                {/* Active Media View */}
-                <div className="relative w-full rounded-xl overflow-hidden bg-black/60 max-h-[55vh] flex items-center justify-center border border-token">
-                  {selectedArtwork.video && selectedAngleIndex === 0 ? (
-                    <video
-                      src={selectedArtwork.video}
-                      autoPlay
-                      loop
-                      muted
-                      controls
-                      playsInline
-                      className="max-h-[55vh] w-full object-contain"
-                    />
-                  ) : (
-                    <Image
-                      src={
-                        selectedArtwork.images && selectedArtwork.images.length > 0
-                          ? selectedArtwork.images[selectedArtwork.video ? selectedAngleIndex - 1 : selectedAngleIndex] || selectedArtwork.image
-                          : selectedArtwork.image
-                      }
-                      alt={language === 'id' ? selectedArtwork.titleId : selectedArtwork.titleEn}
-                      width={1200}
-                      height={800}
-                      sizes="(max-width: 768px) 100vw, 768px"
-                      className="max-h-[55vh] w-auto h-auto object-contain"
-                    />
-                  )}
-                </div>
+                {/* Fixed-Height Preloaded Smooth Crossfade Media View */}
+                <ArtworkMediaStage
+                  artwork={selectedArtwork}
+                  selectedAngleIndex={selectedAngleIndex}
+                  title={language === 'id' ? selectedArtwork.titleId : selectedArtwork.titleEn}
+                />
 
                 {/* Multi-angle / Animation & Render switcher */}
                 {((selectedArtwork.video && selectedArtwork.images && selectedArtwork.images.length > 0) ||

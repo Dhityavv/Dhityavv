@@ -29,6 +29,7 @@ export function Navbar() {
   };
 
   const navItems: LiquidNavItem[] = [
+    { label: language === 'id' ? 'Beranda' : 'Home', href: '#top', icon: NimbusIcons.home, fx: 'glow' },
     { label: t.nav.about, href: '#about', icon: NimbusIcons.user, fx: 'wave' },
     { label: t.nav.showcase, href: '#showcase', icon: NimbusIcons.box, fx: 'spin' },
     { label: t.nav.projects, href: '#projects', icon: NimbusIcons.code, fx: 'pop' },
@@ -78,26 +79,7 @@ export function Navbar() {
     >
       {/* Floating Glass Pill Dock */}
       <div className="liquid-glass rounded-full p-1.5 sm:p-2 flex items-center gap-1.5 sm:gap-2 shadow-[0_12px_44px_rgba(0,0,0,0.55)] border border-white/15 dark:border-white/10 backdrop-blur-xl transition-all">
-        {/* Brand Home Navigation Button with sleek Home icon */}
-        <button
-          type="button"
-          onClick={handleScrollToTop}
-          title={language === 'id' ? 'Beranda' : 'Home'}
-          aria-label={language === 'id' ? 'Beranda' : 'Home'}
-          className="group relative flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full surface-elevated/90 hover:surface-elevated border border-white/15 dark:border-white/10 hover:border-indigo-400/50 shadow-sm cursor-pointer transition-all duration-200 hover:-translate-y-0.5 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-        >
-          <span className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full flex items-center justify-center bg-indigo-500/15 border border-indigo-500/25 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500/25 group-hover:text-indigo-500 transition-all duration-200 shrink-0 shadow-inner">
-            <Home className="w-3.5 h-3.5 transition-transform duration-200" />
-          </span>
-          <span className="font-display font-bold text-xs sm:text-[13px] tracking-tight text-[var(--text-primary)] group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-            {language === 'id' ? 'Beranda' : 'Home'}
-          </span>
-        </button>
-
-        {/* Vertical Glass Divider: Distinguishes brand anchor from section navigation tabs */}
-        <div className="w-px h-5 bg-white/20 dark:bg-white/15 mx-0.5 hidden md:block" />
-
-        {/* Desktop WebGL Physics Liquid Glass Navbar */}
+        {/* Desktop WebGL Physics Liquid Glass Navbar (includes unified Home bubble button) */}
         <div className="hidden md:block">
           <LiquidNavbar
             items={navItems}

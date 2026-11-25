@@ -535,7 +535,16 @@ export function LiquidNavbar({
 
     // Smooth scroll for hash hrefs without exposing hover preview tooltip
     if (it?.href && it.href.startsWith("#")) {
-      if (lenis) {
+      if (it.href === "#top") {
+        if (lenis) {
+          lenis.scrollTo(0, { duration: 1.25 })
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+        }
+        if (typeof window !== "undefined") {
+          window.history.replaceState(null, "", window.location.pathname)
+        }
+      } else if (lenis) {
         lenis.scrollTo(it.href, { offset: -96, duration: 1.15 })
         if (typeof window !== "undefined") {
           window.history.replaceState(null, "", it.href)
