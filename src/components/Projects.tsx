@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
 import { PROJECTS } from '@/data/portfolioData';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
 import { ProjectCardVisual } from '@/components/ProjectCardVisual';
@@ -25,22 +26,25 @@ export function Projects() {
           <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
             {t.projects.eyebrow}
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]">
-            {t.projects.title}
-          </h2>
+          <SplitRevealTitle
+            text={t.projects.title}
+            className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]"
+          />
         </div>
       </div>
 
       {/* Case Study Grid (CyTune, Grainox, Orbitry, Filra with distinct GUI styling) */}
       <div id="projects-grid" className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        {featuredProjects.map((project) => {
+        {featuredProjects.map((project, idx) => {
           const content = language === 'id' ? project.id_lang : project.en;
           return (
             <motion.article
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: '-40px' }}
+              whileHover={{ y: -6, scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 24, delay: idx * 0.06 }}
               key={project.id}
               onClick={() => openCaseStudy(project)}
               onKeyDown={(e) => {
@@ -52,7 +56,7 @@ export function Projects() {
               tabIndex={0}
               role="button"
               aria-label={`View details for ${content.title}`}
-              className="liquid-glass group relative cursor-pointer rounded-2xl overflow-hidden flex flex-col justify-between border border-white/12 hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="liquid-glass group relative cursor-pointer rounded-2xl overflow-hidden flex flex-col justify-between border border-white/12 hover:border-indigo-500/50 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
               {/* Subtle top specular sheen */}
               <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />

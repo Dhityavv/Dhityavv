@@ -15,6 +15,7 @@
  */
 
 import * as React from "react"
+import { useLenis } from "lenis/react"
 
 export type NimbusFx = "plane" | "drop" | "spin" | "glow" | "wave" | "pop" | "none"
 
@@ -259,6 +260,7 @@ export function LiquidNavbar({
 }: LiquidNavbarProps) {
   const [inner, setInner] = React.useState(defaultActive)
   const current = active ?? inner
+  const lenis = useLenis()
   const navRef = React.useRef<HTMLElement>(null)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const dropRef = React.useRef<HTMLSpanElement>(null)
@@ -533,11 +535,18 @@ export function LiquidNavbar({
 
     // Smooth scroll for hash hrefs without exposing hover preview tooltip
     if (it?.href && it.href.startsWith("#")) {
-      const targetEl = document.querySelector(it.href)
-      if (targetEl) {
-        targetEl.scrollIntoView({ behavior: "smooth" })
+      if (lenis) {
+        lenis.scrollTo(it.href, { offset: -96, duration: 1.15 })
         if (typeof window !== "undefined") {
           window.history.replaceState(null, "", it.href)
+        }
+      } else {
+        const targetEl = document.querySelector(it.href)
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: "smooth" })
+          if (typeof window !== "undefined") {
+            window.history.replaceState(null, "", it.href)
+          }
         }
       }
     }

@@ -73,7 +73,7 @@ export function CaseStudyModal() {
           </div>
 
           {/* Scrollable Content Body */}
-          <div className="p-6 space-y-5 overflow-y-auto no-scrollbar">
+          <div data-lenis-prevent className="p-6 space-y-5 overflow-y-auto no-scrollbar">
             {/* Metadata Badges */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-xl surface-elevated text-xs font-mono">
               <div>

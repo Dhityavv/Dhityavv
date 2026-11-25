@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X, Home } from 'lucide-react';
+import { useLenis } from 'lenis/react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
 import { LiquidNavbar, NimbusIcons, type LiquidNavItem } from '@/components/ui/liquid-glass-navbar';
@@ -12,6 +13,7 @@ export function Navbar() {
   const { language, setLanguage, t } = useLanguage();
   const { isAnyModalOpen } = useModal();
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const lenis = useLenis();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mounted = React.useSyncExternalStore(
     () => () => {},
@@ -36,7 +38,11 @@ export function Navbar() {
   ];
 
   const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.25 });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
     if (typeof window !== 'undefined') {
       window.history.replaceState(null, '', window.location.pathname);
     }
@@ -45,6 +51,13 @@ export function Navbar() {
   const handleMobileNavClick = (href: string) => {
     setMobileMenuOpen(false);
     if (href.startsWith('#')) {
+      if (lenis) {
+        lenis.scrollTo(href, { offset: -96, duration: 1.15 });
+        if (typeof window !== 'undefined') {
+          window.history.replaceState(null, '', href);
+        }
+        return;
+      }
       const el = document.querySelector(href);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });

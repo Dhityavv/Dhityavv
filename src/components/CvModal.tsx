@@ -88,6 +88,7 @@ export function CvModal() {
           {/* ATS-Friendly Black-on-White Sheet */}
           <div
             id="cv-printable"
+            data-lenis-prevent
             className="p-6 sm:p-8 overflow-y-auto no-scrollbar bg-white text-[#09090b] space-y-5 text-sm"
           >
             {/* Header */}

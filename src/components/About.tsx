@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { GraduationCap, Box, Globe, Sparkles, MapPin } from 'lucide-react';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 import { QUICK_PROFILE } from '@/data/portfolioData';
 
@@ -19,14 +21,22 @@ export function About() {
         <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
           {t.about.eyebrow}
         </span>
-        <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]">
-          {t.about.title}
-        </h2>
+        <SplitRevealTitle
+          text={t.about.title}
+          className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Left Column: The Creative Journey Story (Condensed to 2 Crisp Paragraphs) */}
-        <div className="lg:col-span-7 liquid-glass p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-6 border border-white/10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+          className="lg:col-span-7 liquid-glass p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-6 border border-white/10 hover:border-indigo-500/35"
+        >
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -57,10 +67,17 @@ export function About() {
               <span className="font-medium text-zinc-200 whitespace-nowrap">{t.about.tagWeb}</span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Column: Quick Profile Card (Redesigned Balanced Bento GUI) */}
-        <div className="lg:col-span-5 liquid-glass p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-4 border border-white/10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 24, delay: 0.08 }}
+          className="lg:col-span-5 liquid-glass p-6 sm:p-8 rounded-2xl flex flex-col justify-between space-y-4 border border-white/10 hover:border-indigo-500/35"
+        >
           {/* Header row */}
           <div className="flex items-center justify-between pb-3.5 border-b border-token">
             <h3 className="font-display font-bold text-base text-[var(--text-primary)]">
@@ -118,7 +135,7 @@ export function About() {
               SMK Animasi
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

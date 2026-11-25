@@ -58,6 +58,7 @@ export const metadata: Metadata = {
 };
 
 import { ScrollRestorationReset } from '@/components/ScrollRestorationReset';
+import { SmoothScroll } from '@/components/SmoothScroll';
 
 export default function RootLayout({
   children,
@@ -68,8 +69,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      data-scroll-behavior="smooth"
-      className={`${inter.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} scroll-smooth no-scrollbar`}
+      className={`${inter.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} no-scrollbar`}
     >
       <head>
         <script
@@ -92,7 +92,9 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <LanguageProvider>
-            <ModalProvider>{children}</ModalProvider>
+            <ModalProvider>
+              <SmoothScroll>{children}</SmoothScroll>
+            </ModalProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

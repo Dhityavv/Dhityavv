@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { EXPERIENCES } from '@/data/portfolioData';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function Experience() {
@@ -13,13 +15,14 @@ export function Experience() {
         <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-400">
           {t.experience.eyebrow}
         </span>
-        <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight">
-          {t.experience.title}
-        </h2>
+        <SplitRevealTitle
+          text={t.experience.title}
+          className="font-display font-bold text-3xl sm:text-4xl tracking-tight"
+        />
       </div>
 
       <div className="relative pl-6 sm:pl-8 border-l border-token space-y-6">
-        {EXPERIENCES.map((item) => {
+        {EXPERIENCES.map((item, idx) => {
           const role = language === 'id' ? item.roleId : item.roleEn;
           const org = language === 'id' ? item.orgId : item.orgEn;
           const bullets = language === 'id' ? item.bulletsId : item.bulletsEn;
@@ -41,7 +44,14 @@ export function Experience() {
               </span>
 
               {/* Timeline Card */}
-              <div className="liquid-glass p-6 rounded-2xl space-y-3">
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 24, delay: idx * 0.05 }}
+                className="liquid-glass p-6 rounded-2xl space-y-3 border border-white/10 hover:border-indigo-500/35"
+              >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <h3 className="font-display font-bold text-lg text-[var(--text-primary)]">
@@ -72,7 +82,7 @@ export function Experience() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             </div>
           );
         })}

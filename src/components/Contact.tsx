@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Mail, MessageSquare } from 'lucide-react';
 import { SOCIAL_LINKS } from '@/data/portfolioData';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
 
@@ -42,15 +44,22 @@ export function Contact() {
 
   return (
     <footer id="contact" className="scroll-mt-24 pt-2">
-      <div className="liquid-glass rounded-2xl p-6 sm:p-8 lg:p-10 space-y-8 border border-white/12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+        className="liquid-glass rounded-2xl p-6 sm:p-8 lg:p-10 space-y-8 border border-white/12"
+      >
         {/* Header Block: Title & Subtitle (Email copy pill removed per request) */}
         <div className="space-y-2.5 max-w-2xl pb-6 border-b border-token">
           <span className="text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
             {t.contact.eyebrow}
           </span>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-[var(--text-primary)]">
-            {t.contact.title}
-          </h2>
+          <SplitRevealTitle
+            text={t.contact.title}
+            className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-[var(--text-primary)]"
+          />
           <p className="text-sm sm:text-base text-secondary leading-relaxed">
             {t.contact.desc}
           </p>
@@ -161,7 +170,7 @@ export function Contact() {
           <p>© 2026 Dhitya Nurhadi (Dhityavv).</p>
           <p>{t.contact.footerLocation}</p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

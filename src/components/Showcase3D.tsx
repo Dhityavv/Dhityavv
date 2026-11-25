@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Box, X, ArrowRight, Eye, Play } from 'lucide-react';
 import { RENDERS_SHOWCASE } from '@/data/portfolioData';
 import { RenderItem } from '@/types/portfolio';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
 
@@ -41,9 +42,10 @@ export function Showcase3D() {
           <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
             {t.showcase.eyebrow}
           </span>
-          <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]">
-            {t.showcase.title}
-          </h2>
+          <SplitRevealTitle
+            text={t.showcase.title}
+            className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]"
+          />
           <p className="text-secondary text-sm sm:text-base max-w-2xl leading-relaxed">
             {t.showcase.desc}
           </p>
@@ -64,10 +66,12 @@ export function Showcase3D() {
           return (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -6, scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 24, delay: idx * 0.06 }}
               onClick={() => handleOpenArtwork(item)}
               tabIndex={0}
               role="button"
@@ -77,7 +81,7 @@ export function Showcase3D() {
                   handleOpenArtwork(item);
                 }
               }}
-              className="liquid-glass group cursor-pointer rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl border border-white/10 hover:border-indigo-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              className="liquid-glass group cursor-pointer rounded-2xl overflow-hidden flex flex-col justify-between hover:shadow-2xl border border-white/10 hover:border-indigo-500/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
               {/* Media Preview Slot */}
               <div className="relative aspect-[16/11] w-full overflow-hidden bg-black/40">
@@ -194,7 +198,7 @@ export function Showcase3D() {
                 </button>
               </div>
 
-              <div className="overflow-y-auto no-scrollbar p-4 sm:p-6 space-y-4">
+              <div data-lenis-prevent className="overflow-y-auto no-scrollbar p-4 sm:p-6 space-y-4">
                 {/* Active Media Display */}
                 <div className="relative w-full rounded-xl overflow-hidden bg-black/60 max-h-[55vh] flex items-center justify-center border border-token">
                   {selectedArtwork.video && selectedAngleIndex === 0 ? (

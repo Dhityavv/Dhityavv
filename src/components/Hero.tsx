@@ -3,13 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Code2, Box } from 'lucide-react';
+import { useLenis } from 'lenis/react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function Hero() {
   const { language, t } = useLanguage();
+  const lenis = useLenis();
   const [roleIndex, setRoleIndex] = useState(0);
 
   const scrollToSection = (id: string) => {
+    if (lenis) {
+      lenis.scrollTo(id, { offset: -96, duration: 1.15 });
+      return;
+    }
     const el = document.querySelector(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -135,7 +141,11 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
         className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-token"
       >
-        <div className="liquid-glass p-4 rounded-xl flex items-center gap-3.5">
+        <motion.div
+          whileHover={{ y: -4, scale: 1.015 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+          className="liquid-glass p-4 rounded-xl flex items-center gap-3.5 border border-white/10 hover:border-indigo-500/40"
+        >
           <div className="w-10 h-10 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-mono font-bold text-sm shrink-0">
             03
           </div>
@@ -143,9 +153,13 @@ export function Hero() {
             <p className="font-display font-semibold text-sm text-[var(--text-primary)]">{t.metrics.m1Title}</p>
             <p className="text-xs text-muted">{t.metrics.m1Sub}</p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="liquid-glass p-4 rounded-xl flex items-center gap-3.5">
+        <motion.div
+          whileHover={{ y: -4, scale: 1.015 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+          className="liquid-glass p-4 rounded-xl flex items-center gap-3.5 border border-white/10 hover:border-emerald-500/40"
+        >
           <div className="w-10 h-10 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
             <Box className="w-5 h-5" />
           </div>
@@ -153,9 +167,13 @@ export function Hero() {
             <p className="font-display font-semibold text-sm text-[var(--text-primary)]">{t.metrics.m2Title}</p>
             <p className="text-xs text-muted">{t.metrics.m2Sub}</p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="liquid-glass p-4 rounded-xl flex items-center gap-3.5">
+        <motion.div
+          whileHover={{ y: -4, scale: 1.015 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+          className="liquid-glass p-4 rounded-xl flex items-center gap-3.5 border border-white/10 hover:border-indigo-500/40"
+        >
           <div className="w-10 h-10 rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
             <Code2 className="w-5 h-5" />
           </div>
@@ -163,7 +181,7 @@ export function Hero() {
             <p className="font-display font-semibold text-sm text-[var(--text-primary)]">{t.metrics.m3Title}</p>
             <p className="text-xs text-muted">{t.metrics.m3Sub}</p>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );

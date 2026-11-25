@@ -3,6 +3,7 @@
 import React from 'react';
 import { MousePointer2, Move3d } from 'lucide-react';
 import { InteractiveRobot3D } from '@/components/ui/interactive-robot-3d';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function Interactive3D() {
@@ -26,9 +27,11 @@ export function Interactive3D() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[2.65rem] tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-[var(--text-primary)] via-[var(--text-primary)] to-zinc-500">
-              {t.interactive3d.title}
-            </h2>
+            <SplitRevealTitle
+              text={t.interactive3d.title}
+              className="font-display font-bold text-3xl sm:text-4xl lg:text-[2.65rem] tracking-tight"
+              wordClassName="bg-clip-text text-transparent bg-gradient-to-b from-[var(--text-primary)] via-[var(--text-primary)] to-zinc-500"
+            />
             <p className="text-sm sm:text-base text-secondary leading-relaxed max-w-md">
               {t.interactive3d.desc}
             </p>

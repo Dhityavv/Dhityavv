@@ -307,7 +307,7 @@ export default function BlenderShowcasePage() {
                 </button>
               </div>
 
-              <div className="overflow-y-auto no-scrollbar p-4 sm:p-6 space-y-4">
+              <div data-lenis-prevent className="overflow-y-auto no-scrollbar p-4 sm:p-6 space-y-4">
                 {/* Active Media View */}
                 <div className="relative w-full rounded-xl overflow-hidden bg-black/60 max-h-[55vh] flex items-center justify-center border border-token">
                   {selectedArtwork.video && selectedAngleIndex === 0 ? (

@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Code2, Box, Terminal, Sparkles } from 'lucide-react';
 import { SKILL_CATEGORIES } from '@/data/portfolioData';
+import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function Skills() {
@@ -43,9 +45,10 @@ export function Skills() {
         <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
           {t.skills.eyebrow}
         </span>
-        <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]">
-          {t.skills.title}
-        </h2>
+        <SplitRevealTitle
+          text={t.skills.title}
+          className="font-display font-bold text-3xl sm:text-4xl tracking-tight text-[var(--text-primary)]"
+        />
       </div>
 
       {/* Creative Compact Bento Grid */}
@@ -55,9 +58,14 @@ export function Skills() {
           const meta = getCategoryMeta(cat.iconName);
 
           return (
-            <div
+            <motion.div
               key={idx}
-              className={`liquid-glass group relative p-5 sm:p-6 rounded-2xl flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${meta.cardAccent} overflow-hidden`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              whileHover={{ y: -5, scale: 1.015 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 24, delay: idx * 0.06 }}
+              className={`liquid-glass group relative p-5 sm:p-6 rounded-2xl flex flex-col justify-between hover:shadow-xl ${meta.cardAccent} overflow-hidden`}
             >
               {/* Subtle top ambient glow */}
               <div
@@ -104,7 +112,7 @@ export function Skills() {
                   Active
                 </span>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
