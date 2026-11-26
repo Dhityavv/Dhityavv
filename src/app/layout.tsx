@@ -48,10 +48,13 @@ export const metadata: Metadata = {
     shortcut: '/assets/dhitya-portfolio-logo.png',
     apple: '/assets/dhitya-portfolio-logo.png',
   },
+  verification: {
+    google: 'kmiL-zEHmypQ_WvUXk_XUGtnQ5XgQjUfln99K_fFN7Y',
+  },
   openGraph: {
     title: 'Dhitya Nurhadi — Portfolio',
     description: 'Building clean web interfaces & 3D pipelines built for production.',
-    url: 'https://grainox.vercel.app',
+    url: 'https://www.dhitya-space.my.id',
     siteName: 'Dhitya Nurhadi Portfolio',
     type: 'website',
   },
