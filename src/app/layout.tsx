@@ -24,7 +24,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Dhitya Nurhadi — Portfolio',
+  metadataBase: new URL('https://www.dhitya-space.my.id'),
+  title: 'Dhitya Nurhadi - 3D Artist & Creative Developer',
   description:
     'Portfolio of Dhitya Nurhadi (Dhityavv) — Front-End Developer, 3D & Animation Artist, and Creative Technologist. Next.js, Blender (3.6 – 5.3), Fabric Modding.',
   keywords: [
@@ -41,21 +42,24 @@ export const metadata: Metadata = {
   authors: [{ name: 'Dhitya Nurhadi', url: 'https://github.com/Dhityavv' }],
   icons: {
     icon: [
-      { url: '/assets/dhitya-portfolio-logo.png' },
-      { url: '/icon.png' },
-      { url: '/favicon.ico' },
+      { url: '/favicon.ico', sizes: '48x48', type: 'image/x-icon' },
+      { url: '/assets/icon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/assets/icon-96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/assets/icon-192.png', sizes: '192x192', type: 'image/png' },
     ],
-    shortcut: '/assets/dhitya-portfolio-logo.png',
-    apple: '/assets/dhitya-portfolio-logo.png',
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   verification: {
     google: 'kmiL-zEHmypQ_WvUXk_XUGtnQ5XgQjUfln99K_fFN7Y',
   },
   openGraph: {
-    title: 'Dhitya Nurhadi — Portfolio',
+    title: 'Dhitya Nurhadi - 3D Artist & Creative Developer',
     description: 'Building clean web interfaces & 3D pipelines built for production.',
     url: 'https://www.dhitya-space.my.id',
-    siteName: 'Dhitya Nurhadi Portfolio',
+    siteName: 'Dhitya Nurhadi',
     type: 'website',
   },
 };
