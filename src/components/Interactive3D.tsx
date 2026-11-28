@@ -21,7 +21,7 @@ export function Interactive3D() {
 
         {/* Left Content */}
         <div className="md:col-span-5 space-y-5 relative z-10 text-center md:text-left flex flex-col items-center md:items-start">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full surface-elevated/80 border border-white/10 text-[11px] font-mono font-semibold uppercase tracking-widest text-indigo-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full surface-elevated/80 border border-white/10 text-[11px] font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
             <Move3d className="w-3.5 h-3.5" />
             <span>{t.interactive3d.badge}</span>
           </div>

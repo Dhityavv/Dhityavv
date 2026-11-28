@@ -77,6 +77,7 @@ export function Showcase3D() {
               onClick={() => handleOpenArtwork(item)}
               tabIndex={0}
               role="button"
+              aria-label={`View 3D render: ${title}`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();

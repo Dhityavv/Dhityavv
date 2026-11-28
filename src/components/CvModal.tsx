@@ -5,11 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Printer, Download } from 'lucide-react';
 import { useModal } from '@/context/ModalContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { EXPERIENCES, PROJECTS, SOCIAL_LINKS } from '@/data/portfolioData';
+import { SOCIAL_LINKS } from '@/data/portfolioData';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 
 export function CvModal() {
   const { isCvOpen, closeCv } = useModal();
   const { language, t } = useLanguage();
+  const { experiences, projects } = usePortfolioData();
+  const eduExp = experiences[3];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -23,11 +26,11 @@ export function CvModal() {
     };
   }, [isCvOpen, closeCv]);
 
-  if (!isCvOpen) return null;
-
   return (
     <AnimatePresence>
+      {isCvOpen && (
       <div
+        key="cv-modal"
         role="dialog"
         aria-modal="true"
         aria-label="Resume Preview"
@@ -124,7 +127,7 @@ export function CvModal() {
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-200 pb-1">
                   {t.cv.expTitle}
                 </h3>
-                {EXPERIENCES.slice(0, 3).map((exp) => (
+                {experiences.slice(0, 3).map((exp) => (
                   <div key={exp.id} className="space-y-0.5">
                     <div className="flex justify-between font-semibold text-[13px] text-zinc-900">
                       <span>{language === 'id' ? exp.roleId : exp.roleEn}</span>
@@ -141,22 +144,24 @@ export function CvModal() {
                 <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 border-b border-zinc-200 pb-1">
                   {t.cv.eduTitle}
                 </h3>
+                {eduExp && (
                 <div className="space-y-0.5">
                   <div className="flex justify-between font-semibold text-[13px] text-zinc-900">
                     <span>
-                      {language === 'id' ? EXPERIENCES[3].roleId : EXPERIENCES[3].roleEn}
+                      {language === 'id' ? eduExp.roleId : eduExp.roleEn}
                     </span>
                     <span className="font-mono text-[11px] text-zinc-500">
-                      {EXPERIENCES[3].date}
+                      {eduExp.date}
                     </span>
                   </div>
                   <p className="text-[11px] font-mono text-zinc-500">
-                    {language === 'id' ? EXPERIENCES[3].orgId : EXPERIENCES[3].orgEn}
+                    {language === 'id' ? eduExp.orgId : eduExp.orgEn}
                   </p>
                   <p className="text-xs text-zinc-600 leading-relaxed pt-1">
                     {t.cv.eduDesc}
                   </p>
                 </div>
+                )}
               </div>
             </div>
 
@@ -166,7 +171,7 @@ export function CvModal() {
                 {t.cv.projTitle}
               </h3>
               <div className="space-y-1.5 text-[13px] text-zinc-700">
-                {PROJECTS.map((proj) => {
+                {projects.map((proj) => {
                   const data = language === 'id' ? proj.id_lang : proj.en;
                   return (
                     <p key={proj.id}>
@@ -201,6 +206,7 @@ export function CvModal() {
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

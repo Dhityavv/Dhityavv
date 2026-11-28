@@ -22,13 +22,17 @@ export function CaseStudyModal() {
     };
   }, [activeCaseStudy, closeCaseStudy]);
 
-  if (!activeCaseStudy) return null;
-
-  const content = language === 'id' ? activeCaseStudy.id_lang : activeCaseStudy.en;
+  const content = activeCaseStudy
+    ? language === 'id'
+      ? activeCaseStudy.id_lang
+      : activeCaseStudy.en
+    : null;
 
   return (
     <AnimatePresence>
+      {activeCaseStudy && content && (
       <div
+        key={activeCaseStudy.id}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cs-title"
@@ -55,7 +59,7 @@ export function CaseStudyModal() {
           {/* Header */}
           <div className="flex items-start justify-between gap-4 p-6 border-b border-token">
             <div className="space-y-1.5">
-              <span className="inline-block px-2.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-400 text-xs font-mono font-medium">
+              <span className="inline-block px-2.5 py-0.5 rounded-md bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 text-xs font-mono font-medium">
                 {content.categoryLabel}
               </span>
               <h3 id="cs-title" className="font-display font-bold text-2xl">
@@ -66,7 +70,7 @@ export function CaseStudyModal() {
               type="button"
               onClick={closeCaseStudy}
               aria-label="Close Modal"
-              className="surface-elevated p-2 rounded-lg text-secondary hover:text-[var(--text-primary)] cursor-pointer"
+              className="surface-elevated p-2 rounded-lg text-secondary hover:text-[var(--text-primary)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
               <X className="w-4 h-4" />
             </button>
@@ -84,7 +88,7 @@ export function CaseStudyModal() {
               </div>
               <div>
                 <span className="text-muted block">{t.modal.statusLabel}</span>
-                <span className="font-semibold text-emerald-400 mt-0.5 block">
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5 block">
                   {content.status}
                 </span>
               </div>
@@ -174,6 +178,7 @@ export function CaseStudyModal() {
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

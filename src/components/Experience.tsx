@@ -13,7 +13,7 @@ export function Experience() {
   return (
     <section id="experience" className="scroll-mt-24 space-y-8">
       <div className="space-y-1.5">
-        <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-400">
+        <span className="inline-block text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
           {t.experience.eyebrow}
         </span>
         <SplitRevealTitle
@@ -60,7 +60,7 @@ export function Experience() {
                     </h3>
                     <p
                       className={`text-sm font-medium ${
-                        item.isCurrent ? 'text-indigo-400' : 'text-muted'
+                        item.isCurrent ? 'text-indigo-600 dark:text-indigo-400' : 'text-muted'
                       }`}
                     >
                       {org}

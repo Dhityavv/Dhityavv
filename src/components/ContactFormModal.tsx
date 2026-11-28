@@ -27,8 +27,6 @@ export function ContactFormModal() {
     };
   }, [isContactFormOpen, closeContactForm]);
 
-  if (!isContactFormOpen) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const subject = encodeURIComponent(`Portfolio Inquiry from ${name || 'Visitor'}`);
@@ -64,7 +62,9 @@ export function ContactFormModal() {
 
   return (
     <AnimatePresence>
+      {isContactFormOpen && (
       <div
+        key="contact-form-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-form-title"
@@ -193,6 +193,7 @@ export function ContactFormModal() {
           </form>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   );
 }

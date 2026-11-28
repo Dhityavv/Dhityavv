@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useSyncExternalStore } from 'react';
 import { ReactLenis, useLenis } from 'lenis/react';
 import 'lenis/dist/lenis.css';
 import gsap from 'gsap';
@@ -45,7 +45,26 @@ function LenisGsapBridge() {
   return null;
 }
 
+const subscribeReducedMotion = (cb: () => void) => {
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  mq.addEventListener('change', cb);
+  return () => mq.removeEventListener('change', cb);
+};
+
+const getReducedMotionSnapshot = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    () => false
+  );
+
+  if (prefersReducedMotion) {
+    return <>{children}</>;
+  }
+
   return (
     <ReactLenis
       root

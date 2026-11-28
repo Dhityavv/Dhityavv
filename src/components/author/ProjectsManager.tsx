@@ -57,7 +57,7 @@ export function ProjectsManager({ onNotify }: ProjectsManagerProps) {
   const openEditor = (project?: ProjectWithOrder) => {
     if (project) {
       setIsNew(false);
-      setEditing(JSON.parse(JSON.stringify(project)));
+      setEditing(structuredClone(project));
       setEnHighlights(project.en.highlights.join('\n'));
       setIdHighlights(project.id_lang.highlights.join('\n'));
       setEnTags(project.en.tags.join(', '));
@@ -67,7 +67,7 @@ export function ProjectsManager({ onNotify }: ProjectsManagerProps) {
     } else {
       setIsNew(true);
       setEditing({
-        ...JSON.parse(JSON.stringify(EMPTY_PROJECT)),
+        ...structuredClone(EMPTY_PROJECT),
         id: `project-${Date.now().toString(36)}`,
         sortOrder: projects.length,
       });

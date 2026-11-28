@@ -56,16 +56,16 @@ export function About() {
           {/* Core Pillars Strip: Interactive pop-up badges without text truncation */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-4 border-t border-token text-xs font-mono">
             <div className="surface-elevated group p-2.5 rounded-xl flex items-center gap-2 border border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.08] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-default">
-              <GraduationCap className="w-4 h-4 text-indigo-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
-              <span className="font-medium text-zinc-200 whitespace-nowrap">{t.about.tagSchool}</span>
+              <GraduationCap className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
+              <span className="font-medium text-[var(--text-primary)] whitespace-nowrap">{t.about.tagSchool}</span>
             </div>
             <div className="surface-elevated group p-2.5 rounded-xl flex items-center gap-2 border border-white/10 hover:border-emerald-500/50 hover:bg-white/[0.08] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-default">
-              <Box className="w-4 h-4 text-emerald-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
-              <span className="font-medium text-zinc-200 whitespace-nowrap">{t.about.tag3d}</span>
+              <Box className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
+              <span className="font-medium text-[var(--text-primary)] whitespace-nowrap">{t.about.tag3d}</span>
             </div>
             <div className="surface-elevated group p-2.5 rounded-xl flex items-center gap-2 border border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.08] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-default">
-              <Globe className="w-4 h-4 text-cyan-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
-              <span className="font-medium text-zinc-200 whitespace-nowrap">{t.about.tagWeb}</span>
+              <Globe className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 group-hover:scale-125 transition-transform duration-200" />
+              <span className="font-medium text-[var(--text-primary)] whitespace-nowrap">{t.about.tagWeb}</span>
             </div>
           </div>
         </motion.div>
