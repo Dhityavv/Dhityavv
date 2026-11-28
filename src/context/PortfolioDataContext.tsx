@@ -252,8 +252,11 @@ export function PortfolioDataProvider({ children }: { children: React.ReactNode 
   }, []);
 
   const featuredRenders = allRenders.filter((r) => r.isFeatured);
-  const rendersShowcase =
-    featuredRenders.length > 0 ? featuredRenders.slice(0, 6) : allRenders.slice(0, 6);
+  const rendersShowcase = (
+    featuredRenders.length >= 6
+      ? featuredRenders
+      : [...featuredRenders, ...allRenders.filter((r) => !r.isFeatured)]
+  ).slice(0, 6);
 
   return (
     <PortfolioDataContext.Provider

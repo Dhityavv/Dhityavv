@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MousePointer2, Move3d } from 'lucide-react';
+import { Move3d } from 'lucide-react';
 import { InteractiveRobot3D } from '@/components/ui/interactive-robot-3d';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
@@ -35,13 +35,6 @@ export function Interactive3D() {
             <p className="text-sm sm:text-base text-secondary leading-relaxed max-w-md">
               {t.interactive3d.desc}
             </p>
-          </div>
-
-          <div className="pt-1">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full surface-elevated/70 border border-white/10 text-xs font-mono text-secondary">
-              <MousePointer2 className="w-3.5 h-3.5 text-indigo-400" />
-              <span>{t.interactive3d.hint}</span>
-            </span>
           </div>
         </div>
 
