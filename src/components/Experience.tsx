@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { EXPERIENCES } from '@/data/portfolioData';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 
 export function Experience() {
   const { language, t } = useLanguage();
+  const { experiences } = usePortfolioData();
 
   return (
     <section id="experience" className="scroll-mt-24 space-y-8">
@@ -22,7 +23,7 @@ export function Experience() {
       </div>
 
       <div className="relative pl-6 sm:pl-8 border-l border-token space-y-6">
-        {EXPERIENCES.map((item, idx) => {
+        {experiences.map((item, idx) => {
           const role = language === 'id' ? item.roleId : item.roleEn;
           const org = language === 'id' ? item.orgId : item.orgEn;
           const bullets = language === 'id' ? item.bulletsId : item.bulletsEn;

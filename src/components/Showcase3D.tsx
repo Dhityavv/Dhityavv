@@ -5,16 +5,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, X, ArrowRight, Eye, Play } from 'lucide-react';
-import { RENDERS_SHOWCASE } from '@/data/portfolioData';
 import { RenderItem } from '@/types/portfolio';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { ArtworkMediaStage } from '@/components/ArtworkMediaStage';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 
 export function Showcase3D() {
   const router = useRouter();
   const { language, t } = useLanguage();
+  const { rendersShowcase } = usePortfolioData();
   const { selectedArtwork, openArtwork, closeArtwork } = useModal();
   const [selectedAngleIndex, setSelectedAngleIndex] = useState(0);
 
@@ -58,9 +59,9 @@ export function Showcase3D() {
         </div>
       </div>
 
-      {/* Grid of Exactly 3 Real 3D Renders */}
+      {/* Grid of Featured 3D Renders */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {RENDERS_SHOWCASE.map((item, idx) => {
+        {rendersShowcase.map((item, idx) => {
           const title = language === 'id' ? item.titleId : item.titleEn;
           const categoryLabel = language === 'id' ? item.categoryLabelId : item.categoryLabelEn;
 

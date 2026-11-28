@@ -4,19 +4,20 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
-import { PROJECTS } from '@/data/portfolioData';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 import { ProjectCardVisual } from '@/components/ProjectCardVisual';
 
 export function Projects() {
   const router = useRouter();
   const { language, t } = useLanguage();
+  const { projects } = usePortfolioData();
   const { openCaseStudy } = useModal();
 
-  // Strictly 4 Featured Projects on Homepage: CyTune, Grainox, Orbitry, Filra
-  const featuredProjects = PROJECTS.filter((project) => project.featured);
+  // Featured Projects on Homepage
+  const featuredProjects = projects.filter((project) => project.featured);
 
   return (
     <section id="projects" className="scroll-mt-24 space-y-8">

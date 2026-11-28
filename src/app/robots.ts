@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: '/author-studio',
     },
     sitemap: 'https://www.dhitya-space.my.id/sitemap.xml',
   };

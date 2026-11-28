@@ -5,15 +5,16 @@ import { motion } from 'framer-motion';
 import { GraduationCap, Box, Globe, Sparkles, MapPin } from 'lucide-react';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
-import { QUICK_PROFILE } from '@/data/portfolioData';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 
 export function About() {
   const { language, t } = useLanguage();
+  const { quickProfile } = usePortfolioData();
 
-  const role = language === 'id' ? QUICK_PROFILE.roleId : QUICK_PROFILE.roleEn;
-  const focus = language === 'id' ? QUICK_PROFILE.focusId : QUICK_PROFILE.focusEn;
-  const interests = language === 'id' ? QUICK_PROFILE.interestsId : QUICK_PROFILE.interestsEn;
-  const loc = language === 'id' ? QUICK_PROFILE.locationId : QUICK_PROFILE.locationEn;
+  const role = language === 'id' ? quickProfile.roleId : quickProfile.roleEn;
+  const focus = language === 'id' ? quickProfile.focusId : quickProfile.focusEn;
+  const interests = language === 'id' ? quickProfile.interestsId : quickProfile.interestsEn;
+  const loc = language === 'id' ? quickProfile.locationId : quickProfile.locationEn;
 
   return (
     <section id="about" className="scroll-mt-24 space-y-8">
@@ -97,7 +98,7 @@ export function About() {
                 {t.about.fieldFullName}
               </span>
               <p className="font-display font-bold text-sm text-[var(--text-primary)]">
-                {QUICK_PROFILE.name}
+                {quickProfile.name}
               </p>
               <p className="text-xs text-indigo-400 font-medium pt-0.5">
                 {role}

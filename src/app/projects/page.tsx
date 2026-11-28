@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Search, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { PROJECTS } from '@/data/portfolioData';
 import { ProjectCategory } from '@/types/portfolio';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 import { ProjectCardVisual } from '@/components/ProjectCardVisual';
 import { CaseStudyModal } from '@/components/CaseStudyModal';
 import { Toast } from '@/components/Toast';
@@ -17,6 +17,7 @@ export default function ProjectsPage() {
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
+  const { projects } = usePortfolioData();
   const { openCaseStudy } = useModal();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,7 +39,7 @@ export default function ProjectsPage() {
     { id: 'mod', en: 'Minecraft Mod', id_label: 'Mod Minecraft' },
   ];
 
-  const filteredProjects = PROJECTS.filter((project) => {
+  const filteredProjects = projects.filter((project) => {
     const content = language === 'id' ? project.id_lang : project.en;
     const matchesCategory =
       selectedCategory === 'all' || project.categories.includes(selectedCategory as ProjectCategory);

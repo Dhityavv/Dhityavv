@@ -6,17 +6,18 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Box, X, Sun, Moon, Eye, Play } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { ALL_BLENDER_ARCHIVES } from '@/data/portfolioData';
 import { RenderItem } from '@/types/portfolio';
 import { ArtworkMediaStage } from '@/components/ArtworkMediaStage';
 import { useLanguage } from '@/context/LanguageContext';
 import { useModal } from '@/context/ModalContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 import { Toast } from '@/components/Toast';
 
 export default function BlenderShowcasePage() {
   const router = useRouter();
   const { language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
+  const { allRenders } = usePortfolioData();
   const { selectedArtwork, openArtwork, closeArtwork } = useModal();
 
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -57,7 +58,7 @@ export default function BlenderShowcasePage() {
     { id: 'prop', en: 'Props', id_label: 'Props' },
   ];
 
-  const filteredArchives = ALL_BLENDER_ARCHIVES.filter((item) => {
+  const filteredArchives = allRenders.filter((item) => {
     if (activeCategory === 'all') return true;
     return item.category === activeCategory;
   });

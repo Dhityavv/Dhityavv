@@ -3,12 +3,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Box, Terminal, Sparkles } from 'lucide-react';
-import { SKILL_CATEGORIES } from '@/data/portfolioData';
 import { SplitRevealTitle } from '@/components/SplitRevealTitle';
 import { useLanguage } from '@/context/LanguageContext';
+import { usePortfolioData } from '@/context/PortfolioDataContext';
 
 export function Skills() {
   const { language, t } = useLanguage();
+  const { skills } = usePortfolioData();
 
   const getCategoryMeta = (type: 'web' | '3d' | 'sys') => {
     switch (type) {
@@ -53,7 +54,7 @@ export function Skills() {
 
       {/* Creative Compact Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5 sm:gap-5 items-stretch">
-        {SKILL_CATEGORIES.map((cat, idx) => {
+        {skills.map((cat, idx) => {
           const title = language === 'id' ? cat.titleId : cat.titleEn;
           const meta = getCategoryMeta(cat.iconName);
 

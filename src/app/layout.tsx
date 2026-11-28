@@ -4,6 +4,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { ModalProvider } from '@/context/ModalContext';
+import { PortfolioDataProvider } from '@/context/PortfolioDataContext';
+import { VisitorTracker } from '@/components/VisitorTracker';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -99,9 +101,12 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <LanguageProvider>
-            <ModalProvider>
-              <SmoothScroll>{children}</SmoothScroll>
-            </ModalProvider>
+            <PortfolioDataProvider>
+              <ModalProvider>
+                <VisitorTracker />
+                <SmoothScroll>{children}</SmoothScroll>
+              </ModalProvider>
+            </PortfolioDataProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
