@@ -15,6 +15,7 @@ export function Navbar() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const lenis = useLenis();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
   const mounted = React.useSyncExternalStore(
     () => () => {},
     () => true,
@@ -70,144 +71,212 @@ export function Navbar() {
   };
 
   return (
-    <header
-      className={`fixed top-3.5 sm:top-5 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[96vw] transition-all duration-300 ease-out ${
-        isAnyModalOpen
-          ? 'opacity-0 pointer-events-none -translate-y-12'
-          : 'opacity-100 translate-y-0'
-      }`}
-    >
-      {/* Floating Glass Pill Dock */}
-      <div className="liquid-glass rounded-full p-1.5 sm:p-2 flex items-center gap-1.5 sm:gap-2 shadow-[0_12px_44px_rgba(0,0,0,0.55)] border border-white/15 dark:border-white/10 backdrop-blur-xl transition-all">
-        {/* Desktop WebGL Physics Liquid Glass Navbar (includes unified Home bubble button) */}
-        <div className="hidden md:block">
-          <LiquidNavbar
-            items={navItems}
-            tone={navTone}
-            sound={false}
-          />
-        </div>
-
-        {/* Mobile View Minimal Title or Compact Indicator */}
-        <div className="md:hidden flex items-center pl-1 pr-1">
-          <button
-            type="button"
-            onClick={handleScrollToTop}
-            title={language === 'id' ? 'Beranda' : 'Home'}
-            aria-label={language === 'id' ? 'Beranda' : 'Home'}
-            className="flex items-center gap-1.5 py-0.5 px-2 rounded-full surface-elevated border border-white/10 cursor-pointer"
-          >
-            <span className="w-5 h-5 rounded-full flex items-center justify-center bg-indigo-500/15 border border-indigo-500/25 text-indigo-400 shrink-0">
-              <Home className="w-3 h-3" />
-            </span>
-            <span className="font-display font-bold text-xs text-[var(--text-primary)]">
-              {language === 'id' ? 'Beranda' : 'Home'}
-            </span>
-          </button>
-        </div>
-
-        {/* Subtle Divider between Navigation Links and Controls */}
-        <div className="w-px h-4 bg-white/20 dark:bg-white/15 mx-0.5" />
-
-        {/* Language Switcher (EN | ID): Clean Segmented Control without cross-page flying glitch */}
+    <>
+      {/* Centered Floating Glass Dock Navigation (Collapses to sleek Logo Circle on Desktop) */}
+      <header
+        className={`fixed top-3.5 sm:top-5 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[92vw] transition-all duration-300 ease-out ${
+          isAnyModalOpen
+            ? 'opacity-0 pointer-events-none -translate-y-12'
+            : 'opacity-100 translate-y-0'
+        }`}
+      >
         <div
-          role="group"
-          aria-label="Language Toggle"
-          className="relative surface-elevated inline-flex items-center p-0.5 rounded-full text-[11px] font-mono font-semibold border border-white/10"
+          onMouseEnter={() => setIsNavExpanded(true)}
+          onMouseLeave={() => setIsNavExpanded(false)}
+          onFocus={() => setIsNavExpanded(true)}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              setIsNavExpanded(false);
+            }
+          }}
+          className={`liquid-glass rounded-full flex items-center shadow-[0_12px_44px_rgba(0,0,0,0.55)] border border-white/15 dark:border-white/10 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isNavExpanded ? 'p-1.5 md:p-2 gap-1.5' : 'p-1.5 md:p-1 gap-0'
+          }`}
         >
-          <button
-            type="button"
-            onClick={() => setLanguage('en')}
-            className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 ${
-              language === 'en'
-                ? 'bg-indigo-600 text-white shadow-sm font-bold'
-                : 'text-secondary hover:text-[var(--text-primary)]'
-            }`}
-          >
-            EN
-          </button>
+          {/* Desktop: Collapsible Logo Circle -> Expands to Full LiquidNavbar on Hover/Focus */}
+          <div className="hidden md:flex items-center">
+            <button
+              type="button"
+              onClick={() => setIsNavExpanded((prev) => !prev)}
+              aria-label={isNavExpanded ? 'Collapse navigation' : 'Expand navigation'}
+              aria-expanded={isNavExpanded}
+              className={`relative flex items-center justify-center rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                isNavExpanded
+                  ? 'w-0 h-10 opacity-0 scale-50 overflow-hidden pointer-events-none mr-0'
+                  : 'w-10 h-10 opacity-100 scale-100 hover:scale-105'
+              }`}
+            >
+              {/* Custom Orbital D Monogram Logo */}
+              <svg
+                viewBox="0 0 36 36"
+                className="w-7 h-7"
+                fill="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#818cf8" />
+                    <stop offset="55%" stopColor="#6366f1" />
+                    <stop offset="100%" stopColor="#22d3ee" />
+                  </linearGradient>
+                </defs>
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="14.5"
+                  stroke="url(#navLogoGrad)"
+                  strokeWidth="1.4"
+                  strokeDasharray="6 3"
+                  opacity="0.7"
+                />
+                <path
+                  d="M13 11.5h4.8c3.9 0 6.7 2.6 6.7 6.5s-2.8 6.5-6.7 6.5H13V11.5Z"
+                  stroke="url(#navLogoGrad)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="17.2" cy="18" r="1.6" fill="#22d3ee" />
+              </svg>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setLanguage('id')}
-            className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 ${
-              language === 'id'
-                ? 'bg-indigo-600 text-white shadow-sm font-bold'
-                : 'text-secondary hover:text-[var(--text-primary)]'
-            }`}
-          >
-            ID
-          </button>
+            <div
+              className={`transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
+                isNavExpanded
+                  ? 'max-w-[820px] opacity-100 scale-100 pointer-events-auto'
+                  : 'max-w-0 opacity-0 scale-95 pointer-events-none'
+              }`}
+            >
+              <LiquidNavbar items={navItems} tone={navTone} sound={false} />
+            </div>
+          </div>
+
+          {/* Mobile View: Compact Home Pill + Hamburger */}
+          <div className="md:hidden flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleScrollToTop}
+              title={language === 'id' ? 'Beranda' : 'Home'}
+              aria-label={language === 'id' ? 'Beranda' : 'Home'}
+              className="flex items-center gap-1.5 py-1 px-2.5 rounded-full surface-elevated border border-white/10 cursor-pointer"
+            >
+              <span className="w-5 h-5 rounded-full flex items-center justify-center bg-indigo-500/15 border border-indigo-500/25 text-indigo-400 shrink-0">
+                <Home className="w-3 h-3" />
+              </span>
+              <span className="font-display font-bold text-xs text-[var(--text-primary)]">
+                {language === 'id' ? 'Beranda' : 'Home'}
+              </span>
+            </button>
+
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+              aria-label={mobileMenuOpen ? 'Close Navigation' : 'Open Navigation'}
+              className="surface-elevated p-2 rounded-full text-secondary hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 cursor-pointer"
+            >
+              {mobileMenuOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
+            </motion.button>
+          </div>
         </div>
 
-        {/* Theme Toggle Button with micro-rotation animation */}
-        <motion.button
-          type="button"
-          onClick={toggleTheme}
-          whileTap={{ scale: 0.9 }}
-          aria-label="Toggle theme"
-          className="surface-elevated p-2 rounded-full text-secondary hover:text-[var(--text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500"
-        >
-          {mounted && currentTheme === 'light' ? (
-            <Moon className="w-3.5 h-3.5 text-indigo-600" />
-          ) : (
-            <Sun className="w-3.5 h-3.5 text-amber-400" />
+        {/* Mobile Drawer Dropdown Sheet */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.96 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden mt-2 rounded-2xl p-2 liquid-glass shadow-2xl border border-white/15 dark:border-white/10 flex flex-col gap-1 backdrop-blur-xl"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleScrollToTop();
+                }}
+                title={language === 'id' ? 'Beranda' : 'Home'}
+                className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 dark:hover:bg-white/10 transition-colors text-left cursor-pointer"
+              >
+                <span className="w-4 h-4 flex items-center justify-center text-indigo-400">
+                  <Home className="w-3.5 h-3.5" />
+                </span>
+                <span>{language === 'id' ? 'Beranda' : 'Home'}</span>
+              </button>
+              {navItems.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => handleMobileNavClick(item.href || '#')}
+                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 dark:hover:bg-white/10 transition-colors text-left cursor-pointer"
+                >
+                  <span className="w-4 h-4 flex items-center justify-center text-indigo-500">
+                    {item.icon}
+                  </span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </motion.div>
           )}
-        </motion.button>
+        </AnimatePresence>
+      </header>
 
-        {/* Mobile Menu Toggle Button */}
-        <motion.button
-          type="button"
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-expanded={mobileMenuOpen}
-          aria-label={mobileMenuOpen ? 'Close Navigation' : 'Open Navigation'}
-          className="md:hidden surface-elevated p-2 rounded-full text-secondary hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500"
-        >
-          {mobileMenuOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
-        </motion.button>
-      </div>
-
-      {/* Mobile Drawer Dropdown Sheet */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.96 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden mt-2 rounded-2xl p-2 liquid-glass shadow-2xl border border-white/15 dark:border-white/10 flex flex-col gap-1 backdrop-blur-xl"
+      {/* Separated Top-Right Controls: Language Switcher (EN | ID) & Theme Toggle */}
+      <div
+        className={`fixed top-3.5 sm:top-5 right-3.5 sm:right-6 z-50 transition-all duration-300 ease-out ${
+          isAnyModalOpen
+            ? 'opacity-0 pointer-events-none -translate-y-12'
+            : 'opacity-100 translate-y-0'
+        }`}
+      >
+        <div className="liquid-glass rounded-full p-1.5 flex items-center gap-1.5 shadow-[0_12px_44px_rgba(0,0,0,0.45)] border border-white/15 dark:border-white/10 backdrop-blur-xl">
+          <div
+            role="group"
+            aria-label="Language Toggle"
+            className="relative surface-elevated inline-flex items-center p-0.5 rounded-full text-[11px] font-mono font-semibold border border-white/10"
           >
             <button
               type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleScrollToTop();
-              }}
-              title={language === 'id' ? 'Beranda' : 'Home'}
-              className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 dark:hover:bg-white/10 transition-colors text-left cursor-pointer"
+              onClick={() => setLanguage('en')}
+              className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 ${
+                language === 'en'
+                  ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                  : 'text-secondary hover:text-[var(--text-primary)]'
+              }`}
             >
-              <span className="w-4 h-4 flex items-center justify-center text-indigo-400">
-                <Home className="w-3.5 h-3.5" />
-              </span>
-              <span>{language === 'id' ? 'Beranda' : 'Home'}</span>
+              EN
             </button>
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                onClick={() => handleMobileNavClick(item.href || '#')}
-                className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-medium text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 dark:hover:bg-white/10 transition-colors text-left cursor-pointer"
-              >
-                <span className="w-4 h-4 flex items-center justify-center text-indigo-500">
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+
+            <button
+              type="button"
+              onClick={() => setLanguage('id')}
+              className={`px-2.5 py-1 rounded-full transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 ${
+                language === 'id'
+                  ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                  : 'text-secondary hover:text-[var(--text-primary)]'
+              }`}
+            >
+              ID
+            </button>
+          </div>
+
+          <motion.button
+            type="button"
+            onClick={toggleTheme}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Toggle theme"
+            className="surface-elevated p-2 rounded-full text-secondary hover:text-[var(--text-primary)] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500"
+          >
+            {mounted && currentTheme === 'light' ? (
+              <Moon className="w-3.5 h-3.5 text-indigo-600" />
+            ) : (
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+            )}
+          </motion.button>
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, Pencil, Trash2, Star, Search, Upload, X, Save, Film } from 'lucide-react';
+import { Plus, Pencil, Trash2, Star, Search, Upload, X, Save, Film, ArrowUp, ArrowDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getSupabaseClient, PORTFOLIO_BUCKET } from '@/lib/supabase';
 import { RenderItemWithOrder, usePortfolioData } from '@/context/PortfolioDataContext';
@@ -216,6 +216,46 @@ export function BlenderManager({ onNotify }: BlenderManagerProps) {
     }
   };
 
+  const featuredItems = allRenders.filter((r) => r.isFeatured);
+
+  const handleMoveFeaturedOrder = async (index: number, direction: 'up' | 'down') => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      onNotify('Hubungkan Supabase terlebih dahulu untuk mengatur urutan.');
+      return;
+    }
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= featuredItems.length) return;
+
+    const current = featuredItems[index];
+    const swapWith = featuredItems[targetIndex];
+    const currentOrder = Number(current.sortOrder ?? index);
+    const swapOrder =
+      Number(swapWith.sortOrder ?? targetIndex) === currentOrder
+        ? targetIndex
+        : Number(swapWith.sortOrder ?? targetIndex);
+
+    try {
+      const [resA, resB] = await Promise.all([
+        supabase
+          .from('portfolio_renders')
+          .update({ sort_order: swapOrder, updated_at: new Date().toISOString() })
+          .eq('id', current.id),
+        supabase
+          .from('portfolio_renders')
+          .update({ sort_order: currentOrder, updated_at: new Date().toISOString() })
+          .eq('id', swapWith.id),
+      ]);
+      if (resA.error) throw resA.error;
+      if (resB.error) throw resB.error;
+      await refreshData();
+      onNotify(`Urutan "${current.titleEn}" diperbarui.`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Gagal mengubah urutan';
+      onNotify(`Error: ${msg}`);
+    }
+  };
+
   const filtered = allRenders.filter((item) => {
     const matchCat = filterCat === 'all' || item.category === filterCat;
     const q = search.toLowerCase();
@@ -249,6 +289,90 @@ export function BlenderManager({ onNotify }: BlenderManagerProps) {
           <Plus className="w-4 h-4" />
           <span>Tambah Karya 3D</span>
         </button>
+      </div>
+
+      {/* 6 Featured Beranda Quick Slot Manager */}
+      <div className="liquid-glass p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+            <h3 className="font-display font-bold text-sm text-[var(--text-primary)]">
+              6 Featured Beranda (Carousel)
+            </h3>
+          </div>
+          <span
+            className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono border ${
+              featuredItems.length === 6
+                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                : featuredItems.length > 6
+                ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                : 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30'
+            }`}
+          >
+            {Math.min(featuredItems.length, 6)} / 6 aktif
+            {featuredItems.length > 6 ? ` (${featuredItems.length} ditandai, 6 teratas tampil)` : ''}
+          </span>
+        </div>
+
+        {featuredItems.length === 0 ? (
+          <p className="text-xs text-muted">
+            Belum ada karya yang ditandai Featured. Klik ikon bintang pada daftar di bawah untuk memilih hingga 6 karya.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            {featuredItems.slice(0, 6).map((item, idx) => (
+              <div
+                key={item.id}
+                className="surface-elevated p-2.5 rounded-xl border border-white/10 flex items-center justify-between gap-2"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="w-6 h-6 rounded-lg bg-indigo-500/15 text-indigo-400 font-mono text-[11px] font-bold flex items-center justify-center shrink-0">
+                    #{idx + 1}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-[var(--text-primary)] truncate">
+                      {item.titleEn}
+                    </p>
+                    <p className="text-[10px] font-mono text-muted truncate">
+                      {item.categoryLabelEn}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    type="button"
+                    disabled={idx === 0}
+                    onClick={() => handleMoveFeaturedOrder(idx, 'up')}
+                    title="Geser ke atas"
+                    aria-label={`Geser ${item.titleEn} ke atas`}
+                    className="p-1 rounded-md text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    disabled={idx === Math.min(featuredItems.length, 6) - 1}
+                    onClick={() => handleMoveFeaturedOrder(idx, 'down')}
+                    title="Geser ke bawah"
+                    aria-label={`Geser ${item.titleEn} ke bawah`}
+                    className="p-1 rounded-md text-secondary hover:text-[var(--text-primary)] hover:bg-white/10 disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleFeatured(item)}
+                    title="Lepas dari Featured"
+                    aria-label={`Lepas ${item.titleEn} dari Featured`}
+                    className="p-1 rounded-md text-amber-400 hover:bg-amber-500/15 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Filter & Search Bar */}
